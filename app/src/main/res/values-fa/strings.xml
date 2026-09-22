@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lune</string>
+    <string name="app_name">Reso Music</string>
     <string name="settings">تنظیمات</string>
     <string name="about">درباره ما</string>
     <string name="version">ورژن</string>
@@ -53,7 +53,7 @@
     <string name="tab_genres">سبک‌ها</string>
 
     <!-- AI Mixes & Intelligence Section -->
-    <string name="ai_core_title">هسته Lune AI</string>
+    <string name="ai_core_title">هسته Reso AI</string>
     <string name="ai_musical_intelligence">هوشمندی موسیقی</string>
     <string name="ai_local_learning_desc">یادگیری ۱۰۰٪ آفلاین و خصوصی</string>
     <string name="ai_affinity_flow">جریان و تناسب موسیقی‌ها</string>
@@ -260,7 +260,7 @@
     <string name="visualizer_mini_player">نشون دادن تو مینی‌پلیر</string>
     <string name="credits">دم این بچه‌ها گرم</string>
     <string name="credits_desc">کسایی که تو تست، طراحی و لوگو کمک کردن</string>
-    <string name="creator_desc">کدنویس و خالق اصلی اپ Lune</string>
+    <string name="creator_desc">کدنویس و خالق اصلی اپ Reso Music</string>
     <string name="gesture">ژست‌های حرکتی</string>
     <string name="gesture_desc">سوایپ و ژست‌ها رو تنظیم کن</string>
     <string name="enable_gestures">روشن کردن ژست‌های حرکتی</string>
@@ -282,7 +282,7 @@
     <string name="other">بقیه چیزا</string>
 
     <!-- Users -->
-    <string name="demon">MrDemonc</string>
+    <string name="demon">Octa Devs</string>
     <string name="desukia">Desukia</string>
 
     <!-- Open Source Libraries -->
@@ -428,9 +428,9 @@
 
     <!-- Quick Player -->
     <string name="quick_player">پخش سریع</string>
-    <string name="open_in_lune">باز کردن در Lune</string>
+    <string name="open_in_lune">باز کردن در Reso Music</string>
     <string name="close">بستن</string>
-    <string name="cd_open_in_lune">باز کردن در Lune</string>
+    <string name="cd_open_in_lune">باز کردن در Reso Music</string>
 
     <!-- Lyrics Editor & Backup Auto-Sync -->
     <string name="edit_lyrics">ویرایش متن آهنگ</string>

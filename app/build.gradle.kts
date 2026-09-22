@@ -20,22 +20,24 @@ ksp {
 }
 
 android {
-    namespace = "com.demonlab.lune"
+    namespace = "com.octadevs.resomusic"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.demonlab.lune"
+        applicationId = "com.octadevs.resomusic"
         minSdk = 24
         targetSdk = 37
-        versionCode = 11
-        versionName = "1.5.3"
+        versionCode = 1
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         create("release") {
             if (keystorePropertiesFile.exists()) {
-                storeFile = file(keystoreProperties["storeFile"] as String)
+                val propStorePath = keystoreProperties["storeFile"] as String
+                val candidate = file(propStorePath)
+                storeFile = if (candidate.exists()) candidate else rootProject.file(propStorePath)
                 storePassword = keystoreProperties["storePassword"] as String
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
@@ -81,7 +83,7 @@ android {
 }
 
 base {
-    archivesName = "Lune"
+    archivesName = "ResoMusic"
 }
 
 dependencies {

@@ -5,9 +5,9 @@
         android:icon="@drawable/ic_playlist"
         android:shortcutShortLabel="@string/shortcut_playlists">
         <intent
-            android:action="com.demonlab.lune.ACTION_VIEW_PLAYLISTS"
-            android:targetPackage="com.demonlab.lune"
-            android:targetClass="com.demonlab.lune.ui.activities.Lune" />
+            android:action="com.octadevs.resomusic.ACTION_VIEW_PLAYLISTS"
+            android:targetPackage="com.octadevs.resomusic"
+            android:targetClass="com.octadevs.resomusic.ui.activities.Lune" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

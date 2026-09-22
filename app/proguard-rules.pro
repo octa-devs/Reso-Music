@@ -1,5 +1,5 @@
 # ==============================================================================
-# LUNE - PROGUARD / R8 RULES
+# RESO MUSIC - PROGUARD / R8 RULES
 # ==============================================================================
 
 # Keep line numbers for crash reporting
@@ -12,7 +12,7 @@
 # ==============================================================================
 # ROOM DATABASE
 # ==============================================================================
--keep class com.demonlab.lune.data.** { *; }
+-keep class com.octadevs.resomusic.data.** { *; }
 -keepclassmembers class * extends androidx.room.RoomDatabase {
     <init>();
 }
@@ -20,10 +20,10 @@
 # ==============================================================================
 # GSON & DATA CLASSES (Cache & Backup)
 # ==============================================================================
--keep class com.demonlab.lune.tools.Song { *; }
--keep class com.demonlab.lune.tools.PlaylistExportData { *; }
--keep class com.demonlab.lune.tools.PlaylistData { *; }
--keep class com.demonlab.lune.tools.SongMetadata { *; }
+-keep class com.octadevs.resomusic.tools.Song { *; }
+-keep class com.octadevs.resomusic.tools.PlaylistExportData { *; }
+-keep class com.octadevs.resomusic.tools.PlaylistData { *; }
+-keep class com.octadevs.resomusic.tools.SongMetadata { *; }
 
 -keepclassmembers class * {
     @com.google.gson.annotations.SerializedName <fields>;
@@ -32,17 +32,17 @@
 # ==============================================================================
 # TOOLS (PlaybackManager, MusicService, SettingsManager, audio pipeline)
 # ==============================================================================
--keep class com.demonlab.lune.tools.** { *; }
+-keep class com.octadevs.resomusic.tools.** { *; }
 
 # ==============================================================================
 # AUDIO EFFECTS (reflection in DynamicsEffect)
 # ==============================================================================
--keep class com.demonlab.lune.audio.** { *; }
+-keep class com.octadevs.resomusic.audio.** { *; }
 
 # ==============================================================================
 # UI ACTIVITIES (EqualizerActivity, etc. — Compose state)
 # ==============================================================================
--keep class com.demonlab.lune.ui.** { *; }
+-keep class com.octadevs.resomusic.ui.** { *; }
 
 # ==============================================================================
 # JAUDIOTAGGER (Metadata extraction)

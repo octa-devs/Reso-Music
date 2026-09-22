@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lune</string>
+    <string name="app_name">Reso Music</string>
     <string name="settings">Настройки</string>
     <string name="about">О приложении</string>
     <string name="version">Версия</string>
@@ -54,7 +54,7 @@
     <string name="tab_genres">Жанры</string>
 
     <!-- AI Mixes & Intelligence Section -->
-    <string name="ai_core_title">Lune AI Core</string>
+    <string name="ai_core_title">Reso AI Core</string>
     <string name="ai_musical_intelligence">Музыкальный ИИ</string>
     <string name="ai_local_learning_desc">100% офлайн и приватное обучение</string>
     <string name="ai_affinity_flow">Гармония и предпочтения медиатеки</string>
@@ -261,7 +261,7 @@
     <string name="visualizer_mini_player">Показывать в мини-плеере</string>
     <string name="credits">Благодарности</string>
     <string name="credits_desc">Тестирование, дизайн и логотип</string>
-    <string name="creator_desc">Создатель и разработчик Lune Music Player</string>
+    <string name="creator_desc">Создатель и разработчик Reso Music Player</string>
     <string name="gesture">Жесты</string>
     <string name="gesture_desc">Настройка жестов приложения</string>
     <string name="enable_gestures">Включить жесты</string>
@@ -283,7 +283,7 @@
     <string name="other">Прочее</string>
 
     <!-- Users -->
-    <string name="demon">MrDemonc</string>
+    <string name="demon">Octa Devs</string>
     <string name="desukia">Desukia</string>
 
     <!-- Open Source Libraries -->
@@ -318,7 +318,7 @@
     <string name="sort_duration">По продолжительности</string>
     <string name="sort_date_added">По дате добавления</string>
     <string name="backup_warning_title">Важное уведомление</string>
-    <string name="backup_warning_desc">Lune импортирует только плейлисты, ранее экспортированные этим приложением. Убедитесь, что соответствующие музыкальные файлы сохранены на устройстве для корректного воспроизведения.</string>
+    <string name="backup_warning_desc">Reso Music импортирует только плейлисты, ранее экспортированные этим приложением. Убедитесь, что соответствующие музыкальные файлы сохранены на устройстве для корректного воспроизведения.</string>
     <string name="export_playlists">Экспорт плейлистов</string>
     <string name="export_playlists_desc">Сохранить ваши плейлисты в файл</string>
     <string name="import_playlists">Импорт плейлистов</string>
@@ -365,8 +365,8 @@
     <string name="onboarding_perm_music_title">Музыка &amp; Аудио</string>
     <string name="onboarding_perm_music_desc">Необходимо для сканирования, индексации и воспроизведения музыкальной коллекции на устройстве.</string>
     <string name="onboarding_perm_manage_files_title">Доступ к папке с музыкой</string>
-    <string name="onboarding_perm_manage_files_desc">Выберите папку с музыкой, чтобы Lune безопасно организовал вашу медиатеку</string>
-    <string name="onboarding_welcome_back">Добро пожаловать в Lune</string>
+    <string name="onboarding_perm_manage_files_desc">Выберите папку с музыкой, чтобы Reso Music безопасно организовал вашу медиатеку</string>
+    <string name="onboarding_welcome_back">Добро пожаловать в Reso Music</string>
     <string name="onboarding_listen_style">Слушай со стилем</string>
     <string name="onboarding_feature_hifi">Поддержка HiFi-аудио</string>
 
@@ -380,10 +380,10 @@
     <string name="onboarding_reminder_desc">Если вы пропустили какие-либо разрешения, вы можете включить их позже в Настройки > Безопасность > Разрешения.</string>
     <string name="onboarding_reminder_button">Понятно</string>
     <string name="onboarding_folder_visibility_title">Видимость папок</string>
-    <string name="onboarding_folder_visibility_desc">По умолчанию Lune показывает только песни из выбранной музыкальной папки. Включите эту опцию, чтобы сразу показывать все папки с музыкой на устройстве.</string>
+    <string name="onboarding_folder_visibility_desc">По умолчанию Reso Music показывает только песни из выбранной музыкальной папки. Включите эту опцию, чтобы сразу показывать все папки с музыкой на устройстве.</string>
     <string name="onboarding_folder_visibility_label">Показывать все папки</string>
     <string name="onboarding_support_title">Поддержка проекта</string>
-    <string name="onboarding_support_desc">Если вам нравится Lune, поддержите нас в разделе «Пожертвования» в Настройках > О приложении. Каждый вклад помогает развитию!</string>
+    <string name="onboarding_support_desc">Если вам нравится Reso Music, поддержите нас в разделе «Пожертвования» в Настройках > О приложении. Каждый вклад помогает развитию!</string>
     <string name="search_play_all">Играть</string>
     <string name="search_shuffle">Перемешать</string>
     <string name="playing_from">Воспроизводится из: %s</string>
@@ -432,9 +432,9 @@
 
     <!-- Quick Player -->
     <string name="quick_player">Быстрое воспроизведение</string>
-    <string name="open_in_lune">Открыть в Lune</string>
+    <string name="open_in_lune">Открыть в Reso Music</string>
     <string name="close">Закрыть</string>
-    <string name="cd_open_in_lune">Открыть в Lune</string>
+    <string name="cd_open_in_lune">Открыть в Reso Music</string>
 
     <!-- Lyrics Editor & Backup Auto-Sync -->
     <string name="edit_lyrics">Редактировать текст</string>

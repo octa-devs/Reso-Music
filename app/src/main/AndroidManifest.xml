@@ -45,7 +45,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Lune.QuickPlayer"
-            android:taskAffinity="com.demonlab.lune.quickplayer"
+            android:taskAffinity="com.octadevs.resomusic.quickplayer"
             android:launchMode="singleInstance"
             android:excludeFromRecents="true"
             android:autoRemoveFromRecents="true"
@@ -157,7 +157,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.demonlab.lune.WIDGET_UPDATE" />
+                <action android:name="com.octadevs.resomusic.WIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -178,7 +178,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.demonlab.lune.fileprovider"
+            android:authorities="com.octadevs.resomusic.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

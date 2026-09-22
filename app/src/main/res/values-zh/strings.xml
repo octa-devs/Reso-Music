@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lune</string>
+    <string name="app_name">Reso Music</string>
     <string name="settings">设置</string>
     <string name="about">关于</string>
     <string name="version">版本</string>
@@ -54,7 +54,7 @@
     <string name="tab_genres">流派</string>
 
     <!-- AI Mixes & Intelligence Section -->
-    <string name="ai_core_title">Lune AI Core</string>
+    <string name="ai_core_title">Reso AI Core</string>
     <string name="ai_musical_intelligence">音乐智能</string>
     <string name="ai_local_learning_desc">100% 本地离线与隐私学习</string>
     <string name="ai_affinity_flow">曲库流派与偏好流动</string>
@@ -261,7 +261,7 @@
     <string name="visualizer_mini_player">迷你播放器显示</string>
     <string name="credits">致谢</string>
     <string name="credits_desc">测试、设计建议和图标</string>
-    <string name="creator_desc">Lune 音乐播放器的创建者和维护者</string>
+    <string name="creator_desc">Reso Music 音乐播放器的创建者和维护者</string>
     <string name="gesture">手势</string>
     <string name="gesture_desc">自定义应用手势</string>
     <string name="enable_gestures">启用手势</string>
@@ -283,7 +283,7 @@
     <string name="other">其他</string>
 
     <!-- Users -->
-    <string name="demon">MrDemonc</string>
+    <string name="demon">Octa Devs</string>
     <string name="desukia">Desukia</string>
 
     <!-- Open Source Libraries -->
@@ -316,7 +316,7 @@
     <string name="sort_duration">时长</string>
     <string name="sort_date_added">添加日期</string>
     <string name="backup_warning_title">重要提示</string>
-    <string name="backup_warning_desc">Lune 仅能导入由本应用导出的播放列表。请确保您的设备上有相应的音乐文件以正常播放。</string>
+    <string name="backup_warning_desc">Reso Music 仅能导入由本应用导出的播放列表。请确保您的设备上有相应的音乐文件以正常播放。</string>
     <string name="export_playlists">导出播放列表</string>
     <string name="export_playlists_desc">将播放列表保存到文件</string>
     <string name="import_playlists">导入播放列表</string>
@@ -363,8 +363,8 @@
     <string name="onboarding_perm_music_title">音乐和音频</string>
     <string name="onboarding_perm_music_desc">扫描、索引和播放设备上存储的音乐收藏所必需。</string>
     <string name="onboarding_perm_manage_files_title">音乐文件夹访问</string>
-    <string name="onboarding_perm_manage_files_desc">选择您的音乐文件夹，让 Lune 安全地组织和管理您的音乐库。</string>
-    <string name="onboarding_welcome_back">欢迎使用 Lune</string>
+    <string name="onboarding_perm_manage_files_desc">选择您的音乐文件夹，让 Reso Music 安全地组织和管理您的音乐库。</string>
+    <string name="onboarding_welcome_back">欢迎使用 Reso Music</string>
     <string name="onboarding_listen_style">有风格地聆听</string>
     <string name="onboarding_feature_hifi">HiFi 音频支持</string>
     <string name="onboarding_feature_title">可自定义标题</string>
@@ -377,10 +377,10 @@
     <string name="onboarding_reminder_desc">如果您跳过了任何权限，稍后可以在 设置 > 安全 > 权限 中轻松启用。</string>
     <string name="onboarding_reminder_button">明白了</string>
     <string name="onboarding_folder_visibility_title">文件夹可见性</string>
-    <string name="onboarding_folder_visibility_desc">默认情况下，Lune 仅显示您选择的音乐文件夹中的歌曲。启用此选项可从一开始就显示设备上的所有音乐文件夹。</string>
+    <string name="onboarding_folder_visibility_desc">默认情况下，Reso Music 仅显示您选择的音乐文件夹中的歌曲。启用此选项可从一开始就显示设备上的所有音乐文件夹。</string>
     <string name="onboarding_folder_visibility_label">显示所有文件夹</string>
     <string name="onboarding_support_title">支持项目</string>
-    <string name="onboarding_support_desc">如果您喜欢 Lune，请考虑通过 设置 > 关于 > 捐赠 支持我们。每份捐助都有助于应用持续发展！</string>
+    <string name="onboarding_support_desc">如果您喜欢 Reso Music，请考虑通过 设置 > 关于 > 捐赠 支持我们。每份捐助都有助于应用持续发展！</string>
     <string name="search_play_all">播放</string>
     <string name="search_shuffle">随机播放</string>
     <string name="playing_from">正在播放：%s</string>
@@ -429,9 +429,9 @@
 
     <!-- Quick Player -->
     <string name="quick_player">快捷播放</string>
-    <string name="open_in_lune">在 Lune 中打开</string>
+    <string name="open_in_lune">在 Reso Music 中打开</string>
     <string name="close">关闭</string>
-    <string name="cd_open_in_lune">在 Lune 中打开</string>
+    <string name="cd_open_in_lune">在 Reso Music 中打开</string>
 
     <!-- Lyrics Editor & Backup Auto-Sync -->
     <string name="edit_lyrics">编辑歌词</string>

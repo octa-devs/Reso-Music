@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lune</string>
+    <string name="app_name">Reso Music</string>
     <string name="settings">Paramètres</string>
     <string name="about">À propos</string>
     <string name="version">Version</string>
@@ -54,7 +54,7 @@
     <string name="tab_genres">Genres</string>
 
     <!-- AI Mixes & Intelligence Section -->
-    <string name="ai_core_title">Lune AI Core</string>
+    <string name="ai_core_title">Reso AI Core</string>
     <string name="ai_musical_intelligence">Intelligence Musicale</string>
     <string name="ai_local_learning_desc">Apprentissage 100% hors ligne et privé</string>
     <string name="ai_affinity_flow">Affinité et fluidité de la bibliothèque</string>
@@ -261,7 +261,7 @@
     <string name="visualizer_mini_player">Afficher dans le mini lecteur</string>
     <string name="credits">Crédits</string>
     <string name="credits_desc">Tests, suggestions de design et logo</string>
-    <string name="creator_desc">Créateur et mainteneur du lecteur Lune Music</string>
+    <string name="creator_desc">Créateur et mainteneur du lecteur Reso Music</string>
     <string name="gesture">Gestes</string>
     <string name="gesture_desc">Configuration des gestes</string>
     <string name="enable_gestures">Activer les gestes</string>
@@ -283,7 +283,7 @@
     <string name="other">Autres</string>
 
     <!-- Users -->
-    <string name="demon">MrDemonc</string>
+    <string name="demon">Octa Devs</string>
     <string name="desukia">Desukia</string>
 
     <!-- Open Source Libraries -->
@@ -318,7 +318,7 @@
     <string name="sort_duration">Durée</string>
     <string name="sort_date_added">Date d\'ajout</string>
     <string name="backup_warning_title">Avis Important</string>
-    <string name="backup_warning_desc">Lune importe uniquement les listes pré-exportées par cette application. Assurez-vous d\'avoir les fichiers musicaux correspondants sur cet appareil pour une lecture correcte.</string>
+    <string name="backup_warning_desc">Reso Music importe uniquement les listes pré-exportées par cette application. Assurez-vous d\'avoir les fichiers musicaux correspondants sur cet appareil pour une lecture correcte.</string>
     <string name="export_playlists">Exporter les playlists</string>
     <string name="export_playlists_desc">Enregistrer vos playlists dans un fichier</string>
     <string name="import_playlists">Importer des playlists</string>
@@ -365,8 +365,8 @@
     <string name="onboarding_perm_music_title">Musique et fichiers</string>
     <string name="onboarding_perm_music_desc">Essentiel pour analyser, indexer et lire votre collection musicale stockée sur cet appareil.</string>
     <string name="onboarding_perm_manage_files_title">Accès au dossier musical</string>
-    <string name="onboarding_perm_manage_files_desc">Sélectionnez votre dossier musical pour permettre à Lune d’organiser et gérer votre bibliothèque en toute sécurité.</string>
-    <string name="onboarding_welcome_back">Bienvenue sur Lune</string>
+    <string name="onboarding_perm_manage_files_desc">Sélectionnez votre dossier musical pour permettre à Reso Music d’organiser et gérer votre bibliothèque en toute sécurité.</string>
+    <string name="onboarding_welcome_back">Bienvenue sur Reso Music</string>
     <string name="onboarding_listen_style">Écoutez avec style</string>
     <string name="onboarding_feature_hifi">Prise en charge audio HiFi</string>
 
@@ -380,10 +380,10 @@
     <string name="onboarding_reminder_desc">Si vous avez ignoré une permission, vous pourrez facilement l’activer plus tard dans Paramètres > Sécurité > Permissions.</string>
     <string name="onboarding_reminder_button">Compris</string>
     <string name="onboarding_folder_visibility_title">Visibilité des Dossiers</string>
-    <string name="onboarding_folder_visibility_desc">Par défaut, Lune n\'affichera que les morceaux du dossier sélectionné. Activez cette option pour afficher tous les dossiers musicaux dès le début.</string>
+    <string name="onboarding_folder_visibility_desc">Par défaut, Reso Music n\'affichera que les morceaux du dossier sélectionné. Activez cette option pour afficher tous les dossiers musicaux dès le début.</string>
     <string name="onboarding_folder_visibility_label">Afficher tous les dossiers</string>
     <string name="onboarding_support_title">Soutenez le Projet</string>
-    <string name="onboarding_support_desc">Si vous aimez Lune, pensez à nous soutenir via la section Faire un don dans Paramètres > À propos. Chaque contribution aide l\'application à continuer de grandir !</string>
+    <string name="onboarding_support_desc">Si vous aimez Reso Music, pensez à nous soutenir via la section Faire un don dans Paramètres > À propos. Chaque contribution aide l\'application à continuer de grandir !</string>
     <string name="search_play_all">Lire</string>
     <string name="search_shuffle">Aléatoire</string>
     <string name="playing_from">Lecture depuis: %s</string>
@@ -432,9 +432,9 @@
 
     <!-- Quick Player -->
     <string name="quick_player">Lecture rapide</string>
-    <string name="open_in_lune">Ouvrir dans Lune</string>
+    <string name="open_in_lune">Ouvrir dans Reso Music</string>
     <string name="close">Fermer</string>
-    <string name="cd_open_in_lune">Ouvrir dans Lune</string>
+    <string name="cd_open_in_lune">Ouvrir dans Reso Music</string>
 
     <!-- Lyrics Editor & Backup Auto-Sync -->
     <string name="edit_lyrics">Modifier les paroles</string>

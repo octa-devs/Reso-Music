@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Lune"
+rootProject.name = "Reso Music"
 include(":app")

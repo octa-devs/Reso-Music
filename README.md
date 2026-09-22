@@ -1,52 +1,46 @@
 <div align="center">
-  <img src="readme-res/logo.svg" width="20%" />
+  <img src="readme-res/logo.png" width="160" />
   <br><br>
+  <h1>Reso Music</h1>
   <p align="center">
-    <img src="https://img.shields.io/github/v/release/MrDemonc/Lune?style=for-the-badge&logo=android&label=Lune&color=blue" />
+    <img src="https://img.shields.io/github/v/release/octa-devs/reso-music?style=for-the-badge&logo=android&label=Reso%20Music&color=blue" />
     <img src="https://img.shields.io/badge/Android-API%2024%2B-green?style=for-the-badge&logo=android&logoColor=white" />
     <img src="https://img.shields.io/badge/Kotlin-100%25-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" /><br>
-    <a href="https://www.paypal.com/paypalme/TommyZambrano">
-      <img src="https://img.shields.io/badge/PayPal-Donate-00457C?style=for-the-badge&logo=paypal&logoColor=white"/>
+    <a href="https://octadevs.pages.dev">
+      <img src="https://img.shields.io/badge/Website-octadevs.pages.dev-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white"/>
     </a>
-    <a href="https://ko-fi.com/mrdemonc">
-      <img src="https://img.shields.io/badge/Ko--fi-Buy me a coffee-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white"/>
+    <a href="https://instagram.com/octadevsoffical">
+      <img src="https://img.shields.io/badge/Instagram-@octadevsoffical-E4405F?style=for-the-badge&logo=instagram&logoColor=white"/>
     </a>
-    <a href="https://github.com/MrDemonc/Lune#-monero-xmr">
-      <img src="https://img.shields.io/badge/Monero-Donate-FF6600?style=for-the-badge&logo=monero&logoColor=white"/>
-    </a>
-    <a href="https://mrdemonc.github.io/Lune">
-      <img src="https://img.shields.io/badge/Website-Visit-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white"/>
+    <a href="mailto:hello.octadevs@gmail.com">
+      <img src="https://img.shields.io/badge/Email-hello.octadevs@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
     </a>
   </p>
   <p align="center">
-    Lune is a minimalist and elegant music player for Android, designed with a focus on aesthetics and a premium user experience. 
+    Reso Music is a minimalist and elegant music player for Android, designed with a focus on aesthetics and a premium user experience. 
     It features a modern Jetpack Compose UI, dynamic color support, and a unique high-quality dark defocus widget system.
   </p>
 </div>
 
 ## 🔒 Privacy & Security
 
-Lune is built with privacy as a core principle:
+Reso Music is built with privacy as a core principle:
 
 - **Zero Internet Access**: The app does not hold the `INTERNET` permission. It never connects to any network, server, or service.
 - **No Trackers**: Zero analytics SDKs, no telemetry, no crash reporters, no ads — nothing phones home.
 - **100% Offline**: All audio is played from your device's local storage. No streaming, no account required, no cloud dependency.
-- **No Data Collection**: Lune does not collect, store, or transmit any personal data. Everything stays on your device.
+- **No Data Collection**: Reso Music does not collect, store, or transmit any personal data. Everything stays on your device.
 - **Open Source**: The entire source code is publicly available for audit. What you see is what you get.
 - **Minimal Permissions**: Only the permissions strictly necessary for local music playback and audio visualization are requested.
 
 ## 📱 F-Droid Information
 
-Lune is designed to be fully open-source and compatible with F-Droid's build standards:
+Reso Music is designed to be fully open-source and compatible with F-Droid's build standards:
 
 - **Pure Gradle Build**: No proprietary pre-compiled binaries.
 - **Standard Metadata**: Compatible with F-Droid build recipes.
 
-**Get app in:**
-
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-alt="Get it on F-Droid"
-height="40">](https://f-droid.org/es/packages/com.demonlab.lune/)
+**Package:** `com.octadevs.resomusic`
 
 ## ✨ Features
 
@@ -137,8 +131,8 @@ keyPassword=password
 1. **Clone the repository**:
 
 ```bash
-git clone https://github.com/MrDemonc/Lune.git
-cd Lune
+git clone https://github.com/octa-devs/reso-music.git
+cd reso-music
 ```
 
 2. **Setup Environment**:
@@ -150,7 +144,7 @@ cd Lune
 ./gradlew assembleRelease
 ```
 
-The output APK will be available at: `app/build/outputs/apk/release/Lune-release.apk`
+The output APK will be available at: `app/build/outputs/apk/release/ResoMusic-release.apk`
 
 ## 👥 The Community
 
@@ -159,17 +153,13 @@ The output APK will be available at: `app/build/outputs/apk/release/Lune-release
 - [Security Policy](SECURITY.md)
 - [Technical Reference](TECHNICAL_REFERENCE.md)
 
-## Other Donation Options
+## 🤝 Credits & Developer
 
-### ☕ Monero (XMR)
-
-```text
-monero:88s5Re4p6a3P9TtqaG1G2Yeq5Ppp1w1npXebyLjktuxYgurFAGn4GRbKuPKGbx1pD1bBwohtAriL7JqB12ECp4SnMN1T3q9
-```
-
-## 🤝 Credits
-
-- **MrDemonc**: Project Creator & Lead Developer.
+- **Octa Devs**: Developer & Maintainer
+  - Website: [octadevs.pages.dev](https://octadevs.pages.dev)
+  - Instagram: [@octadevsoffical](https://instagram.com/octadevsoffical)
+  - Email: [hello.octadevs@gmail.com](mailto:hello.octadevs@gmail.com)
+  - GitHub: [octa-devs/reso-music](https://github.com/octa-devs/reso-music)
 - **Desukia**: Design testing and UX feedback.
 
 ---

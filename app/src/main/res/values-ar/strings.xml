@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lune</string>
+    <string name="app_name">Reso Music</string>
     <string name="settings">الإعدادات</string>
     <string name="about">حول</string>
     <string name="version">الإصدار</string>
@@ -53,7 +53,7 @@
     <string name="tab_genres">الأنواع</string>
 
     <!-- AI Mixes & Intelligence Section -->
-    <string name="ai_core_title">نواة Lune AI</string>
+    <string name="ai_core_title">نواة Reso AI</string>
     <string name="ai_musical_intelligence">الذكاء الموسيقي</string>
     <string name="ai_local_learning_desc">تعلم محلي 100% وخاص بدون إنترنت</string>
     <string name="ai_affinity_flow">انسجام وتناغم المكتبة</string>
@@ -260,7 +260,7 @@
     <string name="visualizer_mini_player">إظهار في المشغل المصغر</string>
     <string name="credits">الاعتمادات</string>
     <string name="credits_desc">الاختبار، اقتراحات التصميم، والشعار</string>
-    <string name="creator_desc">منشئ ومشرف مشغل الموسيقى Lune</string>
+    <string name="creator_desc">منشئ ومشرف مشغل الموسيقى Reso Music</string>
     <string name="gesture">الإيماءات</string>
     <string name="gesture_desc">تخصيص إيماءات التطبيق</string>
     <string name="enable_gestures">تفعيل الإيماءات</string>
@@ -282,7 +282,7 @@
     <string name="other">أخرى</string>
 
     <!-- Users -->
-    <string name="demon">MrDemonc</string>
+    <string name="demon">Octa Devs</string>
     <string name="desukia">Desukia</string>
 
     <!-- Open Source Libraries -->
@@ -316,7 +316,7 @@
     <string name="sort_duration">المدة</string>
     <string name="sort_date_added">تاريخ الإضافة</string>
     <string name="backup_warning_title">ملاحظة هامة</string>
-    <string name="backup_warning_desc">يقوم Lune فقط باستيراد قوائم التشغيل التي تم تصديرها مسبقًا بواسطة هذا التطبيق. تأكد من تخزين ملفات الموسيقى المطابقة على هذا الجهاز لضمان التشغيل السليم.</string>
+    <string name="backup_warning_desc">يقوم Reso Music فقط باستيراد قوائم التشغيل التي تم تصديرها مسبقًا بواسطة هذا التطبيق. تأكد من تخزين ملفات الموسيقى المطابقة على هذا الجهاز لضمان التشغيل السليم.</string>
     <string name="export_playlists">تصدير قوائم التشغيل</string>
     <string name="export_playlists_desc">حفظ قوائم التشغيل الخاصة بك في ملف</string>
     <string name="import_playlists">استيراد قوائم التشغيل</string>
@@ -363,8 +363,8 @@
     <string name="onboarding_perm_music_title">الموسيقى والصوت</string>
     <string name="onboarding_perm_music_desc">أساسي لفحص وفهرسة وتشغيل مجموعة الموسيقى المخزنة على هذا الجهاز.</string>
     <string name="onboarding_perm_manage_files_title">الوصول إلى مجلد الموسيقى</string>
-    <string name="onboarding_perm_manage_files_desc">حدد مجلد الموسيقى الخاص بك للسماح لـ Lune بتنظيم وإدارة مكتبتك بأمان.</string>
-    <string name="onboarding_welcome_back">مرحبًا بك في Lune</string>
+    <string name="onboarding_perm_manage_files_desc">حدد مجلد الموسيقى الخاص بك للسماح لـ Reso Music بتنظيم وإدارة مكتبتك بأمان.</string>
+    <string name="onboarding_welcome_back">مرحبًا بك في Reso Music</string>
     <string name="onboarding_listen_style">استمع بأناقة</string>
     <string name="onboarding_feature_hifi">دعم صوت HiFi</string>
 
@@ -378,10 +378,10 @@
     <string name="onboarding_reminder_desc">إذا تخطيت أي إذن، يمكنك تفعيله بسهولة لاحقاً من الإعدادات > الأمان > الأذونات.</string>
     <string name="onboarding_reminder_button">فهمت</string>
     <string name="onboarding_folder_visibility_title">رؤية المجلدات</string>
-    <string name="onboarding_folder_visibility_desc">بشكل افتراضي، سيعرض Lune الأغاني من مجلد الموسيقى المحدد فقط. قم بتفعيل هذا الخيار لإظهار جميع مجلدات الموسيقى على جهازك منذ البداية.</string>
+    <string name="onboarding_folder_visibility_desc">بشكل افتراضي، سيعرض Reso Music الأغاني من مجلد الموسيقى المحدد فقط. قم بتفعيل هذا الخيار لإظهار جميع مجلدات الموسيقى على جهازك منذ البداية.</string>
     <string name="onboarding_folder_visibility_label">إظهار جميع المجلدات</string>
     <string name="onboarding_support_title">ادعم المشروع</string>
-    <string name="onboarding_support_desc">إذا كنت تستمتع بـ Lune، فكر في دعمنا من خلال قسم التبرع في الإعدادات > حول. كل مساهمة تساعد في استمرار نمو التطبيق!</string>
+    <string name="onboarding_support_desc">إذا كنت تستمتع بـ Reso Music، فكر في دعمنا من خلال قسم التبرع في الإعدادات > حول. كل مساهمة تساعد في استمرار نمو التطبيق!</string>
     <string name="search_play_all">تشغيل</string>
     <string name="search_shuffle">عشوائي</string>
     <string name="playing_from">يتم التشغيل من: %s</string>
@@ -430,9 +430,9 @@
 
     <!-- Quick Player -->
     <string name="quick_player">تشغيل سريع</string>
-    <string name="open_in_lune">فتح في Lune</string>
+    <string name="open_in_lune">فتح في Reso Music</string>
     <string name="close">إغلاق</string>
-    <string name="cd_open_in_lune">فتح في Lune</string>
+    <string name="cd_open_in_lune">فتح في Reso Music</string>
 
     <!-- Lyrics Editor & Backup Auto-Sync -->
     <string name="edit_lyrics">تعديل الكلمات</string>

@@ -1,6 +1,6 @@
-# Lune — Guide Reference
+# Reso Music — Technical Reference
 
-In the latest versions of Lune, the code of the main class, Lune.kt, was split to reduce the amount of code within that class. Several functions were extracted and placed in new classes, creating a better code structure. Below, you can see how the code looks after splitting:
+In Reso Music, the code of the main class, Lune.kt, was split to reduce the amount of code within that class. Several functions were extracted and placed in new classes, creating a better code structure. Below, you can see how the code looks after splitting:
 
 ---
 
@@ -8,7 +8,7 @@ In the latest versions of Lune, the code of the main class, Lune.kt, was split t
 
 ```bash
 
-com.demonlab.lune.ui/
+com.octadevs.resomusic.ui/
 ├── activities/ → Lune.kt (Activity + MainScreen + ReusableSkipIcon)
 ├── components/ → SharedComponents.kt
 ├── data/ → Album.kt
@@ -28,7 +28,7 @@ com.demonlab.lune.ui/
 ## Block 1 — Utilities
 
 **File:** `ui/utils/Extensions.kt`
-**Package:** `com.demonlab.lune.ui.utils`
+**Package:** `com.octadevs.resomusic.ui.utils`
 
 | Function                                                  | Type      | Description               |
 | --------------------------------------------------------- | --------- | ------------------------- |
@@ -44,7 +44,7 @@ com.demonlab.lune.ui/
 ## Block 2 — Shared Components
 
 **File:** `ui/components/SharedComponents.kt`
-**Package:** `com.demonlab.lune.ui.components`
+**Package:** `com.octadevs.resomusic.ui.components`
 
 | Composable              | Description                                    |
 | ----------------------- | ---------------------------------------------- |
@@ -63,7 +63,7 @@ com.demonlab.lune.ui/
 ## Block 3 — Player
 
 **File:** `ui/player/PlayerComponents.kt`
-**Package:** `com.demonlab.lune.ui.player`
+**Package:** `com.octadevs.resomusic.ui.player`
 
 | Composable             | Description                                          |
 | ---------------------- | ---------------------------------------------------- |
@@ -78,7 +78,7 @@ com.demonlab.lune.ui/
 ## Block 4 — Detail Views
 
 **File:** `ui/screens/DetailViews.kt`
-**Package:** `com.demonlab.lune.ui.screens`
+**Package:** `com.octadevs.resomusic.ui.screens`
 
 | Composable           | Description                                       |
 | -------------------- | ------------------------------------------------- |
@@ -91,7 +91,7 @@ com.demonlab.lune.ui/
 ## Block 5 — Search
 
 **File:** `ui/search/SearchScreen.kt`
-**Package:** `com.demonlab.lune.ui.search`
+**Package:** `com.octadevs.resomusic.ui.search`
 
 | Name            | Type       | Description                                                               |
 | --------------- | ---------- | ------------------------------------------------------------------------- |
@@ -103,7 +103,7 @@ com.demonlab.lune.ui/
 ## Block 6 — Playlists
 
 **File:** `ui/playlist/PlaylistViews.kt`
-**Package:** `com.demonlab.lune.ui.playlist`
+**Package:** `com.octadevs.resomusic.ui.playlist`
 
 | Composable                 | Description                            |
 | -------------------------- | -------------------------------------- |
@@ -118,7 +118,7 @@ com.demonlab.lune.ui/
 ## Block 7 — Bottom Sheets
 
 **Files:** `ui/sheets/BottomSheets.kt`, `ui/sheets/PlaylistDialogs.kt`
-**Package:** `com.demonlab.lune.ui.sheets`
+**Package:** `com.octadevs.resomusic.ui.sheets`
 
 | Composable                      | File               | Description                                |
 | ------------------------------- | ------------------ | ------------------------------------------ |
@@ -138,7 +138,7 @@ com.demonlab.lune.ui/
 ## Block 8 — Album Data Class
 
 **File:** `ui/data/Album.kt`
-**Package:** `com.demonlab.lune.ui.data`
+**Package:** `com.octadevs.resomusic.ui.data`
 
 | Name        | Type       | Description                                                |
 | ----------- | ---------- | ---------------------------------------------------------- |
@@ -151,7 +151,7 @@ com.demonlab.lune.ui/
 ## What remains in Lune.kt
 
 **File:** `ui/activities/Lune.kt`
-**Package:** `com.demonlab.lune.ui.activities`
+**Package:** `com.octadevs.resomusic.ui.activities`
 
 | Name                    | Type                          | Description                                                                                                             |
 | ----------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- |

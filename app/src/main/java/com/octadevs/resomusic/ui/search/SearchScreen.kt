@@ -37,6 +37,7 @@ import com.octadevs.resomusic.tools.normalizeForSearch
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
 import com.octadevs.resomusic.ui.components.SongItem
 import com.octadevs.resomusic.ui.components.rememberBlurSheetColors
+import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.data.Album
 import com.octadevs.resomusic.ui.playlist.PlaylistPreviewCovers
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -248,7 +249,12 @@ fun SearchScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(end = 8.dp)
-                                .focusRequester(focusRequester),
+                                .focusRequester(focusRequester)
+                                .glassCard(
+                                    shape = RoundedCornerShape(24.dp),
+                                    isDarkTheme = blurColors.isDark,
+                                    hasBlurBackground = blurColors.hasBlur
+                                ),
                             placeholder = { 
                                 Text(
                                     stringResource(R.string.search_hint), 

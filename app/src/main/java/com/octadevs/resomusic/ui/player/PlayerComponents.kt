@@ -94,6 +94,7 @@ import com.octadevs.resomusic.ui.sheets.PlayerOptionsBottomSheet
 import com.octadevs.resomusic.ui.sheets.QueueBottomSheet
 import com.octadevs.resomusic.ui.sheets.VisualizerSettingsBottomSheet
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
+import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.utils.formatDuration
@@ -902,32 +903,42 @@ fun FullPlayer(
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        onClick = { playbackManager.toggleShuffle() },
-                        shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp, topEnd = 4.dp, bottomEnd = 4.dp),
-                        color = pillBg,
-                        modifier = Modifier.size(48.dp).bounceClick()
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.Default.Shuffle,
-                                contentDescription = stringResource(R.string.option_shuffle),
-                                tint = shuffleIconColor,
-                                modifier = Modifier.size(24.dp)
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .bounceClick()
+                            .glassCard(
+                                shape = RoundedCornerShape(topStart = 24.dp, bottomStart = 24.dp, topEnd = 4.dp, bottomEnd = 4.dp),
+                                isDarkTheme = isDarkTheme,
+                                hasBlurBackground = hasBlurBackground
                             )
-                        }
-                    }
-                    Surface(
-                        onClick = {
-                            playbackManager.toggleFavorite { updatedSong ->
-                                onSyncFavorite?.invoke(updatedSong.id, updatedSong.isFavorite)
-                            }
-                        },
-                        shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp, topEnd = 24.dp, bottomEnd = 24.dp),
-                        color = pillBg,
-                        modifier = Modifier.size(48.dp).bounceClick()
+                            .clickable { playbackManager.toggleShuffle() },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.Shuffle,
+                            contentDescription = stringResource(R.string.option_shuffle),
+                            tint = shuffleIconColor,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .bounceClick()
+                            .glassCard(
+                                shape = RoundedCornerShape(topStart = 4.dp, bottomStart = 4.dp, topEnd = 24.dp, bottomEnd = 24.dp),
+                                isDarkTheme = isDarkTheme,
+                                hasBlurBackground = hasBlurBackground
+                            )
+                            .clickable { 
+                                playbackManager.toggleFavorite { updatedSong ->
+                                    onSyncFavorite?.invoke(updatedSong.id, updatedSong.isFavorite)
+                                }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
                             Icon(
                                 imageVector = if (song.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                 contentDescription = stringResource(R.string.option_favorite),
@@ -2038,8 +2049,11 @@ fun MiniPlayer(
         modifier = Modifier
             .fillMaxWidth()
             .height(68.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(pillMiniColor)
+            .glassCard(
+                shape = RoundedCornerShape(16.dp),
+                isDarkTheme = isDarkTheme,
+                hasBlurBackground = hasBlurBackground
+            )
             .clickable { onExpand() }
             .songSwipeGestures(
                 enabled = true,
@@ -2293,19 +2307,20 @@ fun MiniPlayerMinimized(
         label = "SpinAnim"
     )
 
-    Surface(
-        onClick = onRestore,
-        shape = CircleShape,
-        color = if (hasBlurBackground) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.primaryContainer,
-        tonalElevation = if (hasBlurBackground) 0.dp else 8.dp,
+    Box(
         modifier = modifier
             .offset { IntOffset(0, offsetY.value.roundToInt()) }
             .then(dragModifier)
             .size(52.dp)
             .scale(coverScale)
-            .shadow(6.dp, CircleShape)
+            .glassCard(
+                shape = CircleShape,
+                isDarkTheme = isDarkTheme,
+                hasBlurBackground = hasBlurBackground
+            )
+            .clickable { onRestore() },
+        contentAlignment = Alignment.Center
     ) {
-        Box(contentAlignment = Alignment.Center) {
             if (hasBlurBackground) {
                 Box(
                     modifier = Modifier

@@ -722,6 +722,26 @@ fun SongGridItem(
 }
 
 @Composable
+fun Modifier.glassCard(
+    shape: androidx.compose.ui.graphics.Shape,
+    isDarkTheme: Boolean,
+    hasBlurBackground: Boolean
+): Modifier {
+    val borderColor = if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color.White.copy(alpha = 0.5f)
+    val bgColor = if (isDarkTheme) Color(0xFF1E1E1E).copy(alpha = if (hasBlurBackground) 0.3f else 0.8f) else Color(0xFFF9F9F9).copy(alpha = if (hasBlurBackground) 0.4f else 0.85f)
+    
+    return this
+        .shadow(
+            elevation = 12.dp,
+            shape = shape,
+            spotColor = if (isDarkTheme) Color.Black.copy(alpha = 0.5f) else Color.Gray.copy(alpha = 0.3f),
+            ambientColor = if (isDarkTheme) Color.Black.copy(alpha = 0.5f) else Color.Gray.copy(alpha = 0.3f)
+        )
+        .background(color = bgColor, shape = shape)
+        .border(width = 1.dp, color = borderColor, shape = shape)
+        .clip(shape)
+}
+@Composable
 fun Modifier.headerWaveBackground(
     strokeWidth: androidx.compose.ui.unit.Dp = 1.2.dp,
     cornerRadius: androidx.compose.ui.unit.Dp = 20.dp,

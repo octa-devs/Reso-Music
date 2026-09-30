@@ -1660,6 +1660,12 @@ class MusicService : MediaLibraryService() {
     fun set8DAudioEnabled(enabled: Boolean) {
         eightDAudioJob?.cancel()
         if (enabled) {
+            virtualizer?.enabled = true
+            if (virtualizer?.strengthSupported == true) {
+                virtualizer?.setStrength(1000.toShort())
+            }
+            reverbEffect?.setPreset(android.media.audiofx.PresetReverb.PRESET_LARGEHALL.toInt())
+            
             eightDAudioJob = serviceScope.launch {
                 var t = 0f
                 while (isActive) {
@@ -1672,6 +1678,8 @@ class MusicService : MediaLibraryService() {
                 }
             }
         } else {
+            virtualizer?.enabled = false
+            reverbEffect?.setPreset(settingsManager.reverbPreset)
             val (left, right) = BalanceEffect.volumesForBalance(settingsManager.balance)
             mediaPlayer?.setVolume(left, right)
             secondaryPlayer?.setVolume(left, right)

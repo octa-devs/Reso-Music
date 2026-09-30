@@ -985,7 +985,17 @@ fun MainScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.Black.copy(alpha = if (isDarkThemeMini) 0.3f else 0.1f))
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Black.copy(alpha = if (isDarkThemeMini) 0.2f else 0.0f),
+                                Color.Black.copy(alpha = 0.8f),
+                                Color.Black
+                            ),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
+                    )
             )
         } else {
             AnimatedLiquidGlass(isDarkTheme = isDarkThemeMini)

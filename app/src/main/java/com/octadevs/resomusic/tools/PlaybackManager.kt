@@ -228,6 +228,9 @@ class PlaybackManager private constructor(private val context: Context) {
         private set
     var is8DAudioEnabled by mutableStateOf(settings.is8DAudioEnabled)
         private set
+        
+    var eightDAudioSpeed by mutableStateOf(settings.eightDAudioSpeed)
+        private set
     var dynamicsPreset by mutableStateOf(settings.dynamicsPreset)
         private set
     var isLoudnessEnabled by mutableStateOf(settings.isLoudnessEnabled)
@@ -1250,6 +1253,11 @@ class PlaybackManager private constructor(private val context: Context) {
         is8DAudioEnabled = !is8DAudioEnabled
         settings.is8DAudioEnabled = is8DAudioEnabled
         musicService?.set8DAudioEnabled(is8DAudioEnabled)
+    }
+
+    fun update8DAudioSpeed(speed: Float) {
+        eightDAudioSpeed = speed
+        settings.eightDAudioSpeed = speed
     }
 
     fun updateDynamicsPreset(preset: Int) {

@@ -497,6 +497,10 @@ class SettingsManager(context: Context) {
     var is8DAudioEnabled: Boolean
         get() = prefs.getBoolean("is_8d_audio_enabled", false)
         set(value) = prefs.edit().putBoolean("is_8d_audio_enabled", value).apply()
+        
+    var eightDAudioSpeed: Float
+        get() = prefs.getFloat("eight_d_audio_speed", 0.05f)
+        set(value) = prefs.edit().putFloat("eight_d_audio_speed", value).apply()
 
     var dynamicsPreset: Int
         get() = prefs.getInt("dynamics_preset", 0)

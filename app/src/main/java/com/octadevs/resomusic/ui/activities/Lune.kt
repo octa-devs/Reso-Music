@@ -988,12 +988,11 @@ fun MainScreen(
                     .background(
                         Brush.verticalGradient(
                             colors = listOf(
-                                Color.Black.copy(alpha = if (isDarkThemeMini) 0.2f else 0.0f),
-                                Color.Black.copy(alpha = 0.8f),
+                                Color.Transparent,
+                                Color.Black.copy(alpha = if (isDarkThemeMini) 0.6f else 0.4f),
+                                Color.Black,
                                 Color.Black
-                            ),
-                            startY = 0f,
-                            endY = Float.POSITIVE_INFINITY
+                            )
                         )
                     )
             )

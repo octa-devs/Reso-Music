@@ -1673,7 +1673,7 @@ class MusicService : MediaLibraryService() {
                     val (left, right) = BalanceEffect.volumesForBalance(pan)
                     mediaPlayer?.setVolume(left, right)
                     secondaryPlayer?.setVolume(left, right)
-                    t += 0.05f
+                    t += settingsManager.eightDAudioSpeed
                     delay(50)
                 }
             }

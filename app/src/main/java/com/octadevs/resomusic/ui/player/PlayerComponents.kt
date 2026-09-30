@@ -1601,6 +1601,29 @@ fun FullPlayer(
                 }
             }
 
+
+            AnimatedVisibility(visible = playbackManager.is8DAudioEnabled) {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 8.dp)) {
+                    Text(
+                        text = "8D Audio Speed: ${(playbackManager.eightDAudioSpeed * 1000).toInt()}%",
+                        color = if (hasBlurBackground) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                    Slider(
+                        value = playbackManager.eightDAudioSpeed,
+                        onValueChange = { playbackManager.update8DAudioSpeed(it) },
+                        valueRange = 0.01f..0.2f,
+                        colors = SliderDefaults.colors(
+                            thumbColor = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.primary,
+                            activeTrackColor = if (hasBlurBackground) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+                            inactiveTrackColor = if (hasBlurBackground) Color.White.copy(alpha = 0.2f) else MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                        modifier = Modifier.fillMaxWidth().height(24.dp)
+                    )
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
         }
 

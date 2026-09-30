@@ -225,7 +225,7 @@ fun AboutScreen() {
                     }
                     Button(
                         onClick = { 
-                            uriHandler.openUri("https://octadevs.pages.dev")
+                            uriHandler.openUri("https://octadevs.fun")
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -325,7 +325,7 @@ fun AboutScreen() {
                             color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { uriHandler.openUri("https://octadevs.pages.dev") }
+                                .clickable { uriHandler.openUri("https://octadevs.fun") }
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
@@ -339,7 +339,7 @@ fun AboutScreen() {
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "octadevs.pages.dev",
+                                    text = "octadevs.fun",
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Medium,
                                     color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
@@ -381,7 +381,7 @@ fun AboutScreen() {
                             color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { uriHandler.openUri("mailto:hello.octadevs@gmail.com") }
+                                .clickable { uriHandler.openUri("mailto:hello@octadevs.fun") }
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
@@ -395,7 +395,7 @@ fun AboutScreen() {
                                 )
                                 Spacer(modifier = Modifier.width(10.dp))
                                 Text(
-                                    text = "hello.octadevs@gmail.com",
+                                    text = "hello@octadevs.fun",
                                     style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Medium,
                                     color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
@@ -403,29 +403,6 @@ fun AboutScreen() {
                             }
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Credits
-                    HorizontalDivider(thickness = 0.5.dp, color = if (hasBlurBackground) Color.White.copy(alpha = 0.20f) else MaterialTheme.colorScheme.outlineVariant)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    
-                    Text(
-                        text = stringResource(R.string.credits),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = if (hasBlurBackground) Color.White else MaterialTheme.secondary濃(0.7f)
-                    )
-                    Text(
-                        text = stringResource(R.string.desukia),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = stringResource(R.string.credits_desc),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = if (hasBlurBackground) Color.White.copy(alpha = 0.75f) else MaterialTheme.colorScheme.onSurfaceVariant
-                    )
 
                     Spacer(modifier = Modifier.height(24.dp))
                     HorizontalDivider(thickness = 0.5.dp, color = if (hasBlurBackground) Color.White.copy(alpha = 0.20f) else MaterialTheme.colorScheme.outlineVariant)
@@ -562,7 +539,7 @@ fun DonateDialog(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Button(
-                    onClick = { uriHandler.openUri("https://octadevs.pages.dev") },
+                    onClick = { uriHandler.openUri("https://octadevs.fun") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .bounceClick(),

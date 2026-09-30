@@ -139,48 +139,49 @@ fun AppBlurBackdrop(
 @Composable
 fun AnimatedLiquidGlass(isDarkTheme: Boolean) {
     val infiniteTransition = rememberInfiniteTransition(label = "liquid")
-    val anim1 by infiniteTransition.animateFloat(
-        initialValue = 0f, targetValue = 360f,
-        animationSpec = infiniteRepeatable(tween(15000, easing = LinearEasing), RepeatMode.Restart), label = "a1"
-    )
-    val anim2 by infiniteTransition.animateFloat(
-        initialValue = 360f, targetValue = 0f,
-        animationSpec = infiniteRepeatable(tween(20000, easing = LinearEasing), RepeatMode.Restart), label = "a2"
-    )
-    val anim3 by infiniteTransition.animateFloat(
-        initialValue = 0f, targetValue = 360f,
-        animationSpec = infiniteRepeatable(tween(12000, easing = LinearEasing), RepeatMode.Restart), label = "a3"
-    )
     
-    val color1 = if (isDarkTheme) Color(0xFF1E3A8A) else Color(0xFFDBEAFE)
-    val color2 = if (isDarkTheme) Color(0xFF581C87) else Color(0xFFF3E8FF)
-    val color3 = if (isDarkTheme) Color(0xFF831843) else Color(0xFFFCE7F3)
+    // Slow, mesmerizing rotations
+    val r1 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(25000, easing = LinearEasing), RepeatMode.Restart), label = "r1")
+    val r2 by infiniteTransition.animateFloat(360f, 0f, infiniteRepeatable(tween(30000, easing = LinearEasing), RepeatMode.Restart), label = "r2")
+    val r3 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(20000, easing = LinearEasing), RepeatMode.Restart), label = "r3")
+    val r4 by infiniteTransition.animateFloat(360f, 0f, infiniteRepeatable(tween(35000, easing = LinearEasing), RepeatMode.Restart), label = "r4")
+    val r5 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(28000, easing = LinearEasing), RepeatMode.Restart), label = "r5")
+
+    // Vibrant neon/deep space colors
+    val c1 = if (isDarkTheme) Color(0xFF1E3A8A) else Color(0xFFBFDBFE)
+    val c2 = if (isDarkTheme) Color(0xFF6B21A8) else Color(0xFFE9D5FF)
+    val c3 = if (isDarkTheme) Color(0xFF9D174D) else Color(0xFFFBCFE8)
+    val c4 = if (isDarkTheme) Color(0xFF065F46) else Color(0xFFA7F3D0)
+    val c5 = if (isDarkTheme) Color(0xFF9A3412) else Color(0xFFFED7AA)
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .blur(80.dp)
-            .drawWithContent {
+            .blur(120.dp) // Massive blur for glass mesh effect
+            .drawWithCache {
                 val width = size.width
                 val height = size.height
-                val radius = width.coerceAtLeast(height) * 0.55f
+                val radius = width.coerceAtLeast(height) * 0.7f
 
-                withTransform({
-                    rotate(anim1, Offset(width * 0.4f, height * 0.4f))
-                }) {
-                    drawCircle(color1, radius = radius * 0.8f, center = Offset(width * 0.2f, height * 0.2f))
+                onDrawBehind {
+                    drawRect(color = if (isDarkTheme) Color.Black else Color.White) // base background
+                    
+                    withTransform({ rotate(r1, Offset(width * 0.5f, height * 0.5f)) }) {
+                        drawCircle(c1, radius = radius * 0.8f, center = Offset(width * 0.2f, height * 0.1f))
+                    }
+                    withTransform({ rotate(r2, Offset(width * 0.4f, height * 0.6f)) }) {
+                        drawCircle(c2, radius = radius * 0.9f, center = Offset(width * 0.8f, height * 0.4f))
+                    }
+                    withTransform({ rotate(r3, Offset(width * 0.5f, height * 0.5f)) }) {
+                        drawCircle(c3, radius = radius * 0.7f, center = Offset(width * 0.1f, height * 0.8f))
+                    }
+                    withTransform({ rotate(r4, Offset(width * 0.6f, height * 0.4f)) }) {
+                        drawCircle(c4, radius = radius * 0.85f, center = Offset(width * 0.9f, height * 0.9f))
+                    }
+                    withTransform({ rotate(r5, Offset(width * 0.5f, height * 0.5f)) }) {
+                        drawCircle(c5, radius = radius * 0.6f, center = Offset(width * 0.5f, height * 0.5f))
+                    }
                 }
-                withTransform({
-                    rotate(anim2, Offset(width * 0.6f, height * 0.6f))
-                }) {
-                    drawCircle(color2, radius = radius * 0.9f, center = Offset(width * 0.8f, height * 0.5f))
-                }
-                withTransform({
-                    rotate(anim3, Offset(width * 0.5f, height * 0.5f))
-                }) {
-                    drawCircle(color3, radius = radius * 0.7f, center = Offset(width * 0.5f, height * 0.8f))
-                }
-                drawContent()
             }
     ) {
         Box(

@@ -963,11 +963,15 @@ fun MainScreen(
         val scrollToCurrentTrigger = remember { mutableStateOf(0) }
 
         if (currentSong != null) {
+            val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
+            val bgRot by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(55000, easing = LinearEasing)), label = "bg_rot")
+            val bgScale by infiniteTransition.animateFloat(2.5f, 3.8f, infiniteRepeatable(tween(25000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "bg_scale")
+
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .blur(100.dp)
-                    .alpha(if (isDarkThemeMini) 0.6f else 0.7f)
+                    .alpha(if (isDarkThemeMini) 0.7f else 0.8f)
+                    .clipToBounds()
             ) {
                 val sharedBlurReq = remember(currentSong.id, currentSong.coverUrl) {
                     ImageRequest.Builder(context)
@@ -978,7 +982,11 @@ fun MainScreen(
                 AsyncImage(
                     model = sharedBlurReq,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .scale(bgScale)
+                        .rotate(bgRot)
+                        .blur(100.dp),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -1100,24 +1108,23 @@ fun MainScreen(
                     MaterialTheme.colorScheme.primary
                 }
 
-                LargeTopAppBar(
+                CenterAlignedTopAppBar(
                     title = { 
                         val customTitle by settingsManager.customTitleFlow.collectAsState()
                         val titleText = if (customTitle.isEmpty()) "Reso Music" else customTitle
 
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             AnimatedLogo(
                                 isPlaying = isPlaying,
                                 tintColor = titleColor,
-                                modifier = Modifier.padding(end = 4.dp)
+                                modifier = Modifier.padding(end = 4.dp).size(42.dp)
                             )
-                            ResponsiveText(
+                            Text(
                                 text = titleText,
-                                modifier = Modifier.weight(1f).fillMaxWidth(),
-                                targetTextSize = 32.sp,
+                                fontSize = 28.sp,
                                 color = titleColor,
                                 fontWeight = FontWeight.Bold
                             )

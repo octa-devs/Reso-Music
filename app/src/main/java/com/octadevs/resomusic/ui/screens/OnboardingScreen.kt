@@ -42,7 +42,7 @@ import com.octadevs.resomusic.ui.components.LiquidGlassBackground
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Offset
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -281,12 +281,7 @@ fun WelcomeStep(onStartClick: () -> Unit) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 42.sp,
                 letterSpacing = (-1).sp,
-                brush = Brush.linearGradient(
-                    listOf(
-                        MaterialTheme.colorScheme.primary,
-                        MaterialTheme.colorScheme.tertiary
-                    )
-                )
+                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(modifier = Modifier.height(28.dp))
@@ -1216,42 +1211,35 @@ fun FeaturesStep(onFinish: () -> Unit) {
                         val scale = 1f - (Math.abs(pageOffset) * 0.15f)
                         val alpha = 1f - (Math.abs(pageOffset) * 0.7f)
 
-                        Card(
+                        Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .graphicsLayer {
                                     scaleX = scale
                                     scaleY = scale
                                     this.alpha = alpha
-                                },
-                            shape = RoundedCornerShape(28.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.Transparent
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .matchParentSize()
-                                    .clip(RoundedCornerShape(28.dp))
-                                    .background(
-                                        Brush.verticalGradient(
-                                            listOf(
-                                                Color.White.copy(alpha = if (isDark) 0.13f else 0.55f),
-                                                Color.White.copy(alpha = if (isDark) 0.06f else 0.28f)
-                                            )
+                                }
+                                .clip(RoundedCornerShape(28.dp))
+                                .background(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Color.White.copy(alpha = if (isDark) 0.13f else 0.55f),
+                                            Color.White.copy(alpha = if (isDark) 0.06f else 0.28f)
                                         )
                                     )
-                                    .border(
-                                        width = 1.dp,
-                                        brush = Brush.verticalGradient(
-                                            listOf(
-                                                Color.White.copy(alpha = 0.5f),
-                                                Color.White.copy(alpha = 0.08f)
-                                            )
-                                        ),
-                                        shape = RoundedCornerShape(28.dp)
-                                    )
-                            )
+                                )
+                                .border(
+                                    width = 1.dp,
+                                    brush = Brush.verticalGradient(
+                                        listOf(
+                                            Color.White.copy(alpha = 0.5f),
+                                            Color.White.copy(alpha = 0.08f)
+                                        )
+                                    ),
+                                    shape = RoundedCornerShape(28.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()

@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -16,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
+import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.utils.bounceClick
 
 @Composable
@@ -131,11 +133,39 @@ fun SectionHeader(
     title: String,
     hasBlurBackground: Boolean = false
 ) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 4.dp),
-        color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
-    )
+    val accent = MaterialTheme.colorScheme.primary
+    val onGlass = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 6.dp)
+    ) {
+        Text(
+            text = title.uppercase(),
+            style = MicroLabel,
+            color = if (hasBlurBackground) Color.White.copy(alpha = 0.62f) else accent
+        )
+        Spacer(Modifier.height(3.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall.copy(
+                fontWeight = FontWeight.Bold,
+                brush = Brush.linearGradient(
+                    listOf(onGlass, onGlass.copy(alpha = 0.68f))
+                )
+            ),
+            maxLines = 1
+        )
+        Spacer(Modifier.height(8.dp))
+        Box(
+            modifier = Modifier
+                .width(64.dp)
+                .height(3.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(
+                    Brush.horizontalGradient(listOf(accent, Color.Transparent))
+                )
+        )
+    }
 }

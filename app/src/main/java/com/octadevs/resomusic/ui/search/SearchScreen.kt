@@ -35,6 +35,7 @@ import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.tools.normalizeForSearch
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.GlassIconButton
 import com.octadevs.resomusic.ui.components.SongItem
 import com.octadevs.resomusic.ui.components.rememberBlurSheetColors
 import com.octadevs.resomusic.ui.components.glassCard
@@ -276,40 +277,27 @@ fun SearchScreen(
                         )
                     },
                     navigationIcon = {
-                        IconButton(onClick = onDismiss) {
-                            Surface(
-                                shape = CircleShape,
-                                color = if (blurColors.hasBlur) Color.White.copy(alpha = 0.14f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                modifier = Modifier.size(40.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowBack, 
-                                        contentDescription = "Back",
-                                        tint = if (blurColors.hasBlur) Color.White else MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
-                        }
+                        GlassIconButton(
+                            icon = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            onClick = onDismiss,
+                            size = 42.dp,
+                            iconSize = 21.dp,
+                            tint = if (blurColors.hasBlur) Color.White else MaterialTheme.colorScheme.onSurface,
+                            strong = true
+                        )
                     },
                     actions = {
-                        IconButton(onClick = { showFilterDialog = true }) {
-                            Surface(
-                                shape = CircleShape,
-                                color = if (blurColors.hasBlur) Color.White.copy(alpha = 0.14f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                modifier = Modifier.size(40.dp)
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        Icons.Default.FilterList,
-                                        contentDescription = "Filter",
-                                        tint = if (blurColors.hasBlur) Color.White else MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
-                        }
+                        GlassIconButton(
+                            icon = Icons.Default.FilterList,
+                            contentDescription = "Filter",
+                            onClick = { showFilterDialog = true },
+                            size = 42.dp,
+                            iconSize = 21.dp,
+                            tint = if (blurColors.hasBlur) Color.White else MaterialTheme.colorScheme.onSurface,
+                            strong = true
+                        )
+                        Spacer(Modifier.width(12.dp))
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent

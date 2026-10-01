@@ -1002,8 +1002,18 @@ fun MainScreen(
             AnimatedLiquidGlass(isDarkTheme = isDarkThemeMini)
         }
 
+        val activePrimary = getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)
+        val titleColor = if (useCustomControlsColor) {
+            activePrimary
+        } else if (hasBlurBackgroundMini) {
+            Color.White
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+        val onGlass = if (hasBlurBackgroundMini) Color.White else MaterialTheme.colorScheme.onSurface
+
         Scaffold(
-            snackbarHost = { 
+            snackbarHost = {
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier
@@ -1076,114 +1086,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             containerColor = if (hasBlurBackgroundMini && currentSong != null) Color.Transparent else MaterialTheme.colorScheme.surface,
-            topBar = {
-                val activePrimary = getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)
-                val titleColor = if (useCustomControlsColor) {
-                    activePrimary
-                } else if (hasBlurBackgroundMini) {
-                    Color.White
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
-
-                val actionBtnBg = if (useCustomControlsColor) {
-                    activePrimary.copy(alpha = 0.20f)
-                } else if (hasBlurBackgroundMini) {
-                    Color.White.copy(alpha = 0.15f)
-                } else {
-                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
-                }
-
-                val actionBtnTint = if (useCustomControlsColor) {
-                    activePrimary
-                } else if (hasBlurBackgroundMini) {
-                    Color.White
-                } else {
-                    MaterialTheme.colorScheme.primary
-                }
-
-                val onGlass = if (hasBlurBackgroundMini) Color.White else MaterialTheme.colorScheme.onSurface
-
-                CenterAlignedTopAppBar(
-                    title = {
-                        val customTitle by settingsManager.customTitleFlow.collectAsState()
-                        val titleText = if (customTitle.isEmpty()) "Reso Music" else customTitle
-
-                        GlassSurface(
-                            modifier = Modifier.height(46.dp),
-                            shape = RoundedCornerShape(23.dp),
-                            cornerRadius = 23.dp,
-                            strong = true,
-                            raised = true
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center,
-                                modifier = Modifier.padding(horizontal = 16.dp)
-                            ) {
-                                AnimatedLogo(
-                                    isPlaying = isPlaying,
-                                    tintColor = titleColor,
-                                    modifier = Modifier.size(28.dp)
-                                )
-                                Spacer(Modifier.width(9.dp))
-                                Text(
-                                    text = titleText,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    style = androidx.compose.ui.text.TextStyle(
-                                        fontSize = 20.sp,
-                                        lineHeight = 22.sp,
-                                        letterSpacing = (-0.5).sp,
-                                        fontWeight = FontWeight.Bold,
-                                        brush = Brush.linearGradient(
-                                            listOf(titleColor, titleColor.copy(alpha = 0.62f))
-                                        )
-                                    )
-                                )
-                            }
-                        }
-                    },
-                    scrollBehavior = scrollBehavior,
-                    actions = {
-                        GlassIconButton(
-                            icon = when (themeMode) {
-                                1 -> Icons.Outlined.LightMode
-                                2 -> Icons.Outlined.DarkMode
-                                else -> Icons.Outlined.BrightnessAuto
-                            },
-                            contentDescription = when (themeMode) {
-                                1 -> stringResource(R.string.theme_light)
-                                2 -> stringResource(R.string.theme_dark)
-                                else -> stringResource(R.string.theme_auto)
-                            },
-                            onClick = onThemeModeChange,
-                            size = 42.dp,
-                            iconSize = 19.dp,
-                            tint = onGlass,
-                            strong = true
-                        )
-                        Spacer(Modifier.width(4.dp))
-                        GlassIconButton(
-                            icon = Icons.Outlined.Settings,
-                            contentDescription = stringResource(R.string.settings),
-                            onClick = {
-                                context.startActivity(Intent(context, SettingsActivity::class.java))
-                            },
-                            size = 42.dp,
-                            iconSize = 21.dp,
-                            tint = onGlass,
-                            strong = true
-                        )
-                        Spacer(Modifier.width(12.dp))
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = Color.Transparent,
-                        scrolledContainerColor = Color.Transparent,
-                        titleContentColor = onGlass
-                    )
-                )
-            }
+            topBar = {}
         ) { innerPadding ->
             val contextId = remember(selectedFolder) {
                 when (selectedFolder) {
@@ -1208,6 +1111,21 @@ fun MainScreen(
             }
 
             Column(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
+
+                // Pinned header. Deliberately NOT a Scaffold topBar: a collapsing
+                // app bar can be measured at zero height here, which used to hide
+                // the settings entry completely.
+                ResoTopHeader(
+                    titleColor = titleColor,
+                    onGlass = onGlass,
+                    themeMode = themeMode,
+                    logo = { AnimatedLogo(isPlaying = isPlaying, tintColor = titleColor, modifier = Modifier.size(26.dp)) },
+                    onThemeClick = onThemeModeChange,
+                    onSearchClick = { showSearchScreen = true },
+                    onSettingsClick = {
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
+                    }
+                )
 
                 HorizontalPager(
                     state = pagerState,
@@ -3125,8 +3043,132 @@ fun UnifiedHeaderPill(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                // Second, permanent way into Settings right here in the nav bar.
+                Surface(
+                    onClick = {
+                        context.startActivity(Intent(context, SettingsActivity::class.java))
+                    },
+                    shape = CircleShape,
+                    color = searchIconBg,
+                    modifier = Modifier
+                        .size(46.dp)
+                        .bounceClick()
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(R.string.settings),
+                            tint = searchIconTint,
+                            modifier = Modifier.size(21.dp)
+                        )
+                    }
+                }
             }
         }
+    }
+}
+
+/**
+ * The app's one permanent header: brand pill on the left, then Search, Theme and
+ * Settings. Pinned outside the pager so it can never be scrolled away or
+ * collapsed, and so there is always an unmistakable way into Settings.
+ */
+@Composable
+private fun ResoTopHeader(
+    titleColor: Color,
+    onGlass: Color,
+    themeMode: Int,
+    logo: @Composable () -> Unit,
+    onThemeClick: () -> Unit,
+    onSearchClick: () -> Unit,
+    onSettingsClick: () -> Unit
+) {
+    val context = LocalContext.current
+    val settingsManager = remember { SettingsManager.getInstance(context) }
+    val customTitle by settingsManager.customTitleFlow.collectAsState()
+    val titleText = if (customTitle.isEmpty()) "Reso Music" else customTitle
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 14.dp, end = 14.dp, top = 8.dp, bottom = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        GlassSurface(
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .height(46.dp),
+            shape = RoundedCornerShape(23.dp),
+            cornerRadius = 23.dp,
+            strong = true,
+            raised = true
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(horizontal = 14.dp)
+            ) {
+                logo()
+                Spacer(Modifier.width(9.dp))
+                Text(
+                    text = titleText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = androidx.compose.ui.text.TextStyle(
+                        fontSize = 19.sp,
+                        lineHeight = 21.sp,
+                        letterSpacing = (-0.5).sp,
+                        fontWeight = FontWeight.Bold,
+                        brush = Brush.linearGradient(
+                            listOf(titleColor, titleColor.copy(alpha = 0.62f))
+                        )
+                    )
+                )
+            }
+        }
+
+        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.width(6.dp))
+
+        GlassIconButton(
+            icon = Icons.Default.Search,
+            contentDescription = stringResource(R.string.search),
+            onClick = onSearchClick,
+            size = 42.dp,
+            iconSize = 19.dp,
+            tint = onGlass,
+            strong = true
+        )
+        Spacer(Modifier.width(6.dp))
+        GlassIconButton(
+            icon = when (themeMode) {
+                1 -> Icons.Outlined.LightMode
+                2 -> Icons.Outlined.DarkMode
+                else -> Icons.Outlined.BrightnessAuto
+            },
+            contentDescription = when (themeMode) {
+                1 -> stringResource(R.string.theme_light)
+                2 -> stringResource(R.string.theme_dark)
+                else -> stringResource(R.string.theme_auto)
+            },
+            onClick = onThemeClick,
+            size = 42.dp,
+            iconSize = 19.dp,
+            tint = onGlass,
+            strong = true
+        )
+        Spacer(Modifier.width(6.dp))
+        GlassIconButton(
+            icon = Icons.Outlined.Settings,
+            contentDescription = stringResource(R.string.settings),
+            onClick = onSettingsClick,
+            size = 42.dp,
+            iconSize = 21.dp,
+            tint = onGlass,
+            strong = true
+        )
     }
 }
 

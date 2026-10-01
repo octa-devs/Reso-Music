@@ -70,6 +70,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.content.FileProvider
 import androidx.core.view.WindowCompat
@@ -94,6 +95,7 @@ import com.octadevs.resomusic.ui.sheets.PlayerOptionsBottomSheet
 import com.octadevs.resomusic.ui.sheets.QueueBottomSheet
 import com.octadevs.resomusic.ui.sheets.VisualizerSettingsBottomSheet
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
+import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -855,14 +857,18 @@ fun FullPlayer(
                     modifier = Modifier.weight(1f).padding(end = 12.dp),
                     horizontalAlignment = Alignment.Start
                 ) {
+                    val fullPlayerTitleColor = if (useBlurControls) Color.White else MaterialTheme.colorScheme.onSurface
                     Text(
-                        song.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
+                        text = song.title,
                         maxLines = 1,
                         textAlign = TextAlign.Start,
-                        color = if (useBlurControls) Color.White else MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.fillMaxWidth().basicMarquee()
+                        modifier = Modifier.fillMaxWidth().basicMarquee(),
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            brush = Brush.linearGradient(
+                                listOf(fullPlayerTitleColor, fullPlayerTitleColor.copy(alpha = 0.66f))
+                            )
+                        )
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -872,20 +878,19 @@ fun FullPlayer(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Surface(
-                            color = if (useBlurControls) blurContainerColor else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                            color = if (useBlurControls) Color.White.copy(alpha = 0.14f) else MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
                             shape = RoundedCornerShape(percent = 50),
                             modifier = Modifier
                                 .weight(1f, fill = false)
                                 .clickable { onArtistClick?.invoke(song.artist) }
                         ) {
                             Text(
-                                song.artist,
-                                style = MaterialTheme.typography.labelMedium,
+                                text = song.artist.uppercase(),
+                                style = MicroLabel.copy(fontSize = 11.sp, letterSpacing = 1.4.sp),
                                 color = if (useBlurControls) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                                fontWeight = FontWeight.Bold,
                                 maxLines = 1,
                                 textAlign = TextAlign.Start,
-                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp).basicMarquee()
+                                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp).basicMarquee()
                             )
                         }
                     }

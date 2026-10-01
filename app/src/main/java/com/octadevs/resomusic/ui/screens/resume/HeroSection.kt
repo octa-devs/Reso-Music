@@ -41,6 +41,9 @@ import coil.compose.AsyncImage
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
+import com.octadevs.resomusic.ui.components.LightSweep
+import com.octadevs.resomusic.ui.components.liquidGlass
+import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -257,33 +260,63 @@ fun HeroSection(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(180.dp)
+                    .height(196.dp)
                     .padding(horizontal = 16.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(brush = heroTheme.brush)
-                    .padding(20.dp)
+                    .liquidGlass(
+                        shape = RoundedCornerShape(30.dp),
+                        cornerRadius = 30.dp,
+                        strong = true,
+                        raised = true
+                    )
             ) {
-                Column(modifier = Modifier.fillMaxSize()) {
+                // Time-of-day wash
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(brush = heroTheme.brush)
+                )
+                LightSweep(modifier = Modifier.matchParentSize())
+
+                Column(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .padding(22.dp)
+                ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = heroTheme.greeting,
-                                style = MaterialTheme.typography.headlineMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = heroTheme.contentColor,
-                                maxLines = 1
+                                text = heroTheme.greeting.uppercase(),
+                                style = MicroLabel,
+                                color = heroTheme.contentColor.copy(alpha = 0.72f)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = dailyListeningTimeStr,
+                                maxLines = 1,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    fontSize = 46.sp,
+                                    lineHeight = 46.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = (-2.0).sp,
+                                    brush = Brush.linearGradient(
+                                        listOf(
+                                            heroTheme.contentColor,
+                                            heroTheme.contentColor.copy(alpha = 0.66f)
+                                        )
+                                    )
+                                )
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
                                 text = stringResource(R.string.stats_music_unit),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = heroTheme.contentColor.copy(alpha = 0.75f)
+                                color = heroTheme.contentColor.copy(alpha = 0.72f)
                             )
                         }
                         Surface(
                             shape = CircleShape,
                             color = heroTheme.iconBgColor,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(50.dp)
                         ) {
                             Box(contentAlignment = Alignment.Center) {
                                 Icon(

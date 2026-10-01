@@ -366,13 +366,22 @@ fun SongItem(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 1.dp)
-            .bounceClick(scaleDown = 0.96f),
-        onClick = onClick ?: {},
+            .padding(horizontal = 16.dp, vertical = 1.dp),
         shape = shape,
-        color = cardBg,
-        border = itemBorder
+        color = Color.Transparent
     ) {
+        Row(
+            modifier = Modifier
+                .liquidGlass(
+                    shape = shape,
+                    cornerRadius = 24.dp,
+                    strong = !hasBlurBackground,
+                    raised = false,
+                    tint = if (currentlyPlaying) activePrimary else null
+                )
+                .bounceClick(scaleDown = 0.96f)
+                .clickable(enabled = onClick != null) { onClick?.invoke() }
+        ) {
         ListItem(
             colors = ListItemDefaults.colors(containerColor = Color.Transparent),
             supportingContent = {
@@ -514,9 +523,17 @@ fun SongItem(
                 Text(
                     song.title,
                     maxLines = 1,
-                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.weight(1f, fill = false).basicMarquee(),
-                    color = titleColor
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                        brush = Brush.linearGradient(
+                            if (currentlyPlaying) {
+                                listOf(titleColor, titleColor.copy(alpha = 0.62f))
+                            } else {
+                                listOf(titleColor, titleColor)
+                            }
+                        )
+                    )
                 )
             }
         }

@@ -1102,85 +1102,85 @@ fun MainScreen(
                     MaterialTheme.colorScheme.primary
                 }
 
+                val onGlass = if (hasBlurBackgroundMini) Color.White else MaterialTheme.colorScheme.onSurface
+
                 CenterAlignedTopAppBar(
-                    title = { 
+                    title = {
                         val customTitle by settingsManager.customTitleFlow.collectAsState()
                         val titleText = if (customTitle.isEmpty()) "Reso Music" else customTitle
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
+                        GlassSurface(
+                            modifier = Modifier.height(46.dp),
+                            shape = RoundedCornerShape(23.dp),
+                            cornerRadius = 23.dp,
+                            strong = true,
+                            raised = true
                         ) {
-                            AnimatedLogo(
-                                isPlaying = isPlaying,
-                                tintColor = titleColor,
-                                modifier = Modifier.padding(end = 4.dp).size(42.dp)
-                            )
-                            Text(
-                                text = titleText,
-                                fontSize = 28.sp,
-                                color = titleColor,
-                                fontWeight = FontWeight.Bold
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(horizontal = 16.dp)
+                            ) {
+                                AnimatedLogo(
+                                    isPlaying = isPlaying,
+                                    tintColor = titleColor,
+                                    modifier = Modifier.size(28.dp)
+                                )
+                                Spacer(Modifier.width(9.dp))
+                                Text(
+                                    text = titleText,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    style = androidx.compose.ui.text.TextStyle(
+                                        fontSize = 20.sp,
+                                        lineHeight = 22.sp,
+                                        letterSpacing = (-0.5).sp,
+                                        fontWeight = FontWeight.Bold,
+                                        brush = Brush.linearGradient(
+                                            listOf(titleColor, titleColor.copy(alpha = 0.62f))
+                                        )
+                                    )
+                                )
+                            }
                         }
                     },
                     scrollBehavior = scrollBehavior,
                     actions = {
-                        IconButton(
-                            onClick = onThemeModeChange
-                        ) {
-                            Surface(
-                                shape = CircleShape,
-                                color = actionBtnBg,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .bounceClick()
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        imageVector = when (themeMode) {
-                                            1 -> Icons.Outlined.LightMode
-                                            2 -> Icons.Outlined.DarkMode
-                                            else -> Icons.Outlined.BrightnessAuto
-                                        },
-                                        contentDescription = when (themeMode) {
-                                            1 -> stringResource(R.string.theme_light)
-                                            2 -> stringResource(R.string.theme_dark)
-                                            else -> stringResource(R.string.theme_auto)
-                                        },
-                                        tint = actionBtnTint,
-                                        modifier = Modifier.size(20.dp)
-                                    )
-                                }
-                            }
-                        }
-                        IconButton(
-                            onClick = { 
+                        GlassIconButton(
+                            icon = when (themeMode) {
+                                1 -> Icons.Outlined.LightMode
+                                2 -> Icons.Outlined.DarkMode
+                                else -> Icons.Outlined.BrightnessAuto
+                            },
+                            contentDescription = when (themeMode) {
+                                1 -> stringResource(R.string.theme_light)
+                                2 -> stringResource(R.string.theme_dark)
+                                else -> stringResource(R.string.theme_auto)
+                            },
+                            onClick = onThemeModeChange,
+                            size = 42.dp,
+                            iconSize = 19.dp,
+                            tint = onGlass,
+                            strong = true
+                        )
+                        Spacer(Modifier.width(4.dp))
+                        GlassIconButton(
+                            icon = Icons.Outlined.Settings,
+                            contentDescription = stringResource(R.string.settings),
+                            onClick = {
                                 context.startActivity(Intent(context, SettingsActivity::class.java))
                             },
-                        ) {
-                            Surface(
-                                shape = CircleShape,
-                                color = actionBtnBg,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .bounceClick()
-                            ) {
-                                Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.Settings,
-                                        contentDescription = stringResource(R.string.settings),
-                                        tint = actionBtnTint,
-                                        modifier = Modifier.size(22.dp)
-                                    )
-                                }
-                            }
-                        }
+                            size = 42.dp,
+                            iconSize = 21.dp,
+                            tint = onGlass,
+                            strong = true
+                        )
+                        Spacer(Modifier.width(12.dp))
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent,
                         scrolledContainerColor = Color.Transparent,
-                    titleContentColor = if (hasBlurBackgroundMini) (if (isDarkThemeMini) Color.White else MaterialTheme.colorScheme.onSurface) else MaterialTheme.colorScheme.onSurface
+                        titleContentColor = onGlass
                     )
                 )
             }

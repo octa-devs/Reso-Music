@@ -56,7 +56,7 @@ import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.founded.LibraryMusic
+import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Notifications
@@ -857,7 +857,7 @@ fun SettingsScreen(
                             SettingsPreferenceItem(
                                 headlineText = stringResource(R.string.section_customization),
                                 supportingText = stringResource(R.string.section_customization_desc),
-                                icon = Icons.Default.LibraryMusic,
+                                icon = Icons.Default.Album,
                                 position = SectionPosition.MIDDLE,
                                 onClick = { context.startActivity(Intent(context, CustomizationActivity::class.java)) }
                             )
@@ -1107,10 +1107,10 @@ private fun SettingsHero(
                         fontSize = 46.sp,
                         lineHeight = 46.sp,
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = (-1.8).sp
-                    ),
-                    brush = Brush.linearGradient(
-                        listOf(Color.White, Color.White.copy(alpha = 0.70f))
+                        letterSpacing = (-1.8).sp,
+                        brush = Brush.linearGradient(
+                            listOf(Color.White, Color.White.copy(alpha = 0.70f))
+                        )
                     )
                 )
                 Spacer(Modifier.height(6.dp))

@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.theme.MicroLabel
@@ -64,15 +67,21 @@ private fun RecommendationCard(
     song: Song,
     onClick: () -> Unit,
 ) {
+    val context = LocalContext.current
+    // Media scanners hand back literal "<unknown>" tags; showing that is noise.
+    val displayArtist = song.artist.trim()
+        .takeIf { it.isNotEmpty() && !it.equals("<unknown>", ignoreCase = true) && !it.equals("unknown", ignoreCase = true) }
+        ?.let { context.getString(R.string.unknown_artist) }
+
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(24.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
         tonalElevation = 4.dp,
         shadowElevation = 4.dp,
         modifier = Modifier
-            .width(150.dp)
-            .height(190.dp)
+            .width(158.dp)
+            .height(198.dp)
             .bounceClick()
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -117,7 +126,7 @@ private fun RecommendationCard(
                 Spacer(modifier = Modifier.height(2.dp))
 
                 Text(
-                    text = song.artist,
+                    text = displayArtist ?: context.getString(R.string.unknown_artist),
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

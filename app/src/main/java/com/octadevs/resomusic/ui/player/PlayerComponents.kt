@@ -2118,12 +2118,12 @@ fun MiniPlayer(
                 // Album Art
                 val isSpinActive = coverShape == 2 && coverSpin && isPlaying
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier
-                        .size(52.dp)
+                        .size(56.dp)
                         .rotate(if (isSpinActive) spinRotation else 0f),
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    tonalElevation = 4.dp
+                    color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    tonalElevation = 2.dp
                 ) {
                     val artRequest = remember(song.id, song.coverUrl) {
                         ImageRequest.Builder(miniContext)
@@ -2134,7 +2134,9 @@ fun MiniPlayer(
                     AsyncImage(
                         model = artRequest,
                         contentDescription = "Cover",
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp)),
                         contentScale = ContentScale.Crop
                     )
                 }

@@ -285,19 +285,12 @@ fun HeroSection(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = heroTheme.greeting.uppercase(),
-                                style = MicroLabel,
-                                color = heroTheme.contentColor.copy(alpha = 0.72f)
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = dailyListeningTimeStr,
-                                maxLines = 1,
+                                text = heroTheme.greeting,
                                 style = androidx.compose.ui.text.TextStyle(
-                                    fontSize = 46.sp,
-                                    lineHeight = 46.sp,
+                                    fontSize = 36.sp,
+                                    lineHeight = 40.sp,
                                     fontWeight = FontWeight.Bold,
-                                    letterSpacing = (-2.0).sp,
+                                    letterSpacing = (-1.2).sp,
                                     brush = Brush.linearGradient(
                                         listOf(
                                             heroTheme.contentColor,
@@ -306,11 +299,17 @@ fun HeroSection(
                                     )
                                 )
                             )
-                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = stringResource(R.string.stats_music_unit),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = heroTheme.contentColor.copy(alpha = 0.72f)
+                                text = dailyListeningTimeStr,
+                                maxLines = 1,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    fontSize = 16.sp,
+                                    lineHeight = 20.sp,
+                                    fontWeight = FontWeight.Medium,
+                                    letterSpacing = 0.2.sp,
+                                    color = heroTheme.contentColor.copy(alpha = 0.8f)
+                                )
                             )
                         }
                         Surface(
@@ -516,12 +515,12 @@ private fun StatChip(
     onClick: () -> Unit,
 ) {
     Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = iconBgColor.copy(alpha = 0.28f),
-        border = BorderStroke(1.dp, contentColor.copy(alpha = 0.25f)),
+        shape = RoundedCornerShape(16.dp),
+        color = iconBgColor.copy(alpha = 0.22f),
+        border = BorderStroke(1.dp, contentColor.copy(alpha = 0.28f)),
         modifier = modifier
-            .height(40.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .height(42.dp)
+            .clip(RoundedCornerShape(16.dp))
             .bounceClick()
             .clickable(onClick = onClick)
     ) {
@@ -539,8 +538,7 @@ private fun StatChip(
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = value,
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
                 color = contentColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

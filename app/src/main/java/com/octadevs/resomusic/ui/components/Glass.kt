@@ -99,23 +99,23 @@ fun rememberGlassTuning(
 ): GlassTuning = remember(isDark, strong, raised) {
     if (isDark) {
         GlassTuning(
-            fillTop = if (strong) 0.30f else 0.17f,
-            fillBottom = if (strong) 0.15f else 0.06f,
-            rimAlpha = if (strong) 0.34f else 0.24f,
-            specularAlpha = if (strong) 0.16f else 0.11f,
-            innerShadow = 0.30f,
-            elevation = if (raised) 14.dp else 6.dp,
-            shadowAlpha = 0.55f
+            fillTop = if (strong) 0.18f else 0.10f,
+            fillBottom = if (strong) 0.08f else 0.04f,
+            rimAlpha = if (strong) 0.20f else 0.12f,
+            specularAlpha = if (strong) 0.08f else 0.04f,
+            innerShadow = 0.18f,
+            elevation = if (raised) 12.dp else 4.dp,
+            shadowAlpha = 0.35f
         )
     } else {
         GlassTuning(
-            fillTop = if (strong) 0.84f else 0.64f,
-            fillBottom = if (strong) 0.58f else 0.36f,
-            rimAlpha = if (strong) 0.95f else 0.72f,
-            specularAlpha = if (strong) 0.85f else 0.62f,
-            innerShadow = 0.10f,
-            elevation = if (raised) 16.dp else 7.dp,
-            shadowAlpha = 0.16f
+            fillTop = if (strong) 0.45f else 0.30f,
+            fillBottom = if (strong) 0.25f else 0.15f,
+            rimAlpha = if (strong) 0.40f else 0.25f,
+            specularAlpha = if (strong) 0.35f else 0.20f,
+            innerShadow = 0.06f,
+            elevation = if (raised) 14.dp else 5.dp,
+            shadowAlpha = 0.10f
         )
     }
 }
@@ -191,16 +191,16 @@ fun Modifier.liquidGlass(
                 )
             }
 
-            // ---- 2. Specular sheen: light pooling in the top-left
+            // ---- 2. Specular sheen: subtle light pooling in the top-left (much reduced)
             if (showSpecular) {
-                val specR = size.minDimension * 1.35f
-                val center = Offset(size.width * 0.22f, -size.height * 0.08f)
+                val specR = size.minDimension * 1.1f
+                val center = Offset(size.width * 0.15f, -size.height * 0.05f)
                 clipPath(path) {
                     drawCircle(
                         brush = Brush.radialGradient(
                             colorStops = arrayOf(
                                 0f to Color.White.copy(alpha = tuning.specularAlpha),
-                                0.55f to Color.White.copy(alpha = tuning.specularAlpha * 0.35f),
+                                0.6f to Color.White.copy(alpha = tuning.specularAlpha * 0.2f),
                                 1f to Color.Transparent
                             ),
                             center = center,
@@ -212,43 +212,19 @@ fun Modifier.liquidGlass(
                 }
             }
 
-            // ---- 3. Rim light where the edge curves toward the light
+            // ---- 3. Rim light: single subtle highlight along top edge
             if (showRim) {
                 drawPath(
                     path = path,
                     brush = Brush.linearGradient(
                         colorStops = arrayOf(
                             0f to Color.White.copy(alpha = tuning.rimAlpha),
-                            0.35f to Color.White.copy(alpha = tuning.rimAlpha * 0.18f),
-                            0.68f to Color.White.copy(alpha = tuning.rimAlpha * 0.62f),
-                            1f to Color.White.copy(alpha = tuning.rimAlpha * 0.12f)
+                            0.4f to Color.White.copy(alpha = tuning.rimAlpha * 0.15f),
+                            1f to Color.Transparent
                         )
                     ),
-                    style = Stroke(width = 1.15f * px)
+                    style = Stroke(width = 0.8f * px)
                 )
-
-                // A tighter hairline just inside the rim reads as refraction.
-                val inset = 1.4f * px
-                val innerRadius = (r - inset).coerceAtLeast(0f)
-                if (innerRadius > 0f) {
-                    val inner = roundedRectPath(
-                        size.width - inset * 2f,
-                        size.height - inset * 2f,
-                        innerRadius
-                    )
-                    clipPath(path) {
-                        drawPath(
-                            path = inner,
-                            brush = Brush.linearGradient(
-                                colorStops = arrayOf(
-                                    0f to rimStart.copy(alpha = 0.5f),
-                                    1f to Color.Transparent
-                                )
-                            ),
-                            style = Stroke(width = 1f * px)
-                        )
-                    }
-                }
             }
         }
 }
@@ -443,21 +419,21 @@ fun LiquidGlassBackground(
 
     val colors = if (isDarkTheme) {
         listOf(
-            Color(0xFF3A1E7A),
-            Color(0xFF0A4E77),
-            Color(0xFF7A1440),
-            Color(0xFF0B6B52)
+            Color(0xFF2A1B4A),
+            Color(0xFF0A3E60),
+            Color(0xFF5A1030),
+            Color(0xFF0B5040)
         )
     } else {
         listOf(
-            Color(0xFFE9DDFF),
-            Color(0xFFD5F0FF),
-            Color(0xFFFFE0EF),
-            Color(0xFFD8F8E8)
+            Color(0xFFE0D8FF),
+            Color(0xFFD0EBFF),
+            Color(0xFFFFDBE8),
+            Color(0xFFD0F5E0)
         )
     }
     val backdrop = baseColor ?: if (isDarkTheme) Color(0xFF05060B) else Color(0xFFF7F7FB)
-    val alpha = 0.42f * meshStrength
+    val alpha = 0.25f * meshStrength
 
     Canvas(
         modifier = modifier
@@ -470,26 +446,26 @@ fun LiquidGlassBackground(
 
         val blobs = listOf(
             Blob(
-                Offset(w * 0.18f + cos(driftA) * w * 0.10f, h * 0.12f + sin(driftA) * h * 0.10f),
-                baseR * 0.85f,
+                Offset(w * 0.15f + cos(driftA) * w * 0.08f, h * 0.10f + sin(driftA) * h * 0.08f),
+                baseR * 0.75f,
                 colors[0]
             ),
             Blob(
-                Offset(w * 0.86f + cos(driftB) * w * 0.12f, h * 0.36f + sin(driftB) * h * 0.12f),
-                baseR * 0.80f,
+                Offset(w * 0.82f + cos(driftB) * w * 0.09f, h * 0.32f + sin(driftB) * h * 0.09f),
+                baseR * 0.70f,
                 colors[1]
             ),
             Blob(
-                Offset(w * 0.12f + cos(driftC) * w * 0.10f, h * 0.86f + sin(driftC) * h * 0.10f),
-                baseR * 0.70f,
+                Offset(w * 0.10f + cos(driftC) * w * 0.08f, h * 0.82f + sin(driftC) * h * 0.08f),
+                baseR * 0.60f,
                 colors[2]
             ),
             Blob(
                 Offset(
-                    w * 0.72f + cos(driftA + 2.1f) * w * 0.14f,
-                    h * 0.92f + sin(driftB + 1.3f) * h * 0.10f
+                    w * 0.68f + cos(driftA + 2.1f) * w * 0.10f,
+                    h * 0.88f + sin(driftB + 1.3f) * h * 0.08f
                 ),
-                baseR * 0.62f,
+                baseR * 0.55f,
                 colors[3]
             )
         )
@@ -499,7 +475,7 @@ fun LiquidGlassBackground(
                 brush = Brush.radialGradient(
                     colorStops = arrayOf(
                         0f to blob.color.copy(alpha = alpha),
-                        0.6f to blob.color.copy(alpha = alpha * 0.55f),
+                        0.65f to blob.color.copy(alpha = alpha * 0.35f),
                         1f to Color.Transparent
                     ),
                     center = blob.center,
@@ -510,31 +486,23 @@ fun LiquidGlassBackground(
             )
         }
 
-        // Key light from the top-left + falloff to the bottom-right.
-        drawRect(
-            brush = Brush.linearGradient(
-                colorStops = arrayOf(
-                    0f to Color.White.copy(alpha = if (isDarkTheme) 0.10f else 0.45f),
-                    0.45f to Color.Transparent
-                )
-            )
-        )
+        // Subtle vignette only - no harsh key light
         drawRect(
             brush = Brush.radialGradient(
                 colorStops = arrayOf(
                     0f to Color.Transparent,
-                    0.7f to Color.Transparent,
-                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.42f else 0.06f)
+                    0.6f to Color.Transparent,
+                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.25f else 0.04f)
                 ),
                 center = Offset(w * 0.5f, h * 0.5f),
-                radius = max(w, h) * 0.78f
+                radius = max(w, h) * 0.75f
             )
         )
 
         if (grain) {
             drawGrain(
-                count = (w * h / 5200f).toInt().coerceIn(120, 900),
-                alpha = if (isDarkTheme) 0.030f else 0.022f,
+                count = (w * h / 8000f).toInt().coerceIn(80, 500),
+                alpha = if (isDarkTheme) 0.015f else 0.010f,
                 seed = if (isDarkTheme) 20260901L else 19990712L,
                 light = isDarkTheme
             )

@@ -927,13 +927,18 @@ fun MainScreen(
             modifier = modifier.size(42.dp),
             contentAlignment = Alignment.Center
         ) {
+            // Use the vector logo for crisp rendering
             androidx.compose.foundation.Image(
-                painter = painterResource(id = R.drawable.new_reso_logo_user),
+                painter = painterResource(id = R.drawable.ic_logo_note),
                 contentDescription = "Reso Music Logo",
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop
+                    .clip(CircleShape)
+                    .graphicsLayer {
+                        if (isPlaying) rotationZ = rotation.value
+                    },
+                contentScale = ContentScale.Fit,
+                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(tintColor)
             )
         }
     }

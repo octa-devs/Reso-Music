@@ -739,11 +739,13 @@ fun SongGridItem(
 fun Modifier.glassCard(
     shape: androidx.compose.ui.graphics.Shape,
     isDarkTheme: Boolean,
-    hasBlurBackground: Boolean
+    hasBlurBackground: Boolean,
+    cornerRadius: androidx.compose.ui.unit.Dp = 26.dp,
+    strong: Boolean? = null
 ): Modifier = liquidGlass(
     shape = shape,
-    cornerRadius = 26.dp,
-    strong = !hasBlurBackground,
+    cornerRadius = cornerRadius,
+    strong = strong ?: !hasBlurBackground,
     raised = true,
     tint = if (hasBlurBackground) null else if (isDarkTheme) Color(0xFF1B2033) else Color(0xFFFFFFFF)
 )

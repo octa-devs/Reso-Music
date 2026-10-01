@@ -38,6 +38,12 @@ import androidx.compose.material.icons.filled.Title
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.*
 import com.octadevs.resomusic.ui.components.BouncySwitch
+import com.octadevs.resomusic.ui.components.LiquidGlassBackground
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Offset
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,6 +88,145 @@ fun OnboardingScreen(
     }
 }
 
+/**
+ * Aurora + grain backdrop shared by every onboarding step so the whole flow
+ * feels like one continuous surface instead of a stack of flat screens.
+ */
+@Composable
+private fun OnboardingBackdrop(isDarkTheme: Boolean, content: @Composable BoxScope.() -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        LiquidGlassBackground(
+            isDarkTheme = isDarkTheme,
+            meshStrength = if (isDarkTheme) 0.9f else 0.7f,
+            baseColor = MaterialTheme.colorScheme.background,
+            modifier = Modifier.matchParentSize()
+        )
+        Box(modifier = Modifier.matchParentSize(), content = content)
+    }
+}
+
+/**
+ * The frosted pane that holds a step's copy, so text sits on glass rather than
+ * directly on the background wash.
+ */
+@Composable
+private fun OnboardingGlassCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val shape = RoundedCornerShape(30.dp)
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = if (isDarkTheme) 0.13f else 0.58f),
+                        Color.White.copy(alpha = if (isDarkTheme) 0.06f else 0.34f)
+                    )
+                )
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = 0.5f),
+                        Color.White.copy(alpha = 0.08f)
+                    )
+                ),
+                shape = shape
+            )
+            .padding(horizontal = 24.dp, vertical = 28.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        content = content
+    )
+}
+
+/**
+ * Glass pill CTA. Replaces the flat filled buttons so every action in the flow
+ * shares the same material.
+ */
+@Composable
+private fun OnboardingGlassButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    strong: Boolean = true,
+    enabled: Boolean = true,
+    content: @Composable RowScope.() -> Unit
+) {
+    val isDarkTheme = isSystemInDarkTheme()
+    val shape = RoundedCornerShape(30.dp)
+    val alpha = if (enabled) 1f else 0.45f
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Row(
+        modifier = modifier
+            .height(58.dp)
+            .clip(shape)
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = (if (isDarkTheme) 0.22f else 0.92f) * alpha),
+                        Color.White.copy(alpha = (if (isDarkTheme) 0.12f else 0.62f) * alpha)
+                    )
+                )
+            )
+            .border(
+                width = 1.dp,
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color.White.copy(alpha = 0.7f * alpha),
+                        Color.White.copy(alpha = 0.14f * alpha)
+                    )
+                ),
+                shape = shape
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled,
+                onClick = onClick
+            )
+            .padding(horizontal = 30.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        content = content
+    )
+}
+
+/**
+ * Soft glow disc that sits behind the rotating logo mark.
+ */
+@Composable
+private fun LogoAura(isDarkTheme: Boolean, modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "AuraPulse")
+    val pulse by infiniteTransition.animateFloat(
+        initialValue = 0.72f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(3200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "AuraPulseValue"
+    )
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .graphicsLayer { alpha = pulse }
+            .background(
+                Brush.radialGradient(
+                    colors = listOf(
+                        Color.White.copy(alpha = if (isDarkTheme) 0.16f else 0.62f),
+                        Color.Transparent
+                    )
+                )
+            )
+    )
+}
+
 @Composable
 fun WelcomeStep(onStartClick: () -> Unit) {
     val isDark = isSystemInDarkTheme()
@@ -99,21 +244,19 @@ fun WelcomeStep(onStartClick: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(32.dp),
+                .padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
+                modifier = Modifier.size(210.dp)
             ) {
+                LogoAura(isDarkTheme = isDark, modifier = Modifier.size(230.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.ic_logo_diamonds),
                     contentDescription = null,
@@ -130,52 +273,49 @@ fun WelcomeStep(onStartClick: () -> Unit) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = stringResource(id = R.string.app_name),
-                style = MaterialTheme.typography.headlineLarge,
-                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Bold,
-                fontSize = 40.sp
+                fontSize = 42.sp,
+                letterSpacing = (-1).sp,
+                brush = Brush.linearGradient(
+                    listOf(
+                        MaterialTheme.colorScheme.primary,
+                        MaterialTheme.colorScheme.tertiary
+                    )
+                )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
-            Text(
-                text = stringResource(id = R.string.onboarding_description),
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            OnboardingGlassCard {
+                Text(
+                    text = stringResource(id = R.string.onboarding_description),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(28.dp))
 
-            Button(
-                onClick = onStartClick,
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.onboarding_start_button),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                        contentDescription = null,
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
+            OnboardingGlassButton(onClick = onStartClick, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = stringResource(id = R.string.onboarding_start_button),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
             }
         }
     }
@@ -211,10 +351,7 @@ fun PermissionStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -263,7 +400,7 @@ fun PermissionStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     if (isPermissionGranted) {
                         onNext()
@@ -271,12 +408,7 @@ fun PermissionStep(onNext: () -> Unit) {
                         launcher.launch(Manifest.permission.RECORD_AUDIO)
                     }
                 },
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -285,14 +417,16 @@ fun PermissionStep(onNext: () -> Unit) {
                     Text(
                         text = if (isPermissionGranted) stringResource(R.string.onboarding_next_button) else stringResource(R.string.onboarding_grant_button),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPermissionGranted) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -348,10 +482,7 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -400,7 +531,7 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     if (isPermissionGranted) {
                         onNext()
@@ -408,12 +539,7 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
                         bluetoothPermission?.let { launcher.launch(it) }
                     }
                 },
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -422,14 +548,16 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
                     Text(
                         text = if (isPermissionGranted) stringResource(R.string.onboarding_next_button) else stringResource(R.string.onboarding_grant_button),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPermissionGranted) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -485,10 +613,7 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -537,7 +662,7 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     if (isPermissionGranted) {
                         onNext()
@@ -545,12 +670,7 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
                         notificationPermission?.let { launcher.launch(it) }
                     }
                 },
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -559,14 +679,16 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
                     Text(
                         text = if (isPermissionGranted) stringResource(R.string.onboarding_next_button) else stringResource(R.string.onboarding_grant_button),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPermissionGranted) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -611,10 +733,7 @@ fun MusicPermissionStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -663,7 +782,7 @@ fun MusicPermissionStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     if (isPermissionGranted) {
                         onNext()
@@ -671,12 +790,7 @@ fun MusicPermissionStep(onNext: () -> Unit) {
                         launcher.launch(musicPermission)
                     }
                 },
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -685,14 +799,16 @@ fun MusicPermissionStep(onNext: () -> Unit) {
                     Text(
                         text = if (isPermissionGranted) stringResource(R.string.onboarding_next_button) else stringResource(R.string.onboarding_grant_button),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPermissionGranted) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -754,10 +870,7 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -806,7 +919,7 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     if (isPermissionGranted) {
                         onNext()
@@ -814,12 +927,7 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
                         launcher.launch(initialSafUri)
                     }
                 },
-                modifier = Modifier.height(56.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                shape = MaterialTheme.shapes.extraLarge
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -828,14 +936,16 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
                     Text(
                         text = if (isPermissionGranted) stringResource(R.string.onboarding_next_button) else stringResource(R.string.onboarding_grant_button),
                         style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     if (isPermissionGranted) {
                         Spacer(modifier = Modifier.width(8.dp))
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -867,10 +977,7 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -921,8 +1028,20 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
 
             Surface(
                 onClick = { showAll = !showAll },
-                shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(22.dp),
+                color = if (showAll)
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.32f)
+                else
+                    Color.White.copy(alpha = if (isDark) 0.08f else 0.45f),
+                border = androidx.compose.foundation.BorderStroke(
+                    1.dp,
+                    Brush.verticalGradient(
+                        listOf(
+                            Color.White.copy(alpha = 0.42f),
+                            Color.White.copy(alpha = 0.08f)
+                        )
+                    )
+                ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
@@ -946,18 +1065,18 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = {
                     settingsManager.showAllFoldersOnStart = showAll
                     onNext()
                 },
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(16.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     stringResource(R.string.onboarding_next_button),
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -1031,10 +1150,7 @@ fun FeaturesStep(onFinish: () -> Unit) {
                 alpha = 1f - fadeProgress.value
             }
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
+        OnboardingBackdrop(isDarkTheme = isDark) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -1110,10 +1226,32 @@ fun FeaturesStep(onFinish: () -> Unit) {
                                 },
                             shape = RoundedCornerShape(28.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-                            ),
-                            border = BorderStroke(1.dp, colorPrimary.copy(alpha = 0.1f))
+                                containerColor = Color.Transparent
+                            )
                         ) {
+                            Box(
+                                modifier = Modifier
+                                    .matchParentSize()
+                                    .clip(RoundedCornerShape(28.dp))
+                                    .background(
+                                        Brush.verticalGradient(
+                                            listOf(
+                                                Color.White.copy(alpha = if (isDark) 0.13f else 0.55f),
+                                                Color.White.copy(alpha = if (isDark) 0.06f else 0.28f)
+                                            )
+                                        )
+                                    )
+                                    .border(
+                                        width = 1.dp,
+                                        brush = Brush.verticalGradient(
+                                            listOf(
+                                                Color.White.copy(alpha = 0.5f),
+                                                Color.White.copy(alpha = 0.08f)
+                                            )
+                                        ),
+                                        shape = RoundedCornerShape(28.dp)
+                                    )
+                            )
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -1177,22 +1315,17 @@ fun FeaturesStep(onFinish: () -> Unit) {
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.padding(bottom = 16.dp)
                 ) {
-                    Button(
+                    OnboardingGlassButton(
                         onClick = { isExploding = true },
                         modifier = Modifier
-                            .height(56.dp)
                             .width(220.dp)
-                            .alpha(if (isExploding) 0f else 1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorPrimary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ),
-                        shape = MaterialTheme.shapes.extraLarge
+                            .alpha(if (isExploding) 0f else 1f)
                     ) {
                         Text(
                             text = stringResource(R.string.onboarding_finish_button),
                             style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -1239,10 +1372,7 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -1292,15 +1422,15 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = onNext,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(16.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     stringResource(R.string.onboarding_reminder_button),
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -1324,10 +1454,7 @@ fun SupportStep(onNext: () -> Unit) {
         label = "LogoRotation"
     )
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+    OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -1376,15 +1503,15 @@ fun SupportStep(onNext: () -> Unit) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            Button(
+            OnboardingGlassButton(
                 onClick = onNext,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
-                shape = RoundedCornerShape(16.dp)
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     stringResource(R.string.onboarding_next_button),
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

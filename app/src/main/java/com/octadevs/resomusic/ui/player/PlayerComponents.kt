@@ -16,6 +16,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -2051,14 +2052,17 @@ fun MiniPlayer(
         MaterialTheme.colorScheme.onSecondaryContainer
     }
 
+    val miniShape = RoundedCornerShape(26.dp)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(76.dp)
             .glassCard(
-                shape = RoundedCornerShape(28.dp),
+                shape = miniShape,
                 isDarkTheme = isDarkTheme,
-                hasBlurBackground = hasBlurBackground
+                hasBlurBackground = hasBlurBackground,
+                cornerRadius = 26.dp
             )
             .clickable { onExpand() }
             .songSwipeGestures(
@@ -2107,6 +2111,36 @@ fun MiniPlayer(
                     color = MaterialTheme.colorScheme.primary
                 )
             }
+
+            // Frosted glass veil: softens the artwork behind into a frosted pane.
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(
+                                Color.White.copy(alpha = if (isDarkTheme) 0.13f else 0.42f),
+                                Color.White.copy(alpha = if (isDarkTheme) 0.06f else 0.22f)
+                            )
+                        )
+                    )
+            )
+
+            // Specular sheen across the top-left of the pane.
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = if (isDarkTheme) 0.14f else 0.55f),
+                                Color.Transparent
+                            ),
+                            start = Offset.Zero,
+                            end = Offset(320f, 260f)
+                        )
+                    )
+            )
 
             // Foreground Content
             Row(
@@ -2171,29 +2205,65 @@ fun MiniPlayer(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Play/Pause
+                // Play/Pause - glass pill
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(44.dp)
                         .bounceClick()
                         .clip(CircleShape)
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.White.copy(alpha = if (isDarkTheme) 0.22f else 0.7f),
+                                    Color.White.copy(alpha = if (isDarkTheme) 0.12f else 0.4f)
+                                )
+                            )
+                        )
+                        .border(
+                            width = 0.75.dp,
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    Color.White.copy(alpha = 0.55f),
+                                    Color.White.copy(alpha = 0.12f)
+                                )
+                            ),
+                            shape = CircleShape
+                        )
                         .clickable { onTogglePlay() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = if (isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
                         contentDescription = "Play/Pause",
-                        tint = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(32.dp)
+                        tint = onGlass,
+                        modifier = Modifier.size(26.dp)
                     )
                 }
-                
-                // Next Button
+
+                // Next Button - glass pill
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(40.dp)
                         .bounceClick()
                         .clip(CircleShape)
+                        .background(
+                            Brush.verticalGradient(
+                                listOf(
+                                    Color.White.copy(alpha = if (isDarkTheme) 0.16f else 0.5f),
+                                    Color.White.copy(alpha = if (isDarkTheme) 0.08f else 0.26f)
+                                )
+                            )
+                        )
+                        .border(
+                            width = 0.75.dp,
+                            brush = Brush.verticalGradient(
+                                listOf(
+                                    Color.White.copy(alpha = 0.4f),
+                                    Color.White.copy(alpha = 0.08f)
+                                )
+                            ),
+                            shape = CircleShape
+                        )
                         .clickable { onNext() },
                     contentAlignment = Alignment.Center
                 ) {
@@ -2201,7 +2271,7 @@ fun MiniPlayer(
                         imageVector = Icons.Filled.SkipNext,
                         contentDescription = "Next",
                         tint = onGlass,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }

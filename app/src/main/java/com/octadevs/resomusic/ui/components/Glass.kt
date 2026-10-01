@@ -99,23 +99,23 @@ fun rememberGlassTuning(
 ): GlassTuning = remember(isDark, strong, raised) {
     if (isDark) {
         GlassTuning(
-            fillTop = if (strong) 0.18f else 0.10f,
-            fillBottom = if (strong) 0.08f else 0.04f,
-            rimAlpha = if (strong) 0.20f else 0.12f,
-            specularAlpha = if (strong) 0.08f else 0.04f,
-            innerShadow = 0.18f,
-            elevation = if (raised) 12.dp else 4.dp,
-            shadowAlpha = 0.35f
+            fillTop = if (strong) 0.34f else 0.22f,
+            fillBottom = if (strong) 0.18f else 0.10f,
+            rimAlpha = if (strong) 0.58f else 0.40f,
+            specularAlpha = if (strong) 0.24f else 0.15f,
+            innerShadow = 0.26f,
+            elevation = if (raised) 16.dp else 7.dp,
+            shadowAlpha = 0.45f
         )
     } else {
         GlassTuning(
-            fillTop = if (strong) 0.45f else 0.30f,
-            fillBottom = if (strong) 0.25f else 0.15f,
-            rimAlpha = if (strong) 0.40f else 0.25f,
-            specularAlpha = if (strong) 0.35f else 0.20f,
-            innerShadow = 0.06f,
-            elevation = if (raised) 14.dp else 5.dp,
-            shadowAlpha = 0.10f
+            fillTop = if (strong) 0.80f else 0.62f,
+            fillBottom = if (strong) 0.56f else 0.38f,
+            rimAlpha = if (strong) 0.92f else 0.68f,
+            specularAlpha = if (strong) 0.68f else 0.44f,
+            innerShadow = 0.09f,
+            elevation = if (raised) 18.dp else 8.dp,
+            shadowAlpha = 0.14f
         )
     }
 }

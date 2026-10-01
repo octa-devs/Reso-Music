@@ -51,7 +51,39 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Universal Release APK
-        run: ./gradlew assembleRelease --stacktrace
+        run: |
+          set -o pipefail
+          ./gradlew assembleRelease --stacktrace 2>&1 | tee build-log.txt
+
+      - name: Publish build diagnostics
+        if: always()
+        run: |
+          {
+            echo "# Build diagnostics"
+            echo
+            echo "- Commit: $GITHUB_SHA"
+            echo "- Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo
+            echo "## Errors"
+            echo
+            if [ -f build-log.txt ]; then
+              grep -E "^e: |error: |FAILURE: |What went wrong|^Caused by: |Unresolved reference|Cannot find a symbol|Execution failed|> Task .* FAILED" build-log.txt | tail -n 200 || echo "(no error lines matched)"
+              echo
+              echo "## Tail"
+              echo
+              echo '```'
+              tail -n 80 build-log.txt
+              echo '```'
+            else
+              echo "(build-log.txt was not produced)"
+            fi
+          } > build-diagnostics.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B build-diagnostics
+          git add -f build-diagnostics.md
+          git commit -q -m "ci: update build diagnostics for $GITHUB_SHA" || true
+          git push --force -q origin build-diagnostics
 
       - name: Upload Release APK Artifact
         uses: actions/upload-artifact@v4

@@ -46,3 +46,7 @@ keystore.properties
 
 refactor-lune-kt-plan.txt
 
+
+# CI scratch
+build-log.txt
+build-diagnostics.md

@@ -468,4 +468,26 @@
     <string name="auto_sync_backup">Auto-sync backup</string>
     <string name="auto_sync_backup_desc">Automatically update the exported backup when playlists or lyrics change</string>
     <string name="auto_sync_requires_export">Export a backup first to enable auto-sync</string>
+
+    <!-- Settings revamp -->
+    <string name="settings_subtitle">Tune every surface of the player — glass, colour, motion and sound.</string>
+    <string name="settings_footer">Crafted by Octa Devs</string>
+    <string name="appearance">Appearance</string>
+    <string name="theme">Theme</string>
+    <string name="color_palette_locked">Turn on custom colours to choose a palette</string>
+    <string name="liquid_glass">Liquid Glass</string>
+    <string name="advanced_glass">Advanced Glass</string>
+    <string name="advanced_glass_desc">Cinematic mode, control tinting and blur intensity</string>
+    <string name="playback">Playback</string>
+    <string name="interface_section">Interface</string>
+    <string name="library">Library</string>
+    <string name="eq_title_desc">Bass, mid and treble shaping plus presets</string>
+    <string name="tracks_view">Track Layout</string>
+    <string name="view_list">List</string>
+    <string name="view_grid">Grid</string>
+    <string name="show_options_desc">Show the quick-action bar above the player</string>
+    <string name="show_all_folders">Show all folders</string>
+    <string name="show_all_folders_desc">Include every music folder on the device, not just the one you picked</string>
+    <string name="whatsapp_audio">WhatsApp Audio</string>
+    <string name="whatsapp_audio_desc">Show or hide the WhatsApp Audio folder</string>
 </resources>

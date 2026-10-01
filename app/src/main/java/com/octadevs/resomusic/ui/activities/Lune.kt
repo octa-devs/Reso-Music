@@ -962,49 +962,64 @@ fun MainScreen(
         val scrollToCurrentTrigger = remember { mutableStateOf(0) }
 
         if (currentSong != null) {
-            val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
-            val bgRot by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(55000, easing = LinearEasing)), label = "bg_rot")
-            val bgScale by infiniteTransition.animateFloat(2.5f, 3.8f, infiniteRepeatable(tween(25000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "bg_scale")
-
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(if (isDarkThemeMini) 0.7f else 0.8f)
-                    .clipToBounds()
+                modifier = Modifier.fillMaxSize()
             ) {
-                val sharedBlurReq = remember(currentSong.id, currentSong.coverUrl) {
-                    ImageRequest.Builder(context)
-                        .data(currentSong.coverUrl ?: currentSong.uri)
-                        .crossfade(true)
-                        .build()
-                }
-                AsyncImage(
-                    model = sharedBlurReq,
-                    contentDescription = null,
+                // Base liquid glass background
+                LiquidGlassBackground(
+                    isDarkTheme = isDarkThemeMini,
+                    modifier = Modifier.fillMaxSize(),
+                    meshStrength = 0.6f
+                )
+
+                // Cover art behind the glass, slowly animating
+                val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
+                val bgRot by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(55000, easing = LinearEasing)), label = "bg_rot")
+                val bgScale by infiniteTransition.animateFloat(1.15f, 1.35f, infiniteRepeatable(tween(25000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "bg_scale")
+
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .scale(bgScale)
                         .rotate(bgRot)
-                        .blur(100.dp),
-                    contentScale = ContentScale.Crop
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Black.copy(alpha = if (isDarkThemeMini) 0.6f else 0.4f),
-                                Color.Black,
-                                Color.Black
+                        .alpha(if (isDarkThemeMini) 0.35f else 0.25f)
+                ) {
+                    val sharedBlurReq = remember(currentSong.id, currentSong.coverUrl) {
+                        ImageRequest.Builder(context)
+                            .data(currentSong.coverUrl ?: currentSong.uri)
+                            .crossfade(true)
+                            .build()
+                    }
+                    AsyncImage(
+                        model = sharedBlurReq,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // Subtle vignette overlay
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Color.Transparent,
+                                    Color.Black.copy(alpha = if (isDarkThemeMini) 0.5f else 0.25f)
+                                ),
+                                center = Offset(0.5f, 0.5f),
+                                radius = 0.85f
                             )
                         )
-                    )
-            )
+                )
+            }
         } else {
-            AnimatedLiquidGlass(isDarkTheme = isDarkThemeMini)
+            LiquidGlassBackground(
+                isDarkTheme = isDarkThemeMini,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
         val activePrimary = getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)

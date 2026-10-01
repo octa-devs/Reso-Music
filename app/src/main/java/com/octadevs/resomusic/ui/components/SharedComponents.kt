@@ -85,6 +85,15 @@ import com.octadevs.resomusic.ui.utils.formatLongDuration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * The single background primitive every screen uses.
+ *
+ * Three modes:
+ *  - blur OFF  -> clean surface
+ *  - blur ON + a song playing -> album art pushed far into the background,
+ *    with a slow aurora wash + scrim layered on top for legibility
+ *  - blur ON + nothing playing -> the animated liquid mesh
+ */
 @Composable
 fun AppBlurBackdrop(
     hasBlurBackground: Boolean,
@@ -95,20 +104,29 @@ fun AppBlurBackdrop(
     content: @Composable BoxScope.() -> Unit
 ) {
     val context = LocalContext.current
-    val baseBgColor = if (isDarkTheme) Color(0xFF141416) else MaterialTheme.colorScheme.surface
-    val fallbackBlurBg = if (isDarkTheme) Color(0xFF1C1C1E).copy(alpha = 0.96f) else Color(0xFFF2F2F7).copy(alpha = 0.96f)
+    val baseBgColor = if (isDarkTheme) Color(0xFF05060B) else MaterialTheme.colorScheme.surface
+    val fallbackBlurBg = if (isDarkTheme) Color(0xFF0A0C14).copy(alpha = 0.96f) else Color(0xFFF2F2F7).copy(alpha = 0.96f)
+
     Box(
         modifier = modifier
             .clip(shape)
-            .background(if (hasBlurBackground) (if (currentSong != null) baseBgColor else fallbackBlurBg) else MaterialTheme.colorScheme.surface)
+            .background(
+                if (hasBlurBackground) {
+                    if (currentSong != null) baseBgColor else fallbackBlurBg
+                } else {
+                    MaterialTheme.colorScheme.surface
+                }
+            )
     ) {
         if (hasBlurBackground) {
             if (currentSong != null) {
+                // 1. Artwork, pushed deep into the background.
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .blur(80.dp)
-                        .alpha(if (isDarkTheme) 0.35f else 0.45f)
+                        .blur(90.dp)
+                        .graphicsLayer { scaleX = 1.18f; scaleY = 1.18f }
+                        .alpha(if (isDarkTheme) 0.38f else 0.48f)
                 ) {
                     val req = remember(currentSong.id, currentSong.coverUrl) {
                         coil.request.ImageRequest.Builder(context)
@@ -123,10 +141,29 @@ fun AppBlurBackdrop(
                         contentScale = ContentScale.Crop
                     )
                 }
+
+                // 2. Slow aurora wash so the backdrop never feels static.
+                LiquidGlassBackground(
+                    isDarkTheme = isDarkTheme,
+                    meshStrength = if (isDarkTheme) 0.55f else 0.35f,
+                    grain = false,
+                    baseColor = Color.Transparent,
+                    modifier = Modifier.matchParentSize()
+                )
+
+                // 3. Scrim + directional light so text always reads.
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .background(Color.Black.copy(alpha = if (isDarkTheme) 0.50f else 0.20f))
+                        .background(
+                            Brush.verticalGradient(
+                                colorStops = arrayOf(
+                                    0f to Color.Black.copy(alpha = if (isDarkTheme) 0.62f else 0.30f),
+                                    0.45f to Color.Black.copy(alpha = if (isDarkTheme) 0.42f else 0.14f),
+                                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.58f else 0.22f)
+                                )
+                            )
+                        )
                 )
             } else {
                 AnimatedLiquidGlass(isDarkTheme = isDarkTheme)
@@ -138,58 +175,7 @@ fun AppBlurBackdrop(
 
 @Composable
 fun AnimatedLiquidGlass(isDarkTheme: Boolean) {
-    val infiniteTransition = rememberInfiniteTransition(label = "liquid")
-    
-    // Slow, mesmerizing rotations
-    val r1 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(25000, easing = LinearEasing), RepeatMode.Restart), label = "r1")
-    val r2 by infiniteTransition.animateFloat(360f, 0f, infiniteRepeatable(tween(30000, easing = LinearEasing), RepeatMode.Restart), label = "r2")
-    val r3 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(20000, easing = LinearEasing), RepeatMode.Restart), label = "r3")
-    val r4 by infiniteTransition.animateFloat(360f, 0f, infiniteRepeatable(tween(35000, easing = LinearEasing), RepeatMode.Restart), label = "r4")
-    val r5 by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(28000, easing = LinearEasing), RepeatMode.Restart), label = "r5")
-
-    // Vibrant neon/deep space colors
-    val c1 = if (isDarkTheme) Color(0xFF1E3A8A) else Color(0xFFBFDBFE)
-    val c2 = if (isDarkTheme) Color(0xFF6B21A8) else Color(0xFFE9D5FF)
-    val c3 = if (isDarkTheme) Color(0xFF9D174D) else Color(0xFFFBCFE8)
-    val c4 = if (isDarkTheme) Color(0xFF065F46) else Color(0xFFA7F3D0)
-    val c5 = if (isDarkTheme) Color(0xFF9A3412) else Color(0xFFFED7AA)
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .blur(120.dp) // Massive blur for glass mesh effect
-            .drawWithCache {
-                val width = size.width
-                val height = size.height
-                val radius = width.coerceAtLeast(height) * 0.7f
-
-                onDrawBehind {
-                    drawRect(color = if (isDarkTheme) Color.Black else Color.White) // base background
-                    
-                    withTransform({ rotate(r1, Offset(width * 0.5f, height * 0.5f)) }) {
-                        drawCircle(c1, radius = radius * 0.8f, center = Offset(width * 0.2f, height * 0.1f))
-                    }
-                    withTransform({ rotate(r2, Offset(width * 0.4f, height * 0.6f)) }) {
-                        drawCircle(c2, radius = radius * 0.9f, center = Offset(width * 0.8f, height * 0.4f))
-                    }
-                    withTransform({ rotate(r3, Offset(width * 0.5f, height * 0.5f)) }) {
-                        drawCircle(c3, radius = radius * 0.7f, center = Offset(width * 0.1f, height * 0.8f))
-                    }
-                    withTransform({ rotate(r4, Offset(width * 0.6f, height * 0.4f)) }) {
-                        drawCircle(c4, radius = radius * 0.85f, center = Offset(width * 0.9f, height * 0.9f))
-                    }
-                    withTransform({ rotate(r5, Offset(width * 0.5f, height * 0.5f)) }) {
-                        drawCircle(c5, radius = radius * 0.6f, center = Offset(width * 0.5f, height * 0.5f))
-                    }
-                }
-            }
-    ) {
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .background(Color.White.copy(alpha = if (isDarkTheme) 0.05f else 0.3f))
-        )
-    }
+    LiquidGlassBackground(isDarkTheme = isDarkTheme)
 }
 
 data class BlurSheetColors(
@@ -721,25 +707,22 @@ fun SongGridItem(
     }
 }
 
+/**
+ * Legacy entry point kept so existing call-sites keep compiling, now routed
+ * through the full liquid-glass treatment.
+ */
+@Composable
 fun Modifier.glassCard(
     shape: androidx.compose.ui.graphics.Shape,
     isDarkTheme: Boolean,
     hasBlurBackground: Boolean
-): Modifier {
-    val borderColor = if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color.White.copy(alpha = 0.5f)
-    val bgColor = if (isDarkTheme) Color(0xFF1E1E1E).copy(alpha = if (hasBlurBackground) 0.3f else 0.8f) else Color(0xFFF9F9F9).copy(alpha = if (hasBlurBackground) 0.4f else 0.85f)
-    
-    return this
-        .shadow(
-            elevation = 12.dp,
-            shape = shape,
-            spotColor = if (isDarkTheme) Color.Black.copy(alpha = 0.5f) else Color.Gray.copy(alpha = 0.3f),
-            ambientColor = if (isDarkTheme) Color.Black.copy(alpha = 0.5f) else Color.Gray.copy(alpha = 0.3f)
-        )
-        .background(color = bgColor, shape = shape)
-        .border(width = 1.dp, color = borderColor, shape = shape)
-        .clip(shape)
-}
+): Modifier = liquidGlass(
+    shape = shape,
+    cornerRadius = 26.dp,
+    strong = !hasBlurBackground,
+    raised = true,
+    tint = if (hasBlurBackground) null else if (isDarkTheme) Color(0xFF1B2033) else Color(0xFFFFFFFF)
+)
 @Composable
 fun Modifier.headerWaveBackground(
     strokeWidth: androidx.compose.ui.unit.Dp = 1.2.dp,
@@ -939,25 +922,23 @@ fun HeaderSurface(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(cornerRadius),
-        color = if (hasBlurBackground) Color.Black.copy(alpha = 0.25f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-        border = if (!isWaveEnabled && hasBlurBackground) BorderStroke(1.2.dp, Color.White.copy(alpha = 0.16f)) else null,
-        tonalElevation = if (hasBlurBackground) 0.dp else 4.dp,
-        shadowElevation = 0.dp
+    Box(
+        modifier = modifier.liquidGlass(
+            shape = RoundedCornerShape(cornerRadius),
+            cornerRadius = cornerRadius,
+            strong = !hasBlurBackground,
+            raised = true,
+            tint = if (hasBlurBackground) null else null
+        )
     ) {
         if (isWaveEnabled) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .headerWaveBackground(cornerRadius = cornerRadius, hasBlurBackground = hasBlurBackground)
-            ) {
-                content()
-            }
-        } else {
-            content()
+            )
         }
+        content()
     }
 }
 

@@ -2028,6 +2028,8 @@ fun MiniPlayer(
     val blurContainerColorMini = if (isDarkTheme) Color.Black.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.4f)
     val activePrimary = getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)
 
+    val onGlass = if (hasBlurBackground || useCustomControlsColor) Color.White else MaterialTheme.colorScheme.onSurface
+
     val pillMiniColor = if (useCustomControlsColor) {
         activePrimary.copy(alpha = 0.25f)
     } else if (hasBlurBackground) {
@@ -2047,9 +2049,9 @@ fun MiniPlayer(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(68.dp)
+            .height(76.dp)
             .glassCard(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(28.dp),
                 isDarkTheme = isDarkTheme,
                 hasBlurBackground = hasBlurBackground
             )
@@ -2142,16 +2144,19 @@ fun MiniPlayer(
                     Text(
                         text = song.title,
                         modifier = Modifier.basicMarquee(),
-                        color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.Bold,
+                            brush = Brush.linearGradient(
+                                listOf(onGlass, onGlass.copy(alpha = 0.72f))
+                            )
+                        ),
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = song.artist,
                         modifier = Modifier.basicMarquee(),
-                        color = if (hasBlurBackground) Color.White.copy(alpha = 0.75f) else MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f),
+                        color = onGlass.copy(alpha = 0.72f),
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 1
                     )
@@ -2188,10 +2193,36 @@ fun MiniPlayer(
                     Icon(
                         imageVector = Icons.Filled.SkipNext,
                         contentDescription = "Next",
-                        tint = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
+                        tint = onGlass,
                         modifier = Modifier.size(28.dp)
                     )
                 }
+            }
+
+            // Progress hairline hugging the bottom edge of the pane
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+                    .height(3.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(onGlass.copy(alpha = 0.16f))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(progress.coerceIn(0f, 1f))
+                        .fillMaxHeight()
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.tertiary
+                                )
+                            )
+                        )
+                )
             }
         }
     }

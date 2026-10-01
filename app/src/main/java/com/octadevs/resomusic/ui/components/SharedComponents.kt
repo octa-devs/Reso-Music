@@ -537,6 +537,7 @@ fun SongItem(
                 )
             }
         }
+        }
     }
 }
 
@@ -554,13 +555,19 @@ fun SongGridItem(
     modifier: Modifier = Modifier
 ) {
     val activePrimary = com.octadevs.resomusic.ui.theme.getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)
-    val cardShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp, bottomStart = 8.dp, bottomEnd = 8.dp)
+    val cardShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp, bottomStart = 10.dp, bottomEnd = 10.dp)
     val coverShape = RoundedCornerShape(24.dp)
     Column(
         modifier = modifier
             .fillMaxWidth()
             .bounceClick()
-            .clip(cardShape)
+            .liquidGlass(
+                shape = cardShape,
+                cornerRadius = 22.dp,
+                strong = !hasBlurBackground,
+                raised = false,
+                tint = if (currentlyPlaying) activePrimary else null
+            )
             .clickable(onClick = onClick)
     ) {
         Box {

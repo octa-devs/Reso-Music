@@ -721,7 +721,6 @@ fun SongGridItem(
     }
 }
 
-@Composable
 fun Modifier.glassCard(
     shape: androidx.compose.ui.graphics.Shape,
     isDarkTheme: Boolean,

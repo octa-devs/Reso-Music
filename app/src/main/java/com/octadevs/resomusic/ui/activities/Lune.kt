@@ -914,7 +914,7 @@ fun MainScreen(
                 while (true) {
                     rotation.animateTo(
                         targetValue = 360f,
-                        animationSpec = tween(durationMillis = 2000, easing = LinearEasing)
+                        animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
                     )
                     rotation.snapTo(0f)
                 }
@@ -924,22 +924,16 @@ fun MainScreen(
         }
 
         Box(
-            modifier = modifier.size(60.dp),
+            modifier = modifier.size(42.dp),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_logo_diamonds),
-                contentDescription = null,
-                tint = tintColor.copy(alpha = 0.3f),
+            androidx.compose.foundation.Image(
+                painter = painterResource(id = R.drawable.new_reso_logo_user),
+                contentDescription = "Reso Music Logo",
                 modifier = Modifier
                     .fillMaxSize()
-                    .graphicsLayer(rotationZ = rotation.value)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_logo_note),
-                contentDescription = null,
-                tint = tintColor,
-                modifier = Modifier.fillMaxSize()
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop
             )
         }
     }

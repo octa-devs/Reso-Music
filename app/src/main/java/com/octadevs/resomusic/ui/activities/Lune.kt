@@ -965,38 +965,12 @@ fun MainScreen(
             Box(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Base liquid glass background
+                // Base liquid glass background - no cover art behind
                 LiquidGlassBackground(
                     isDarkTheme = isDarkThemeMini,
                     modifier = Modifier.fillMaxSize(),
-                    meshStrength = 0.6f
+                    meshStrength = 0.55f
                 )
-
-                // Cover art behind the glass, slowly animating
-                val infiniteTransition = rememberInfiniteTransition(label = "bg_anim")
-                val bgRot by infiniteTransition.animateFloat(0f, 360f, infiniteRepeatable(tween(55000, easing = LinearEasing)), label = "bg_rot")
-                val bgScale by infiniteTransition.animateFloat(1.15f, 1.35f, infiniteRepeatable(tween(25000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = "bg_scale")
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .scale(bgScale)
-                        .rotate(bgRot)
-                        .alpha(if (isDarkThemeMini) 0.35f else 0.25f)
-                ) {
-                    val sharedBlurReq = remember(currentSong.id, currentSong.coverUrl) {
-                        ImageRequest.Builder(context)
-                            .data(currentSong.coverUrl ?: currentSong.uri)
-                            .crossfade(true)
-                            .build()
-                    }
-                    AsyncImage(
-                        model = sharedBlurReq,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
 
                 // Subtle vignette overlay
                 Box(
@@ -1007,10 +981,10 @@ fun MainScreen(
                                 colors = listOf(
                                     Color.Transparent,
                                     Color.Transparent,
-                                    Color.Black.copy(alpha = if (isDarkThemeMini) 0.5f else 0.25f)
+                                    Color.Black.copy(alpha = if (isDarkThemeMini) 0.42f else 0.2f)
                                 ),
                                 center = Offset(0.5f, 0.5f),
-                                radius = 0.85f
+                                radius = 0.9f
                             )
                         )
                 )

@@ -939,17 +939,16 @@ fun FullPlayer(
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                            Icon(
-                                imageVector = if (song.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                contentDescription = stringResource(R.string.option_favorite),
-                                tint = if (song.isFavorite) {
-                                    if (useBlurControls) Color.White else MaterialTheme.colorScheme.primary
-                                } else {
-                                    if (useBlurControls) Color.White.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                                },
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+                        Icon(
+                            imageVector = if (song.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                            contentDescription = stringResource(R.string.option_favorite),
+                            tint = if (song.isFavorite) {
+                                if (useBlurControls) Color.White else MaterialTheme.colorScheme.primary
+                            } else {
+                                if (useBlurControls) Color.White.copy(alpha = 0.5f) else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                            },
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             }

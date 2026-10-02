@@ -133,6 +133,8 @@ private fun DrawScope.drawContourLayer(
 ) {
     val n = field.paths.size
     if (n == 0) return
+    val majorPx = widthMajor.toPx()
+    val minorPx = widthMinor.toPx()
     for (i in 0 until n) {
         val t = (i + 0.5f) / n
         val isMajor = field.isMajor[i]
@@ -141,7 +143,7 @@ private fun DrawScope.drawContourLayer(
         drawPath(
             path = field.paths[i],
             color = color.copy(alpha = alpha),
-            style = Stroke(width = if (isMajor) widthMajor else widthMinor)
+            style = Stroke(width = if (isMajor) majorPx else minorPx)
         )
     }
 }
@@ -166,8 +168,11 @@ fun OrganicWaveBackdrop(
     wash: Float = 1f,
     washColor: Color = NoirPurple
 ) {
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val field = remember(size) { buildContourField(size) }
+    // Named `fieldSize`, not `size`: inside `drawBehind` the unqualified
+    // `size` has to keep resolving to `DrawScope.size` (a Size). A local named
+    // `size` shadows it and silently turns every `size.width` into an Int.
+    var fieldSize by remember { mutableStateOf(IntSize.Zero) }
+    val field = remember(fieldSize) { buildContourField(fieldSize) }
 
     val reducedMotion = rememberReducedMotion()
     val shouldAnimate = animate && !reducedMotion
@@ -200,7 +205,7 @@ fun OrganicWaveBackdrop(
 
     Box(
         modifier = modifier
-            .onSizeChanged { size = it }
+            .onSizeChanged { fieldSize = it }
             .drawBehind {
                 val w = size.width
                 val h = size.height

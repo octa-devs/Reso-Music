@@ -20,6 +20,11 @@ import com.octadevs.resomusic.data.Playlist
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.screens.resume.HeroSection
+import com.octadevs.resomusic.ui.screens.resume.CategoryPills
+import com.octadevs.resomusic.ui.screens.resume.HomeTab
+import com.octadevs.resomusic.ui.screens.resume.RecentlyPlayedCarousel
+import com.octadevs.resomusic.ui.screens.resume.resolveMostPlayed
+import com.octadevs.resomusic.ui.screens.resume.resolveRecentlyPlayed
 import com.octadevs.resomusic.ui.screens.resume.PlaylistGridSection
 import com.octadevs.resomusic.ui.screens.resume.RecommendationSection
 import com.octadevs.resomusic.ui.screens.resume.RecentlyAddedSection
@@ -49,6 +54,13 @@ fun ResumeScreen(
     onGenreClick: (String) -> Unit,
     onExpandPlayer: () -> Unit,
     onPlayToggle: () -> Unit,
+    /**
+     * Real top-level destinations, used by the category pill row. These are the
+     * same ids the pager already uses, so tapping a pill is genuine navigation.
+     */
+    navTabs: List<HomeTab> = emptyList(),
+    activeTabId: String = "",
+    onTabSelected: (String) -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -160,6 +172,17 @@ fun ResumeScreen(
         allSongs.sortedByDescending { it.dateAdded }.take(10)
     }
 
+    // Real, persisted listening history. Empty until something has actually
+    // been played, and the sections below simply do not render in that case
+    // rather than substituting invented content.
+    val recentlyPlayed = remember(viewModel.recentlyPlayedStats, allSongs) {
+        resolveRecentlyPlayed(viewModel.recentlyPlayedStats, allSongs)
+    }
+
+    val mostPlayed = remember(viewModel.topSongStats, allSongs) {
+        resolveMostPlayed(viewModel.topSongStats, allSongs)
+    }
+
     val favoriteCount = remember(allSongs) {
         allSongs.count { it.isFavorite }
     }
@@ -207,6 +230,30 @@ fun ResumeScreen(
                 playbackProgress = playbackProgress,
                 onContinueListening = onExpandPlayer,
                 onPlayToggle = onPlayToggle
+            )
+        }
+
+        if (navTabs.isNotEmpty()) {
+            CategoryPills(
+                tabs = navTabs,
+                activeTabId = activeTabId,
+                onTabSelected = onTabSelected
+            )
+        }
+
+        if (recentlyPlayed.isNotEmpty()) {
+            RecentlyPlayedCarousel(
+                title = stringResource(R.string.resume_recently_played),
+                songs = recentlyPlayed,
+                onSongClick = { song -> onSongClick(song, allSongs) }
+            )
+        }
+
+        if (mostPlayed.isNotEmpty()) {
+            RecentlyPlayedCarousel(
+                title = stringResource(R.string.resume_most_played),
+                songs = mostPlayed,
+                onSongClick = { song -> onSongClick(song, allSongs) }
             )
         }
 

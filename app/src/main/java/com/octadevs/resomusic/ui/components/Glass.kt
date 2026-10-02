@@ -229,8 +229,7 @@ fun Modifier.liquidGlass(
                                 0f to wash.copy(alpha = tuning.tintAlpha),
                                 0.42f to wash.copy(alpha = tuning.tintAlpha * 0.74f),
                                 1f to wash.copy(alpha = tuning.tintAlpha * 0.46f)
-                            ),
-                            size = size
+                            )
                         )
                     )
                 }
@@ -520,9 +519,10 @@ fun LiquidGlassBackground(
     val glow = glowTokens()
     Box(modifier = modifier.fillMaxSize()) {
         if (baseColor != null) {
-            androidx.compose.foundation.background(
-                color = baseColor,
-                modifier = Modifier.fillMaxSize()
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(baseColor)
             )
         }
         OrganicWaveBackdrop(

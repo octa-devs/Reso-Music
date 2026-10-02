@@ -179,6 +179,14 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
 
     var topSongStats by mutableStateOf<List<com.octadevs.resomusic.data.PlaybackStats>>(emptyList())
         private set
+    /**
+     * Real listening history, newest first, from the persisted
+     * `playback_stats.lastPlayed` column. Empty until something has actually
+     * been played, which is correct — the Home screen shows nothing rather
+     * than inventing a history.
+     */
+    var recentlyPlayedStats by mutableStateOf<List<com.octadevs.resomusic.data.PlaybackStats>>(emptyList())
+        private set
     var topPlaylistStats by mutableStateOf<List<com.octadevs.resomusic.data.PlaybackStats>>(emptyList())
         private set
     var topArtistStats by mutableStateOf<List<com.octadevs.resomusic.data.PlaybackStats>>(emptyList())
@@ -403,7 +411,12 @@ class MusicViewModel(application: Application) : AndroidViewModel(application) {
             val dao = db.playbackStatsDao()
             
             launch {
-                dao.getTopByCountFlow("SONG", 3).collect { topSongStats = it }
+                // Was LIMIT 3, which was only ever enough for a "top 3" widget.
+                // A carousel and a "Most Played" section need a real top-N.
+                dao.getTopByCountFlow("SONG", 12).collect { topSongStats = it }
+            }
+            launch {
+                dao.getRecentlyPlayedFlow("SONG", 20).collect { recentlyPlayedStats = it }
             }
             launch {
                 dao.getTopByTimeFlow("PLAYLIST", 1).collect { topPlaylistStats = it }

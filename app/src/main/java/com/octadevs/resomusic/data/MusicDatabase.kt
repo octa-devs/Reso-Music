@@ -127,6 +127,17 @@ interface PlaybackStatsDao {
     @Query("SELECT * FROM playback_stats WHERE type = :type ORDER BY totalTimeMs DESC LIMIT :limit")
     fun getTopByTimeFlow(type: String, limit: Int): kotlinx.coroutines.flow.Flow<List<PlaybackStats>>
 
+    /**
+     * Most recently played, newest first.
+     *
+     * `lastPlayed` has always been written on every play — there simply was
+     * no query for it, which is why "Recently Played" only ever existed as a
+     * volatile in-memory list in [com.octadevs.resomusic.tools.PlaybackManager]
+     * that died with the process. This surfaces the real persisted history.
+     */
+    @Query("SELECT * FROM playback_stats WHERE type = :type AND lastPlayed > 0 ORDER BY lastPlayed DESC LIMIT :limit")
+    fun getRecentlyPlayedFlow(type: String, limit: Int): kotlinx.coroutines.flow.Flow<List<PlaybackStats>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStats(stats: PlaybackStats)
 }

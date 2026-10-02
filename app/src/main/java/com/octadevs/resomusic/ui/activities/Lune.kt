@@ -684,6 +684,33 @@ fun MainScreen(
     val currentActiveFolder = folders.getOrNull(pagerState.currentPage) ?: selectedFolder
     var isPagerProgrammaticScroll by remember { mutableStateOf(false) }
 
+    /**
+     * The category pill row on Home.
+     *
+     * Built from the live `folders` list, so it can never drift out of sync
+     * with section customisation, hidden tabs, or the favourites/AI/folders
+     * tabs that only appear when there is real content behind them.
+     */
+    val homeNavTabs = remember(folders) {
+        folders.map { id ->
+            com.octadevs.resomusic.ui.screens.resume.HomeTab(
+                id = id,
+                label = when (id) {
+                    "RESUME" -> sTabResume
+                    "MIXES" -> sTabMixes
+                    "ALL" -> sTabAll
+                    "PLAYLISTS" -> sTabPlaylists
+                    "FAVORITES" -> sTabFavorites
+                    "ALBUMS" -> sTabAlbums
+                    "ARTISTS" -> sTabArtists
+                    "GENRES" -> sTabGenres
+                    "FOLDERS" -> sTabFolders
+                    else -> id.lowercase().replaceFirstChar { it.uppercase() }
+                }
+            )
+        }
+    }
+
     LaunchedEffect(selectedFolder) {
         val target = folders.indexOf(selectedFolder)
         if (target >= 0 && pagerState.currentPage != target) {
@@ -1179,6 +1206,9 @@ fun MainScreen(
                                 isDarkTheme = isDarkThemeMini,
                                 useCustomControlsColor = useCustomControlsColor,
                                 controlsColorPalette = controlsColorPalette,
+                                navTabs = homeNavTabs,
+                                activeTabId = currentActiveFolder,
+                                onTabSelected = onSelectedFolderChange,
                                 onSongClick = { song, listContext ->
                                     onCurrentSongChange(song)
                                     playbackManager.play(song, listContext, -100L, category = "ALL", shuffleMode = playbackManager.isShuffle)

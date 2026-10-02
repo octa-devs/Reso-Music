@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Warm charcoal, matching Color.kt NightDeep so the launch window and the
+         first composed frame are the same colour. -->
+    <color name="splash_background">#120D0A</color>
+
     <style name="Theme.Lune" parent="Theme.AppCompat.DayNight.NoActionBar" />
+
+    <!--
+      Launch theme for the main activity only. Lune swaps back to Theme.Lune in
+      onCreate before it inflates anything, so the real theme governs the app
+      and this one only paints the window that shows while it starts.
+    -->
+    <style name="Theme.Lune.Splash" parent="Theme.Lune">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
 
     <style name="Theme.Lune.QuickPlayer" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>

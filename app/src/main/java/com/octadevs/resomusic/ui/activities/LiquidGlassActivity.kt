@@ -43,7 +43,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -105,13 +107,13 @@ fun LiquidGlassScreen(onBack: () -> Unit) {
     // Mirrors of the persisted values. Writes go to both the mirror (so this
     // screen repaints) and SettingsManager (so it survives a restart and so
     // every other screen repaints).
-    var intensity by remember { androidx.compose.runtime.mutableFloatStateOf(settingsManager.glassIntensity) }
-    var transparency by remember { androidx.compose.runtime.mutableFloatStateOf(settingsManager.glassTransparency) }
-    var border by remember { androidx.compose.runtime.mutableFloatStateOf(settingsManager.glassBorderOpacity) }
-    var shadow by remember { androidx.compose.runtime.mutableFloatStateOf(settingsManager.glassShadowIntensity) }
-    var glow by remember { androidx.compose.runtime.mutableFloatStateOf(settingsManager.glassGlowIntensity) }
-    var ambient by remember { androidx.compose.runtime.mutableStateOf(settingsManager.glassAmbientEnabled) }
-    var animations by remember { androidx.compose.runtime.mutableStateOf(settingsManager.glassAnimationsEnabled) }
+    var intensity by remember { mutableFloatStateOf(settingsManager.glassIntensity) }
+    var transparency by remember { mutableFloatStateOf(settingsManager.glassTransparency) }
+    var border by remember { mutableFloatStateOf(settingsManager.glassBorderOpacity) }
+    var shadow by remember { mutableFloatStateOf(settingsManager.glassShadowIntensity) }
+    var glow by remember { mutableFloatStateOf(settingsManager.glassGlowIntensity) }
+    var ambient by remember { mutableStateOf(settingsManager.glassAmbientEnabled) }
+    var animations by remember { mutableStateOf(settingsManager.glassAnimationsEnabled) }
 
     val previewTuning = remember(intensity, transparency, border, shadow, glow) {
         GlassUserTuning(
@@ -317,7 +319,7 @@ private fun GlassPreviewCard(
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        stringResource(R.string.liquid_glass_preview_track),
+                        stringResource(R.string.glass_preview_track),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

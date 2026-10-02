@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ system splash.
+
+  The platform owns this screen, so it can only be styled, not animated - which
+  is exactly what the brief asked for ("no long or distracting animation").
+  No icon background: the ResoMusic mark already carries its own background,
+  and the default scrim behind it would frame the logo in a box.
+-->
+<resources>
+    <style name="Theme.Lune.Splash" parent="Theme.Lune">
+        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/new_reso_logo</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/splash_background</item>
+        <item name="android:postSplashScreenTheme">@style/Theme.Lune</item>
+    </style>
+</resources>

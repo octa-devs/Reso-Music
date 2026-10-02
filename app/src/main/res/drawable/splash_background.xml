@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Pre-Android-12 launch background.
+
+  Matches the app's dark base exactly so the hand-off from the system splash to
+  the Compose tree has no visible seam. API 31+ overrides this with the platform
+  splash theme in values-v31/themes.xml.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/splash_background" />
+    <item
+        android:drawable="@drawable/new_reso_logo"
+        android:gravity="center" />
+</layer-list>

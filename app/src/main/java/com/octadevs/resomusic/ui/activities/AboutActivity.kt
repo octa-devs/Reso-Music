@@ -202,6 +202,14 @@ fun AboutScreen() {
                     color = if (hasBlurBackground) Color.White.copy(alpha = 0.75f) else MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
+                Spacer(modifier = Modifier.height(6.dp))
+
+                Text(
+                    text = stringResource(R.string.brand_tagline),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (hasBlurBackground) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
+                )
+
                 Spacer(modifier = Modifier.height(28.dp))
 
                 // Action Buttons (GitHub & Website)

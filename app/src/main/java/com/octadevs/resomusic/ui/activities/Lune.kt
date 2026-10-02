@@ -222,6 +222,10 @@ class Lune : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // The manifest gives this activity the splash theme so the launch
+        // window is branded. Swap back to the real theme before anything is
+        // inflated, otherwise the splash colours bleed into the app.
+        setTheme(com.octadevs.resomusic.R.style.Theme_Lune)
         handleIntent(intent)
         val settingsManager = SettingsManager.getInstance(this)
         enableEdgeToEdge(

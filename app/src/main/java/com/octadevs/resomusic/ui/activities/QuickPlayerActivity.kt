@@ -293,7 +293,9 @@ private fun QuickPlayerDialogScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Image(
+                                    // Fully qualified: the `androidx.compose.material.icons.filled.*` star import
+                                    // above also brings in `Icons.Filled.Image`, which shadows the layout composable.
+                                    androidx.compose.foundation.Image(
                                         painter = painterResource(R.drawable.new_reso_logo),
                                         contentDescription = null,
                                         modifier = Modifier.size(22.dp),

@@ -492,7 +492,6 @@
     <string name="whatsapp_audio_desc">Show or hide the WhatsApp Audio folder</string>
 
     <!-- Liquid Glass -->
-    <string name="liquid_glass">Liquid Glass</string>
     <string name="liquid_glass_desc">Customise how glass surfaces look throughout Reso Music. Changes apply instantly.</string>
     <string name="glass_surface">Surface</string>
     <string name="glass_depth">Depth &amp; Light</string>
@@ -505,4 +504,5 @@
     <string name="glass_animations">Animate ambient glow</string>
     <string name="glass_preview_track">Live preview</string>
     <string name="reset_to_default">Reset to Default</string>
+    <string name="brand_tagline">Your music. Offline. Always.</string>
 </resources>

@@ -66,6 +66,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
+import com.octadevs.resomusic.ui.theme.EmberAmber
+import com.octadevs.resomusic.ui.theme.EmberGold
+import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.glowTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlin.math.cos
 import kotlin.math.max
@@ -458,8 +462,12 @@ fun GlassDivider(
    ============================================================================ */
 
 /**
- * Animated liquid mesh. Uses radial gradients rather than one enormous blur
- * pass — visually equivalent (gradients are already soft) and far cheaper.
+ * Animated ambient backdrop. Two slow warm pools rather than a multi-hue
+ * mesh: the brief for this layer was "a room with a lamp in it", and four
+ * drifting hues read as a gradient wallpaper instead.
+ *
+ * Implemented with radial gradients, not blur passes — gradients are already
+ * soft, so this looks the same and costs a fraction of the frame.
  */
 @Composable
 fun LiquidGlassBackground(
@@ -473,39 +481,23 @@ fun LiquidGlassBackground(
     val driftA by transition.animateFloat(
         initialValue = 0f,
         targetValue = (2.0 * Math.PI).toFloat(),
-        animationSpec = infiniteRepeatable(tween(26000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(38000, easing = LinearEasing), RepeatMode.Restart),
         label = "driftA"
     )
     val driftB by transition.animateFloat(
         initialValue = (2.0 * Math.PI).toFloat(),
         targetValue = 0f,
-        animationSpec = infiniteRepeatable(tween(19000, easing = LinearEasing), RepeatMode.Restart),
+        animationSpec = infiniteRepeatable(tween(29000, easing = LinearEasing), RepeatMode.Restart),
         label = "driftB"
     )
-    val driftC by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = (2.0 * Math.PI).toFloat(),
-        animationSpec = infiniteRepeatable(tween(37000, easing = LinearEasing), RepeatMode.Restart),
-        label = "driftC"
-    )
 
-    val colors = if (isDarkTheme) {
-        listOf(
-            Color(0xFF2A1B4A),
-            Color(0xFF0A3E60),
-            Color(0xFF5A1030),
-            Color(0xFF0B5040)
-        )
-    } else {
-        listOf(
-            Color(0xFFE0D8FF),
-            Color(0xFFD0EBFF),
-            Color(0xFFFFDBE8),
-            Color(0xFFD0F5E0)
-        )
-    }
-    val backdrop = baseColor ?: if (isDarkTheme) Color(0xFF05060B) else Color(0xFFF7F7FB)
-    val alpha = 0.25f * meshStrength
+    val glow = glowTokens()
+    val warmA = glow.primary
+    val warmB = glow.tertiary
+    val backdrop = baseColor ?: if (isDarkTheme) Color(0xFF0A0705) else Color(0xFFF7F3EE)
+    // Deliberately low. Anything higher and the glass on top of it stops
+    // reading as glass because there is no dark to refract.
+    val alpha = 0.13f * meshStrength
 
     Canvas(
         modifier = modifier
@@ -514,40 +506,27 @@ fun LiquidGlassBackground(
     ) {
         val w = size.width
         val h = size.height
-        val baseR = max(w, h) * 0.72f
+        val baseR = max(w, h) * 0.80f
 
-        val blobs = listOf(
+        val pools = listOf(
             Blob(
-                Offset(w * 0.15f + cos(driftA) * w * 0.08f, h * 0.10f + sin(driftA) * h * 0.08f),
-                baseR * 0.75f,
-                colors[0]
+                Offset(w * 0.16f + cos(driftA) * w * 0.07f, h * 0.12f + sin(driftA) * h * 0.07f),
+                baseR * 0.78f,
+                warmA
             ),
             Blob(
-                Offset(w * 0.82f + cos(driftB) * w * 0.09f, h * 0.32f + sin(driftB) * h * 0.09f),
+                Offset(w * 0.86f + cos(driftB) * w * 0.08f, h * 0.80f + sin(driftB) * h * 0.08f),
                 baseR * 0.70f,
-                colors[1]
-            ),
-            Blob(
-                Offset(w * 0.10f + cos(driftC) * w * 0.08f, h * 0.82f + sin(driftC) * h * 0.08f),
-                baseR * 0.60f,
-                colors[2]
-            ),
-            Blob(
-                Offset(
-                    w * 0.68f + cos(driftA + 2.1f) * w * 0.10f,
-                    h * 0.88f + sin(driftB + 1.3f) * h * 0.08f
-                ),
-                baseR * 0.55f,
-                colors[3]
+                warmB
             )
         )
 
-        for (blob in blobs) {
+        for (blob in pools) {
             drawCircle(
                 brush = Brush.radialGradient(
                     colorStops = arrayOf(
                         0f to blob.color.copy(alpha = alpha),
-                        0.65f to blob.color.copy(alpha = alpha * 0.35f),
+                        0.55f to blob.color.copy(alpha = alpha * 0.32f),
                         1f to Color.Transparent
                     ),
                     center = blob.center,
@@ -564,7 +543,7 @@ fun LiquidGlassBackground(
                 colorStops = arrayOf(
                     0f to Color.Transparent,
                     0.6f to Color.Transparent,
-                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.25f else 0.04f)
+                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.28f else 0.04f)
                 ),
                 center = Offset(w * 0.5f, h * 0.5f),
                 radius = max(w, h) * 0.75f
@@ -647,20 +626,20 @@ fun LightSweep(
    TYPE
    ============================================================================ */
 
-private val AuroraSweep = listOf(
-    Color(0xFF7C5CFF),
-    Color(0xFF22D3EE),
-    Color(0xFFFF4D9D),
-    Color(0xFF7C5CFF)
+private val EmberSweep = listOf(
+    EmberOrange,
+    EmberAmber,
+    EmberGold,
+    EmberOrange
 )
 
-/** Text filled with a slowly drifting aurora gradient. */
+/** Text filled with a slowly drifting brand gradient. */
 @Composable
 fun AnimatedGradientText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.displaySmall,
-    colors: List<Color> = AuroraSweep
+    colors: List<Color> = EmberSweep
 ) {
     val transition = rememberInfiniteTransition(label = "textGradient")
     val phase by transition.animateFloat(

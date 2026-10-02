@@ -301,14 +301,17 @@ fun HeroSection(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = dailyListeningTimeStr,
+                                // Brand tagline rather than a second stat:
+                                // the chips below already carry the numbers,
+                                // and repeating one read as a bug.
+                                text = stringResource(R.string.brand_tagline),
                                 maxLines = 1,
                                 style = androidx.compose.ui.text.TextStyle(
                                     fontSize = 16.sp,
-                                    lineHeight = 20.sp,
+                                    lineHeight = 22.sp,
                                     fontWeight = FontWeight.Medium,
-                                    letterSpacing = 0.2.sp,
-                                    color = heroTheme.contentColor.copy(alpha = 0.8f)
+                                    letterSpacing = 0.1.sp,
+                                    color = heroTheme.contentColor.copy(alpha = 0.72f)
                                 )
                             )
                         }

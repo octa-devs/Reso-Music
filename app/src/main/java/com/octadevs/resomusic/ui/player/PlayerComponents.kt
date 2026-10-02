@@ -99,6 +99,9 @@ import com.octadevs.resomusic.ui.sheets.VisualizerSettingsBottomSheet
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.components.glassCard
+import com.octadevs.resomusic.ui.components.AmbientHalo
+import com.octadevs.resomusic.ui.components.AmbientGlowBackground
+import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.utils.formatDuration
@@ -769,6 +772,16 @@ fun FullPlayer(
                 )
             }
         }
+
+        // Warm ambient light over whichever backdrop is in play. Without this
+        // the non-cinematic player is a flat colour field; with it the surface
+        // reads as lit. Kept low so it never competes with the artwork.
+        AmbientGlowBackground(
+            modifier = Modifier.fillMaxSize(),
+            isPlaying = isPlaying,
+            strength = LocalGlassUserTuning.current.glowIntensity,
+            drawBase = false
+        )
 
         val coverSection: @Composable () -> Unit = {
             Column(
@@ -2055,7 +2068,21 @@ fun MiniPlayer(
 
     val miniShape = RoundedCornerShape(26.dp)
 
-    Row(
+    val glowTuning = LocalGlassUserTuning.current
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        // Bloom sits outside the pane so it lights the surface it floats on
+        // rather than washing out the title sitting on the glass.
+        AmbientHalo(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .height(124.dp),
+            strength = glowTuning.glowIntensity,
+            isPlaying = isPlaying
+        )
+
+        Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(76.dp)
@@ -2304,9 +2331,9 @@ fun MiniPlayer(
             }
         }
     }
-
-
+    }
 }
+
 
 @Composable
 fun MiniPlayerMinimized(

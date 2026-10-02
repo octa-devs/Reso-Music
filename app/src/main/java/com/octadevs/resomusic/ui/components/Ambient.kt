@@ -127,6 +127,8 @@ private fun GlowPool(
  *
  * @param isPlaying lifts the glow slightly while audio is running.
  * @param strength   multiplies the whole layer; 0 disables it entirely.
+ * @param drawBase   set false to lay only the glow over artwork that is
+ *                   already painting the backdrop (the full player does this).
  */
 @Composable
 fun AmbientGlowBackground(
@@ -134,6 +136,7 @@ fun AmbientGlowBackground(
     isPlaying: Boolean = false,
     strength: Float = 1f,
     baseColor: Color? = null,
+    drawBase: Boolean = true,
     content: @Composable BoxScope.() -> Unit = {}
 ) {
     val glow: GlowTokens = glowTokens()
@@ -147,8 +150,10 @@ fun AmbientGlowBackground(
     val lift = if (isPlaying) 1f else 0.55f
 
     Box(modifier = modifier.fillMaxSize()) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            drawRect(color = baseColor ?: scheme.background)
+        if (drawBase) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                drawRect(color = baseColor ?: scheme.background)
+            }
         }
 
         GlowPool(

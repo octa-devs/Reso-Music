@@ -330,8 +330,16 @@ private fun ColorScheme.glassify(): ColorScheme {
     )
 }
 
-/** True when this scheme is one of the dark variants. */
-private fun ColorScheme.isDarkScheme(): Boolean = luminance() < 0.5f
+/**
+ * True when this scheme is one of the dark variants.
+ *
+ * Reads `surface`, not the scheme itself. `luminance()` is an extension on
+ * `Color`, and `ColorScheme` has no such member, so calling it on the scheme
+ * does not compile. `surface` is also the only role `glassify()` leaves
+ * opaque, which makes it the one place a dark/light test is still meaningful
+ * after the containers have become translucent.
+ */
+private fun ColorScheme.isDarkScheme(): Boolean = surface.luminance() < 0.5f
 
 /* Veil rungs for dark mode. Named so the ladder reads as a scale rather than
    as four unexplained numbers. */

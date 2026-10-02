@@ -711,6 +711,16 @@ fun MainScreen(
         }
     }
 
+    /**
+     * Single entry point for the Settings destination.
+     *
+     * Used by the floating dock. The pinned header keeps its own settings
+     * button, so both routes stay available.
+     */
+    val openSettings: () -> Unit = {
+        context.startActivity(Intent(context, SettingsActivity::class.java))
+    }
+
     LaunchedEffect(selectedFolder) {
         val target = folders.indexOf(selectedFolder)
         if (target >= 0 && pagerState.currentPage != target) {
@@ -2151,7 +2161,9 @@ fun MainScreen(
             }
         }
 
-        val miniPlayerShape = RoundedCornerShape(20.dp)
+        // Radius family shared with FloatingNavDock (28dp) so the stacked
+        // dock + mini player read as one continuous glass assembly.
+        val miniPlayerShape = RoundedCornerShape(26.dp)
 
         // Mini Player
 
@@ -2235,27 +2247,12 @@ fun MainScreen(
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Box(modifier = Modifier.weight(1f)) {
-                                    UnifiedHeaderPill(
-                                        selectedFolder = currentActiveFolder,
-                                        folders = folders,
-                                        onSelectedFolderChange = onSelectedFolderChange,
-                                        showSectionMenuSheet = { showSectionMenuSheet = true },
-                                        showSearchScreen = { showSearchScreen = true },
-                                        playbackManager = playbackManager,
-                                        song = song,
-                                        hasBlurBackground = hasBlurBackgroundMini,
-                                        isDarkTheme = isDarkThemeMini,
-                                        useCustomControlsColor = useCustomControlsColor,
-                                        controlsColorPalette = controlsColorPalette,
-                                        sTabResume = sTabResume,
-                                        sTabMixes = sTabMixes,
-                                        sTabAll = sTabAll,
-                                        sTabFavorites = sTabFavorites,
-                                        sTabAlbums = sTabAlbums,
-                                        sTabArtists = sTabArtists,
-                                        sTabGenres = sTabGenres,
-                                        sTabPlaylists = sTabPlaylists,
-                                        sTabFolders = sTabFolders
+                                    FloatingNavDock(
+                                        tabs = homeNavTabs,
+                                        activeTabId = currentActiveFolder,
+                                        onTabSelected = onSelectedFolderChange,
+                                        onMoreClick = { showSectionMenuSheet = true },
+                                        onSettingsClick = openSettings
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -2282,36 +2279,24 @@ fun MainScreen(
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 14.dp)
+                                        .padding(horizontal = 18.dp)
                                 ) {
-                                    UnifiedHeaderPill(
-                                        selectedFolder = currentActiveFolder,
-                                        folders = folders,
-                                        onSelectedFolderChange = onSelectedFolderChange,
-                                        showSectionMenuSheet = { showSectionMenuSheet = true },
-                                        showSearchScreen = { showSearchScreen = true },
-                                        playbackManager = playbackManager,
-                                        song = song,
-                                        hasBlurBackground = hasBlurBackgroundMini,
-                                        isDarkTheme = isDarkThemeMini,
-                                        useCustomControlsColor = useCustomControlsColor,
-                                        controlsColorPalette = controlsColorPalette,
-                                        sTabResume = sTabResume,
-                                        sTabMixes = sTabMixes,
-                                        sTabAll = sTabAll,
-                                        sTabFavorites = sTabFavorites,
-                                        sTabAlbums = sTabAlbums,
-                                        sTabArtists = sTabArtists,
-                                        sTabGenres = sTabGenres,
-                                        sTabPlaylists = sTabPlaylists,
-                                        sTabFolders = sTabFolders
+                                    FloatingNavDock(
+                                        tabs = homeNavTabs,
+                                        activeTabId = currentActiveFolder,
+                                        onTabSelected = onSelectedFolderChange,
+                                        onMoreClick = { showSectionMenuSheet = true },
+                                        onSettingsClick = openSettings
                                     )
                                 }
-                                Spacer(modifier = Modifier.height(8.dp))
+                                Spacer(modifier = Modifier.height(10.dp))
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 14.dp)
+                                        // Same inset as the dock above, so the two
+                                        // panes read as one merged assembly rather
+                                        // than as two independently-placed bars.
+                                        .padding(horizontal = 18.dp)
                                 ) {
                                     MiniPlayer(
                                         song = song,
@@ -2353,29 +2338,14 @@ fun MainScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 14.dp, end = 14.dp, bottom = bottomInset + 8.dp)
+                            .padding(start = 18.dp, end = 18.dp, bottom = bottomInset + 8.dp)
                     ) {
-                        UnifiedHeaderPill(
-                            selectedFolder = currentActiveFolder,
-                            folders = folders,
-                            onSelectedFolderChange = onSelectedFolderChange,
-                            showSectionMenuSheet = { showSectionMenuSheet = true },
-                            showSearchScreen = { showSearchScreen = true },
-                            playbackManager = playbackManager,
-                            song = null,
-                            hasBlurBackground = hasBlurBackgroundMini,
-                            isDarkTheme = isDarkThemeMini,
-                            useCustomControlsColor = useCustomControlsColor,
-                            controlsColorPalette = controlsColorPalette,
-                            sTabResume = sTabResume,
-                            sTabMixes = sTabMixes,
-                            sTabAll = sTabAll,
-                            sTabFavorites = sTabFavorites,
-                            sTabAlbums = sTabAlbums,
-                            sTabArtists = sTabArtists,
-                            sTabGenres = sTabGenres,
-                            sTabPlaylists = sTabPlaylists,
-                            sTabFolders = sTabFolders
+                        FloatingNavDock(
+                            tabs = homeNavTabs,
+                            activeTabId = currentActiveFolder,
+                            onTabSelected = onSelectedFolderChange,
+                            onMoreClick = { showSectionMenuSheet = true },
+                            onSettingsClick = openSettings
                         )
                     }
                 }

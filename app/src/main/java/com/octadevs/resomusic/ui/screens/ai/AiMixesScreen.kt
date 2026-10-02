@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.octadevs.resomusic.R
@@ -45,6 +44,7 @@ import com.octadevs.resomusic.ai.model.MixCategory
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.rememberBlurSheetColors
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
@@ -65,7 +65,7 @@ val M3ExpressiveTileShape = RoundedCornerShape(22.dp)
 fun M3WavyProgressIndicator(
     progress: Float,
     modifier: Modifier = Modifier,
-    trackColor: Color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+    trackColor: Color = glassPane(0.4f),
     waveColor: Color = MaterialTheme.colorScheme.primary,
     strokeWidth: Dp = 5.dp,
     amplitude: Float = 6f,

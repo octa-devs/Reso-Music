@@ -110,6 +110,7 @@ import com.octadevs.resomusic.ui.components.BouncySwitch
 import com.octadevs.resomusic.ui.components.GlassIconButton
 import com.octadevs.resomusic.ui.components.LightSweep
 import com.octadevs.resomusic.ui.components.StaggeredEntrance
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.liquidGlass
 import com.octadevs.resomusic.ui.theme.EmberAmber
 import com.octadevs.resomusic.ui.theme.EmberOrange
@@ -1160,10 +1161,11 @@ private fun SettingsChoiceDialog(
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit
 ) {
-    val tokens = LocalGlassTokens.current
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = if (tokens.isDark) Color(0xFF141726) else Color(0xFFFCFCFF),
+        // A floating pane, so the high glass rung. `tokens` is gone from here:
+        // it existed only to pick between two hardcoded slab colours.
+        containerColor = glassPane(0.62f),
         shape = RoundedCornerShape(30.dp),
         title = {
             Text(
@@ -1238,7 +1240,7 @@ private fun SettingsPaletteDialog(
     val isDark = LocalGlassTokens.current.isDark
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = if (isDark) Color(0xFF141726) else Color(0xFFFCFCFF),
+        containerColor = glassPane(0.62f),
         shape = RoundedCornerShape(30.dp),
         title = {
             Text(

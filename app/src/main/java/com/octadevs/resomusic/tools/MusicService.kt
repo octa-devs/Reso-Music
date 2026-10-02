@@ -14,7 +14,6 @@ import android.os.Environment
 import com.octadevs.resomusic.data.MusicDatabase
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
-import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.octadevs.resomusic.R

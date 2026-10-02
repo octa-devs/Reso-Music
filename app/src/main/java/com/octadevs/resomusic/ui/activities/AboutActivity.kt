@@ -46,6 +46,7 @@ import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.GlassSurface
 import androidx.compose.ui.layout.ContentScale
 import com.octadevs.resomusic.ui.theme.LuneTheme
@@ -339,7 +340,7 @@ fun AboutScreen() {
                         // Website Link
                         Surface(
                             shape = RoundedCornerShape(12.dp),
-                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else glassPane(0.5f),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { uriHandler.openUri("https://octadevs.fun") }
@@ -367,7 +368,7 @@ fun AboutScreen() {
                         // Instagram Link
                         Surface(
                             shape = RoundedCornerShape(12.dp),
-                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else glassPane(0.5f),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { uriHandler.openUri("https://instagram.com/octadevsoffical") }
@@ -395,7 +396,7 @@ fun AboutScreen() {
                         // Email Link
                         Surface(
                             shape = RoundedCornerShape(12.dp),
-                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.15f)) else glassPane(0.5f),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { uriHandler.openUri("mailto:hello@octadevs.fun") }
@@ -541,7 +542,11 @@ fun DonateDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(28.dp),
-        containerColor = if (hasBlurBackground) (if (isDarkTheme) Color(0xFF1E1E1E).copy(alpha = 0.95f) else Color(0xFFF5F5F5).copy(alpha = 0.95f)) else MaterialTheme.colorScheme.surfaceContainerHigh,
+        // One pane for both branches. The old version swapped between a 95%-opaque
+        // hand-picked hex pair and a role colour, which meant the dialog was
+        // never actually transparent in the blur case -- exactly where
+        // translucency matters most.
+        containerColor = glassPane(0.62f),
         title = {
             Text(
                 text = stringResource(R.string.donate_title),
@@ -598,7 +603,7 @@ fun DonateDialog(
                 if (showMonero) {
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Row(

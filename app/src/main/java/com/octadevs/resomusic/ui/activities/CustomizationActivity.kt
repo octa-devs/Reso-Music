@@ -43,6 +43,7 @@ import androidx.compose.material.icons.filled.Widgets
 
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.utils.bounceClick
 
 class CustomizationActivity : ComponentActivity() {
@@ -310,7 +311,7 @@ fun CustomizationScreen(
                             .fillMaxWidth()
                             .padding(vertical = 1.dp),
                         shape = RoundedCornerShape(4.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                     ) {
                         Row(
@@ -392,7 +393,7 @@ fun CustomizationScreen(
                             .fillMaxWidth()
                             .padding(vertical = 1.dp),
                         shape = RoundedCornerShape(4.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
@@ -556,7 +557,7 @@ fun CustomizationScreen(
                         .clip(RoundedCornerShape(4.dp))
                         .clickable { showBitrateSheet = true },
                     shape = RoundedCornerShape(4.dp),
-                    color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                    color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                     tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                 ) {
                     Row(
@@ -696,7 +697,7 @@ fun CustomizationScreen(
                             .fillMaxWidth()
                             .padding(vertical = 1.dp),
                         shape = RoundedCornerShape(4.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                     ) {
                         Column(

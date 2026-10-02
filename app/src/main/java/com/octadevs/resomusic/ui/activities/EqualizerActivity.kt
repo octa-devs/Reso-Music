@@ -39,6 +39,7 @@ import kotlinx.coroutines.delay
 
 import androidx.compose.ui.graphics.Color
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
 
@@ -391,7 +392,7 @@ fun EqualizerScreen(onBack: () -> Unit) {
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = if (hasBlurBackground && currentSong != null) (if (useCustomControlsColor) activePrimary else Color.White.copy(alpha = 0.35f)) else (if (useCustomControlsColor) activePrimary else MaterialTheme.colorScheme.primaryContainer),
                                         selectedLabelColor = if (hasBlurBackground && currentSong != null) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                                        containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                        containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else glassPane(0.5f),
                                         labelColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
                                     ),
                                     modifier = Modifier.bounceClick()
@@ -415,7 +416,7 @@ fun EqualizerScreen(onBack: () -> Unit) {
                                     colors = FilterChipDefaults.filterChipColors(
                                         selectedContainerColor = if (hasBlurBackground && currentSong != null) (if (useCustomControlsColor) activePrimary else Color.White.copy(alpha = 0.35f)) else (if (useCustomControlsColor) activePrimary else MaterialTheme.colorScheme.primaryContainer),
                                         selectedLabelColor = if (hasBlurBackground && currentSong != null) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                                        containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                        containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else glassPane(0.5f),
                                         labelColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
                                     ),
                                     modifier = Modifier.bounceClick()
@@ -564,7 +565,7 @@ fun EqualizerScreen(onBack: () -> Unit) {
                             colors = FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = if (hasBlurBackground && currentSong != null) (if (useCustomControlsColor) activePrimary else Color.White.copy(alpha = 0.35f)) else (if (useCustomControlsColor) activePrimary else MaterialTheme.colorScheme.primaryContainer),
                                 selectedLabelColor = if (hasBlurBackground && currentSong != null) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                                containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else glassPane(0.5f),
                                 labelColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
                             ),
                             modifier = Modifier.bounceClick()
@@ -659,7 +660,7 @@ fun EqualizerScreen(onBack: () -> Unit) {
                             colors = FilterChipDefaults.filterChipColors(
                                 selectedContainerColor = if (hasBlurBackground && currentSong != null) (if (useCustomControlsColor) activePrimary else Color.White.copy(alpha = 0.35f)) else (if (useCustomControlsColor) activePrimary else MaterialTheme.colorScheme.primaryContainer),
                                 selectedLabelColor = if (hasBlurBackground && currentSong != null) Color.White else MaterialTheme.colorScheme.onPrimaryContainer,
-                                containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                                containerColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.1f) else glassPane(0.5f),
                                 labelColor = if (hasBlurBackground && currentSong != null) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
                             ),
                             modifier = Modifier.bounceClick()

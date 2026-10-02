@@ -70,6 +70,7 @@ import com.octadevs.resomusic.ui.activities.SettingsPreferenceItem
 import com.octadevs.resomusic.ui.activities.SettingsSection
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.theme.LuneTheme
 import androidx.compose.foundation.isSystemInDarkTheme
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -231,7 +232,7 @@ fun WidgetCustomizationScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     shape = RoundedCornerShape(24.dp),
-                    color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
+                    color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.4f),
                     border = BorderStroke(1.dp, if (hasBlurBackground) Color.White.copy(alpha = 0.15f) else MaterialTheme.colorScheme.outline.copy(alpha = 0.1f))
                 ) {
                     Column(
@@ -541,7 +542,7 @@ fun WidgetCustomizationScreen(
                             .fillMaxWidth()
                             .padding(vertical = 1.dp),
                         shape = RoundedCornerShape(4.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                     ) {
                         Column(
@@ -620,7 +621,7 @@ fun WidgetCustomizationScreen(
                             .fillMaxWidth()
                             .padding(vertical = 1.dp),
                         shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp, bottomStart = 20.dp, bottomEnd = 20.dp),
-                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        color = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)) else glassPane(0.5f),
                         tonalElevation = if (hasBlurBackground) 0.dp else 1.dp
                     ) {
                         Column(

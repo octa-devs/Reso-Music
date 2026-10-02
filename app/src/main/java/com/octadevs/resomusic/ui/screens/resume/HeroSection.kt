@@ -42,6 +42,7 @@ import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.components.LightSweep
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.liquidGlass
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlinx.coroutines.delay
@@ -567,7 +568,7 @@ private fun ContinueListeningCard(
     val cardBg = if (hasBlurBackground) {
         if (isDarkTheme) Color.White.copy(alpha = 0.12f) else Color.Black.copy(alpha = 0.25f)
     } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+        glassPane(0.6f)
     }
 
     val titleColor = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface

@@ -6,7 +6,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -223,7 +222,11 @@ fun rememberBlurSheetColors(currentSong: Song? = null): BlurSheetColors {
         BlurSheetColors(
             hasBlur = false,
             isDark = isDarkTheme,
-            containerColor = MaterialTheme.colorScheme.surface,
+            // surfaceContainerHigh rather than `surface`. These containers
+            // float over the page, so they need the elevated glass rung, not
+            // the opaque page base -- which is what left every sheet and
+            // dialog reading as a grey slab.
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
             itemContainerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.4f),
             textColor = MaterialTheme.colorScheme.onSurface,
             textSecondaryColor = MaterialTheme.colorScheme.onSurfaceVariant,

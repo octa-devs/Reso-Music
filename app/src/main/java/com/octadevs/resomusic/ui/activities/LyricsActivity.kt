@@ -71,6 +71,7 @@ import com.octadevs.resomusic.ui.player.MiniPlayerMinimized
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.utils.triggerLightVibration
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
+import com.octadevs.resomusic.ui.components.glassPane
 import java.util.regex.Pattern
 
 data class LyricWord(val timeMs: Long, val text: String)
@@ -267,7 +268,7 @@ fun LyricsScreen(onBack: () -> Unit, isDarkTheme: Boolean = false) {
                 ) {
                     val pillBg = if (isBlurActive) {
                         if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color.Black.copy(alpha = 0.08f)
-                    } else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+                    } else glassPane(0.55f)
 
                     val pillBorder = if (isBlurActive) {
                         if (isDarkTheme) Color.White.copy(alpha = 0.18f) else Color.Black.copy(alpha = 0.12f)

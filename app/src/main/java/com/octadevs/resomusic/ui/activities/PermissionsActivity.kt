@@ -51,6 +51,7 @@ import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.theme.LuneTheme
 
 class PermissionsActivity : ComponentActivity() {
@@ -295,7 +296,7 @@ fun PermissionsPreferenceItem(
     val cardBg = if (hasBlurBackground) {
         if (isDarkTheme) Color.White.copy(alpha = 0.09f) else Color.Black.copy(alpha = 0.22f)
     } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        glassPane(0.5f)
     }
 
     val iconBg = if (hasBlurBackground) Color.White.copy(alpha = 0.15f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)

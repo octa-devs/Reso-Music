@@ -10,7 +10,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -61,9 +60,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.theme.EmberGold
@@ -481,6 +480,40 @@ fun GlassPill(
                 color = textColor
             )
         }
+    }
+}
+
+/**
+ * A translucent pane drawn straight from a Material container role.
+ *
+ * Roughly 34 call sites hand-written their own fill as
+ * `surfaceVariant.copy(alpha = 0.5f)`. Once the container roles carry alpha
+ * themselves (see `ColorScheme.glassify`), that idiom inverts: `.copy(alpha)`
+ * *replaces* alpha rather than multiplying it, so a role that was a 12% veil
+ * silently became a 50% one -- a milky slab rather than a pane. Those sites
+ * now ask for the role directly.
+ *
+ * This exists so they can keep their alpha argument and their call-site
+ * readability. The value is mapped into each theme's usable band rather than
+ * used raw, because the band [ColorScheme.glassify] lands on differs by an
+ * order of magnitude between themes: dark glass sits at 0-0.17, light glass at
+ * 0.62-0.88. A literal 0.5 is a heavy scrim in dark mode and invisible in
+ * light mode, so passing it through raw would mean the same number means two
+ * completely different things depending on the user's theme.
+ *
+ * @param strength 0..1 intent, not literal alpha.
+ */
+@Composable
+fun glassPane(strength: Float = 0.5f): Color {
+    val s = strength.coerceIn(0f, 1f)
+    // `surface` rather than `colorScheme` itself: only the page base keeps an
+    // opaque colour after glassify(), so it is the one honest dark/light test
+    // left. `colorScheme.luminance()` would average the whole palette and give
+    // a meaningless answer.
+    return if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) {
+        Color.White.copy(alpha = s * 0.17f)
+    } else {
+        Color.White.copy(alpha = 0.62f + s * 0.26f)
     }
 }
 

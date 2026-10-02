@@ -71,7 +71,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.core.content.FileProvider
@@ -102,6 +101,7 @@ import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.components.AmbientHalo
 import com.octadevs.resomusic.ui.components.AmbientGlowBackground
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -309,7 +309,7 @@ fun AudioQualityBadges(
     val badgeBg = if (useBlurControls) {
         if (isDarkTheme) Color.Black.copy(alpha = 0.30f) else Color.White.copy(alpha = 0.35f)
     } else {
-        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+        glassPane(0.55f)
     }
 
     val badgeBorder = if (useBlurControls) {
@@ -913,7 +913,7 @@ fun FullPlayer(
                     }
                 }
 
-                val pillBg = if (useBlurControls) blurContainerColor else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                val pillBg = if (useBlurControls) blurContainerColor else glassPane(0.5f)
                 val isShuffling = playbackManager.isShuffle
                 val shuffleIconColor = if (isShuffling) {
                     if (useBlurControls) Color.White else MaterialTheme.colorScheme.primary
@@ -1381,7 +1381,7 @@ fun FullPlayer(
                 } else {
                     val pillBg = if (useBlurControls) {
                         if (isDarkTheme) Color.White.copy(alpha = 0.15f) else Color.Black.copy(alpha = 0.08f)
-                    } else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.55f)
+                    } else glassPane(0.55f)
 
                     val pillBorder = if (useBlurControls) {
                         if (isDarkTheme) Color.White.copy(alpha = 0.18f) else Color.Black.copy(alpha = 0.12f)
@@ -2105,10 +2105,43 @@ fun MiniPlayer(
         // Background Effects
         Box(modifier = Modifier.fillMaxSize()) {
             if (hasBlurBackground) {
+                // The cover used to be a full-bleed ContentScale.Crop image at
+                // 30-50% alpha. On the full player the same wash reads as
+                // ambience, because there it sits behind a whole screen of
+                // scrim. In a 76dp strip that crop stays legible as a
+                // *picture*: the album cover filled the entire mini player, the
+                // title sat on top of artwork instead of on glass, and the
+                // pane stopped reading as a pane at all.
+                //
+                // A surface this small cannot afford a picture. It wants the
+                // cover's colour and nothing else, so the wash is weighted to
+                // the leading edge where the thumbnail actually is and
+                // dissolved out well before it reaches the controls. That also
+                // puts the title, the play button and next on clean glass,
+                // which is where they have to be legible.
+                //
+                // Masked with DstIn rather than a plain alpha so the falloff
+                // is a real dissolve instead of a rectangle of tint ending at a
+                // hard edge.
+                val washMask = Brush.horizontalGradient(
+                    colorStops = arrayOf(
+                        0f to Color.White,
+                        0.34f to Color.White.copy(alpha = 0.58f),
+                        0.68f to Color.White.copy(alpha = 0.14f),
+                        1f to Color.Transparent
+                    )
+                )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .alpha(if (isDarkTheme) 0.3f else 0.5f)
+                        .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                        .drawWithContent {
+                            drawContent()
+                            drawRect(brush = washMask, blendMode = BlendMode.DstIn)
+                        }
+                        // After the mask, so this fades the already-dissolved
+                        // result rather than multiplying against it twice.
+                        .alpha(if (isDarkTheme) 0.20f else 0.28f)
                 ) {
                     val miniBlurRequest = remember(song.id, song.coverUrl) {
                         ImageRequest.Builder(miniContext)
@@ -2127,7 +2160,7 @@ fun MiniPlayer(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(Color.Black.copy(alpha = if (isDarkTheme) 0.4f else 0.15f))
+                        .background(Color.Black.copy(alpha = if (isDarkTheme) 0.26f else 0.12f))
                 )
             }
 

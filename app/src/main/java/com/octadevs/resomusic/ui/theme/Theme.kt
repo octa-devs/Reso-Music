@@ -3,6 +3,7 @@ package com.octadevs.resomusic.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -260,6 +261,85 @@ private val MidnightEmberDark = darkColorScheme(
 private val DarkColorScheme = NoirDark
 private val LightColorScheme = NoirLight
 
+/**
+ * Turns Material's opaque container roles into translucent glass veils.
+ *
+ * This is the single highest-leverage lever for glassmorphism in a
+ * Material3 app, and it is applied here rather than at 90 call sites on
+ * purpose.
+ *
+ * Every "neutral" surface role in M3 -- `surfaceContainerLow` through
+ * `surfaceContainerHighest`, plus `surfaceVariant` and `surfaceBright` -- is
+ * defined as an *opaque* colour. That single fact is what keeps an app from
+ * looking glassy no matter how much you polish the cards: M3's own components
+ * (AlertDialog, ModalBottomSheet, ListItem, FilterChip, Menu, TextField) all
+ * paint their chrome from those roles, so every one of them renders as an
+ * opaque slab no matter what you do to your own components.
+ *
+ * Giving the roles an alpha makes the backdrop visible through them, and
+ * because the same roles feed M3's built-in components, those become glass
+ * for free -- no rewriting 30 dialog and sheet call sites, and no risk of
+ * one of them being missed later.
+ *
+ * The veil is a light neutral in both themes, which is what real frosted
+ * glass does: it scatters *light*, it does not tint. Tinting the pane with
+ * the brand hue is handled separately by the glass tokens (`meshFill`,
+ * `tintAlpha`), so hue stays adjustable in Liquid Glass settings without
+ * this function needing to know about the palette at all.
+ *
+ * `surfaceContainerLowest` is deliberately left opaque. It is the floor a
+ * sheet or dialog is laid over, and making it see-through would let the
+ * content behind bleed through the surface it is supposed to be separating.
+ * That is not glassmorphism, that is a rendering bug.
+ *
+ * @param isDark selects the alpha ladder. Dark glass needs a stronger veil to
+ *        register at all against a near-black backdrop; light glass goes milky
+ *        fast, so its rungs sit much higher and closer together.
+ */
+private fun ColorScheme.glassify(): ColorScheme {
+    // Four rungs of the ladder, low -> highest.
+    val low: Float
+    val mid: Float
+    val high: Float
+    val top: Float
+
+    if (isDarkScheme()) {
+        // Kept low: these sit over a backdrop that is already almost black, so
+        // even 17% reads as a clearly separate pane.
+        low = GlassVeilLow
+        mid = GlassVeilMid
+        high = GlassVeilHigh
+        top = GlassVeilTop
+    } else {
+        // Much heavier, because on a light backdrop a thin veil is invisible
+        // and a thick one goes milky. Deliberately compressed to keep the
+        // panes distinguishable without any reading as solid card stock.
+        low = 0.62f
+        mid = 0.70f
+        high = 0.80f
+        top = 0.88f
+    }
+
+    return copy(
+        surfaceContainerLow = Color.White.copy(alpha = low),
+        surfaceContainer = Color.White.copy(alpha = mid),
+        surfaceContainerHigh = Color.White.copy(alpha = high),
+        surfaceContainerHighest = Color.White.copy(alpha = top),
+        surfaceVariant = Color.White.copy(alpha = high),
+        surfaceBright = Color.White.copy(alpha = top)
+    )
+}
+
+/** True when this scheme is one of the dark variants. */
+private fun ColorScheme.isDarkScheme(): Boolean = luminance() < 0.5f
+
+/* Veil rungs for dark mode. Named so the ladder reads as a scale rather than
+   as four unexplained numbers. */
+private const val GlassVeilLow = 0.05f
+private const val GlassVeilMid = 0.08f
+private const val GlassVeilHigh = 0.12f
+private const val GlassVeilTop = 0.17f
+
 /** Names shown in the colour picker, index-aligned with [palette]. */
 val paletteNames = listOf(
     "Reso Noir", "Sunset Peach", "Sage Green", "Ocean Breeze", "Soft Sand", "Warm Amber", "Midnight Ember"
@@ -499,6 +579,11 @@ fun LuneTheme(
         else -> LightColorScheme
     }
 
+    // AMOLED is an explicit opt-out from glassmorphism, not an oversight. The
+    // user asking for pitch black is asking for *no* lit panes, and a white
+    // veil over pure black is just grey -- it would undo the one thing that
+    // setting exists to do. So the opaque black ladder is kept verbatim there,
+    // and every other configuration gets the translucent container roles.
     val colorScheme = if (darkTheme && useAmoledPitchBlack) {
         baseColorScheme.copy(
             background = Color.Black,
@@ -513,7 +598,7 @@ fun LuneTheme(
             tertiaryContainer = Color(0xFF141414)
         )
     } else {
-        baseColorScheme
+        baseColorScheme.glassify()
     }
 
     // Keep icon/status-bar contrast honest against whatever surface we land on.

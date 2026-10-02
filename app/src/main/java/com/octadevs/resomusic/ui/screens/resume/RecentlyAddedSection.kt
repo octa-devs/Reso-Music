@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
+import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.utils.formatDuration
 
@@ -63,7 +64,7 @@ private fun RecentlyAddedRow(
     val titleColor = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
     val artistColor = if (hasBlurBackground) Color.White.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
     val durationColor = if (hasBlurBackground) Color.White.copy(alpha = 0.7f) else MaterialTheme.colorScheme.onSurfaceVariant
-    val rowBg = if (hasBlurBackground) Color.Black.copy(alpha = 0.22f) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+    val rowBg = if (hasBlurBackground) Color.Black.copy(alpha = 0.22f) else glassPane(0.3f)
 
     Surface(
         shape = RoundedCornerShape(14.dp),

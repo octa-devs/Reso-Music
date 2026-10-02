@@ -21,7 +21,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import com.octadevs.resomusic.ui.theme.GlowTokens
-import com.octadevs.resomusic.ui.theme.glowTokens
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin

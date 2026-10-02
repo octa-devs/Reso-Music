@@ -50,6 +50,7 @@ import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.utils.triggerLightVibration
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.octadevs.resomusic.ui.components.glassPane
 import java.util.regex.Pattern
 
 private data class SyncLine(
@@ -90,7 +91,7 @@ fun LyricsEditorSheet(
 
     val sheetCardBg = if (hasBlurBackground) {
         if (isDarkTheme) Color.White.copy(alpha = 0.10f) else Color.Black.copy(alpha = 0.06f)
-    } else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+    } else glassPane(0.45f)
 
     val sheetCardActiveBg = if (hasBlurBackground) {
         if (isDarkTheme) Color.White.copy(alpha = 0.22f) else Color.Black.copy(alpha = 0.14f)
@@ -530,8 +531,8 @@ fun LyricsEditorSheet(
                             colors = OutlinedTextFieldDefaults.colors(
                                 focusedTextColor = sheetTextColor,
                                 unfocusedTextColor = sheetTextColor,
-                                focusedContainerColor = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.04f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-                                unfocusedContainerColor = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.05f) else Color.Black.copy(alpha = 0.03f)) else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f),
+                                focusedContainerColor = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.08f) else Color.Black.copy(alpha = 0.04f)) else glassPane(0.2f),
+                                unfocusedContainerColor = if (hasBlurBackground) (if (isDarkTheme) Color.White.copy(alpha = 0.05f) else Color.Black.copy(alpha = 0.03f)) else glassPane(0.1f),
                                 focusedBorderColor = if (hasBlurBackground) sheetTextColor else MaterialTheme.colorScheme.primary,
                                 unfocusedBorderColor = sheetBorderColor,
                                 cursorColor = sheetTextColor
@@ -656,7 +657,7 @@ fun LyricsEditorSheet(
                                         } else if (isStamped) {
                                             sheetCardBg
                                         } else {
-                                            if (hasBlurBackground) Color.Transparent else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.15f)
+                                            if (hasBlurBackground) Color.Transparent else glassPane(0.15f)
                                         },
                                         border = if (isCurrent) {
                                             androidx.compose.foundation.BorderStroke(
@@ -757,7 +758,7 @@ fun LyricsEditorSheet(
                             modifier = Modifier.fillMaxWidth(),
                             color = if (hasBlurBackground) {
                                 if (isDarkTheme) Color.Black.copy(alpha = 0.65f) else Color.White.copy(alpha = 0.75f)
-                            } else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                            } else glassPane(0.5f),
                             border = androidx.compose.foundation.BorderStroke(1.dp, sheetBorderColor),
                             tonalElevation = 6.dp
                         ) {

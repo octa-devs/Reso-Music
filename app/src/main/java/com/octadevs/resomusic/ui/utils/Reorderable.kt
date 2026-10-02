@@ -2,7 +2,6 @@ package com.octadevs.resomusic.ui.utils
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*

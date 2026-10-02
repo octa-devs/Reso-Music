@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
-import com.octadevs.resomusic.ui.theme.MicroLabel
+import com.octadevs.resomusic.ui.theme.DisplayTitle
 import com.octadevs.resomusic.ui.utils.bounceClick
 
 @Composable
@@ -137,44 +137,29 @@ private fun RecommendationCard(
     }
 }
 
+/**
+ * Section heading, shared by every section on Home.
+ *
+ * This used to be an all-caps eyebrow above a gradient headline with an
+ * accent underline beneath it. That treatment is a dashboard idiom: three
+ * decorative elements stacked on each other. The reference gets its
+ * personality from one bold rounded line with real presence, and separates
+ * sections with spacing rather than chrome -- so that is all this is now.
+ */
 @Composable
 fun SectionHeader(
     title: String,
     hasBlurBackground: Boolean = false
 ) {
-    val accent = MaterialTheme.colorScheme.primary
-    val onGlass = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface
-
-    Column(
+    Text(
+        text = title,
+        style = DisplayTitle,
+        fontWeight = FontWeight.Bold,
+        color = if (hasBlurBackground) Color.White else MaterialTheme.colorScheme.onSurface,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 6.dp)
-    ) {
-        Text(
-            text = title.uppercase(),
-            style = MicroLabel,
-            color = if (hasBlurBackground) Color.White.copy(alpha = 0.62f) else accent
-        )
-        Spacer(Modifier.height(3.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontWeight = FontWeight.Bold,
-                brush = Brush.linearGradient(
-                    listOf(onGlass, onGlass.copy(alpha = 0.68f))
-                )
-            ),
-            maxLines = 1
-        )
-        Spacer(Modifier.height(8.dp))
-        Box(
-            modifier = Modifier
-                .width(64.dp)
-                .height(3.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(
-                    Brush.horizontalGradient(listOf(accent, Color.Transparent))
-                )
-        )
-    }
+            .padding(start = 18.dp, end = 18.dp, top = 14.dp, bottom = 10.dp)
+    )
 }

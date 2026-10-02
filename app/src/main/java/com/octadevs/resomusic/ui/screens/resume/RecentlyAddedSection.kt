@@ -2,8 +2,6 @@ package com.octadevs.resomusic.ui.screens.resume
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -16,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
-import coil.compose.AsyncImage
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
@@ -35,12 +32,18 @@ fun RecentlyAddedSection(
             title = stringResource(R.string.resume_recently_added),
             hasBlurBackground = hasBlurBackground
         )
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.heightIn(max = 320.dp)
+        // Plain Column, not a LazyColumn.
+        //
+        // This sits inside ResumeScreen's verticalScroll Column. A nested
+        // vertical list inside a vertical scroll steals the parent's gestures,
+        // so the Home page would appear to "stick" for ~320dp before the page
+        // scrolled at all. It only ever holds five rows, so it does not need
+        // to virtualise anything.
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(2.dp)
         ) {
-            itemsIndexed(songs.take(5), key = { _, s -> s.id }) { _, song ->
+            songs.take(5).forEach { song ->
                 RecentlyAddedRow(
                     song = song,
                     hasBlurBackground = hasBlurBackground,

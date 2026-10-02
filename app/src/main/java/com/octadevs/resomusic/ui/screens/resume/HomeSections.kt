@@ -44,7 +44,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.R
@@ -53,7 +52,6 @@ import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.components.liquidGlass
 import com.octadevs.resomusic.ui.theme.CardSubtitle
 import com.octadevs.resomusic.ui.theme.CardTitle
-import com.octadevs.resomusic.ui.theme.DisplayTitle
 import com.octadevs.resomusic.ui.theme.NoirPurple
 import com.octadevs.resomusic.ui.theme.NoirPurpleLift
 import com.octadevs.resomusic.ui.theme.PillLabel
@@ -193,28 +191,6 @@ private fun Modifier.categoryPillInteraction(
     .clickable(onClick = onClick)
 
 /**
- * Section heading in the reference's voice: bold, rounded, unboxed.
- *
- * Deliberately no container — the brief asks for sections separated by
- * spacing rather than by heavy chrome.
- */
-@Composable
-fun HomeSectionTitle(
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text = title,
-        style = DisplayTitle,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onSurface,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        modifier = modifier.padding(horizontal = Space.lg, vertical = Space.sm)
-    )
-}
-
-/**
  * "Recently Played" as a large horizontal carousel.
  *
  * Shows real listening history from `playback_stats.lastPlayed`; renders
@@ -232,7 +208,9 @@ fun RecentlyPlayedCarousel(
     val cardShape = RoundedCornerShape(22.dp)
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        HomeSectionTitle(title = title)
+        // Shares the one SectionHeader with every other Home section, so the
+        // whole page has a single heading rhythm.
+        SectionHeader(title = title)
 
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
             val available = maxWidth - Space.lg * 2

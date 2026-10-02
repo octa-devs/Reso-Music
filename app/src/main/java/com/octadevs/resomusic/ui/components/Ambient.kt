@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import com.octadevs.resomusic.ui.theme.GlowTokens
 import kotlin.math.cos
 import kotlin.math.max
+import com.octadevs.resomusic.ui.theme.glowTokens
 import kotlin.math.sin
 
 /* ============================================================================

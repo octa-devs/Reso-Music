@@ -48,6 +48,7 @@ import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.rememberBlurSheetColors
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
+import androidx.compose.ui.unit.dp
 import kotlin.math.sin
 
 /**

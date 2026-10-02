@@ -72,6 +72,8 @@ import com.octadevs.resomusic.ui.theme.glowTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlin.math.cos
 import kotlin.math.max
+import androidx.compose.animation.core.spring
+import androidx.compose.ui.unit.dp
 import kotlin.math.sin
 
 /**

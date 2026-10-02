@@ -173,6 +173,9 @@ import com.octadevs.resomusic.ui.screens.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import coil.imageLoader
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.animation.core.Spring
+import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
 
 class Lune : AppCompatActivity() {

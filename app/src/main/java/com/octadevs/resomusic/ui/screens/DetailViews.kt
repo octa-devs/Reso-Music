@@ -51,6 +51,7 @@ import com.octadevs.resomusic.ui.utils.reorderable
 import com.octadevs.resomusic.ui.utils.reorderableItem
 import com.octadevs.resomusic.ui.utils.bounceClick
 import com.octadevs.resomusic.ui.theme.getControlsPrimaryColor
+import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
 
 @Composable

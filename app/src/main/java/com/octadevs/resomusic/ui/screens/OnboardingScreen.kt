@@ -67,6 +67,7 @@ import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.SettingsManager
 import kotlinx.coroutines.delay
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 
 @Composable
 fun OnboardingScreen(

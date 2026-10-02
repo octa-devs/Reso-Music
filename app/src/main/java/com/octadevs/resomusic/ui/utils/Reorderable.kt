@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.CoroutineScope
+import androidx.compose.animation.core.spring
 import kotlinx.coroutines.launch
 
 @Composable

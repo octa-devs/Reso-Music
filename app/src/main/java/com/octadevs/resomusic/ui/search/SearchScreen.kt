@@ -41,6 +41,7 @@ import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.data.Album
 import com.octadevs.resomusic.ui.playlist.PlaylistPreviewCovers
 import com.octadevs.resomusic.ui.utils.bounceClick
+import androidx.compose.ui.focus.focusRequester
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
 
 data class SearchResults(

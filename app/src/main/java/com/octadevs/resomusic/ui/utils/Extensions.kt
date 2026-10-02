@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.cos
+import androidx.compose.animation.core.spring
 import kotlin.math.sin
 
 fun Vibrator.triggerLightVibration() {

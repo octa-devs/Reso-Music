@@ -44,6 +44,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.ui.screens.resume.HomeTab
+import androidx.compose.animation.core.spring
+import androidx.compose.ui.semantics.role
 import com.octadevs.resomusic.ui.theme.EmberOrange
 
 /* ============================================================

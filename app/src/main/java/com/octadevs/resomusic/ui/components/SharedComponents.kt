@@ -83,6 +83,7 @@ import com.octadevs.resomusic.ui.utils.formatDuration
 import com.octadevs.resomusic.ui.utils.formatDurationCompact
 import com.octadevs.resomusic.ui.utils.formatLongDuration
 import kotlinx.coroutines.delay
+import androidx.compose.animation.core.spring
 import kotlinx.coroutines.launch
 
 /**

@@ -45,6 +45,7 @@ import com.octadevs.resomusic.ui.components.headerWaveBorder
 import com.octadevs.resomusic.ui.utils.formatLongDuration
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
 import com.octadevs.resomusic.ui.components.rememberBlurSheetColors
+import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
 
 @Composable

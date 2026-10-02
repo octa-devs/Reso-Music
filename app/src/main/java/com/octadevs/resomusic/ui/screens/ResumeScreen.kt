@@ -32,6 +32,7 @@ import com.octadevs.resomusic.ui.screens.resume.TopArtistsSection
 import com.octadevs.resomusic.ui.screens.resume.ArtistItem
 import com.octadevs.resomusic.ui.screens.resume.TopGenresSection
 import com.octadevs.resomusic.ui.screens.resume.GenreItem
+import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
 
 @Composable

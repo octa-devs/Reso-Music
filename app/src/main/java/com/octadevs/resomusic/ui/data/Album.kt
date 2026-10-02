@@ -28,6 +28,7 @@ import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.components.SongCoverImage
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 data class Album(
     val id: Long,

@@ -304,8 +304,13 @@ private fun ColorScheme.glassify(): ColorScheme {
     val top: Float
 
     if (isDarkScheme()) {
-        // Kept low: these sit over a backdrop that is already almost black, so
-        // even 17% reads as a clearly separate pane.
+        // These sit over a backdrop that is already almost black, so the usable
+        // band is wide. Raised from the first pass (0.05/0.08/0.12/0.17), which
+        // was too timid to read as glass -- against a near-black field a 12%
+        // veil is barely distinguishable from the field, so the panes looked
+        // like flat cards that happened to be slightly lighter. At 0.10-0.28
+        // there is enough light in the pane to see it is *lit*, which is the
+        // whole difference between a tinted rectangle and glass.
         low = GlassVeilLow
         mid = GlassVeilMid
         high = GlassVeilHigh
@@ -342,11 +347,15 @@ private fun ColorScheme.glassify(): ColorScheme {
 private fun ColorScheme.isDarkScheme(): Boolean = surface.luminance() < 0.5f
 
 /* Veil rungs for dark mode. Named so the ladder reads as a scale rather than
-   as four unexplained numbers. */
-private const val GlassVeilLow = 0.05f
-private const val GlassVeilMid = 0.08f
-private const val GlassVeilHigh = 0.12f
-private const val GlassVeilTop = 0.17f
+   as four unexplained numbers.
+   The step between low and top is what makes the ladder legible as *elevation*
+   rather than as four similar greys, so the gaps are deliberately uneven:
+   small from the floor to the base surface, widening toward the top where the
+   floating chrome lives. */
+private const val GlassVeilLow = 0.10f
+private const val GlassVeilMid = 0.16f
+private const val GlassVeilHigh = 0.22f
+private const val GlassVeilTop = 0.28f
 
 /** Names shown in the colour picker, index-aligned with [palette]. */
 val paletteNames = listOf(

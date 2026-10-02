@@ -102,6 +102,7 @@ import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.components.AmbientHalo
 import com.octadevs.resomusic.ui.components.AmbientGlowBackground
 import com.octadevs.resomusic.ui.components.glassPane
+import com.octadevs.resomusic.ui.components.LiquidGlassBackground
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -630,28 +631,75 @@ fun FullPlayer(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface)
+        modifier = Modifier.fillMaxSize()
     ) {
+        // The app's own topographic field, same one every other screen sits on.
+        //
+        // This used to be a flat `background(colorScheme.surface)` -- an opaque
+        // near-black fill with nothing in it. The cover art was then the only
+        // thing on screen with any structure, so it stopped being a wash and
+        // became *the background*: the player read as a full-screen album
+        // cover with controls floating on it. Putting the real backdrop here
+        // means the artwork is a tint over a scene again, which is what a wash
+        // is supposed to be.
+        LiquidGlassBackground(
+            isDarkTheme = isDarkTheme,
+            grain = false
+        )
+
         if (!isCinematic && hasBlurBackground) {
-            val blurRequest = remember(song.id) {
-                ImageRequest.Builder(context)
-                            .data(song.coverUrl ?: song.uri)
-                            .size(BACKDROP_WASH_PX)
-                    .crossfade(true)
-                    .fallback(R.drawable.ic_artwork_fallback)
-                    .error(R.drawable.ic_artwork_fallback)
-                    .build()
+            // Weighted to the top of the screen, where the artwork is, and
+            // dissolved out below the cover. The old version was a flat
+            // full-bleed rectangle at a single alpha: uniform from edge to
+            // edge, so it had no depth and no hierarchy -- the one thing that
+            // stops a wash reading as a picture is a gradient, and there wasn't
+            // one.
+            val washMask = if (isLandscape) {
+                Brush.horizontalGradient(
+                    colorStops = arrayOf(
+                        0f to Color.White,
+                        0.40f to Color.White.copy(alpha = 0.55f),
+                        0.72f to Color.White.copy(alpha = 0.12f),
+                        1f to Color.Transparent
+                    )
+                )
+            } else {
+                Brush.verticalGradient(
+                    colorStops = arrayOf(
+                        0f to Color.White,
+                        0.30f to Color.White.copy(alpha = 0.62f),
+                        0.58f to Color.White.copy(alpha = 0.16f),
+                        0.80f to Color.White.copy(alpha = 0.04f),
+                        1f to Color.Transparent
+                    )
+                )
             }
-            AsyncImage(
-                model = blurRequest,
-                contentDescription = null,
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .alpha(if (isDarkTheme) 0.2f else 0.35f),
-                contentScale = ContentScale.Crop
-            )
+                    .graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(brush = washMask, blendMode = BlendMode.DstIn)
+                    }
+                    .alpha(if (isDarkTheme) 0.30f else 0.34f)
+            ) {
+                val blurRequest = remember(song.id) {
+                    ImageRequest.Builder(context)
+                                .data(song.coverUrl ?: song.uri)
+                                .size(BACKDROP_WASH_PX)
+                        .crossfade(true)
+                        .fallback(R.drawable.ic_artwork_fallback)
+                        .error(R.drawable.ic_artwork_fallback)
+                        .build()
+                }
+                AsyncImage(
+                    model = blurRequest,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
             if (!isDarkTheme) {
                 Box(
                     modifier = Modifier

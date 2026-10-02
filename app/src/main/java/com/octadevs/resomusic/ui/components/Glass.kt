@@ -503,6 +503,8 @@ fun GlassPill(
  * light mode, so passing it through raw would mean the same number means two
  * completely different things depending on the user's theme.
  *
+ * The dark-mode band must stay in step with `GlassVeilTop` in Theme.kt.
+ *
  * @param strength 0..1 intent, not literal alpha.
  */
 @Composable
@@ -513,7 +515,12 @@ fun glassPane(strength: Float = 0.5f): Color {
     // left. `colorScheme.luminance()` would average the whole palette and give
     // a meaningless answer.
     return if (MaterialTheme.colorScheme.surface.luminance() < 0.5f) {
-        Color.White.copy(alpha = s * 0.17f)
+        // 0.10 -> 0.28: the same band glassify() spans in dark mode, so a
+        // hand-written pane lands in the same range as a role-derived one and
+        // the two do not read as different materials. Keeping this ceiling in
+        // step with GlassVeilTop is the whole point -- when the ladder moved,
+        // this had to move with it.
+        Color.White.copy(alpha = 0.10f + s * 0.18f)
     } else {
         Color.White.copy(alpha = 0.62f + s * 0.26f)
     }

@@ -107,19 +107,21 @@ fun LiquidGlassScreen(onBack: () -> Unit) {
     // every other screen repaints).
     var intensity by remember { mutableFloatStateOf(settingsManager.glassIntensity) }
     var transparency by remember { mutableFloatStateOf(settingsManager.glassTransparency) }
+    var saturation by remember { mutableFloatStateOf(settingsManager.glassSaturation) }
     var border by remember { mutableFloatStateOf(settingsManager.glassBorderOpacity) }
     var shadow by remember { mutableFloatStateOf(settingsManager.glassShadowIntensity) }
     var glow by remember { mutableFloatStateOf(settingsManager.glassGlowIntensity) }
     var ambient by remember { mutableStateOf(settingsManager.glassAmbientEnabled) }
     var animations by remember { mutableStateOf(settingsManager.glassAnimationsEnabled) }
 
-    val previewTuning = remember(intensity, transparency, border, shadow, glow) {
+    val previewTuning = remember(intensity, transparency, saturation, border, shadow, glow) {
         GlassUserTuning(
             intensity = intensity,
             borderOpacity = border,
             shadowIntensity = shadow,
             glowIntensity = glow,
-            transparency = transparency
+            transparency = transparency,
+            saturation = saturation
         ).clamped()
     }
 
@@ -204,6 +206,15 @@ fun LiquidGlassScreen(onBack: () -> Unit) {
                             settingsManager.glassTransparency = it
                         }
                     )
+                    GlassSlider(
+                        label = stringResource(R.string.glass_saturation),
+                        value = saturation,
+                        range = 0f..1.6f,
+                        onValueChange = {
+                            saturation = it
+                            settingsManager.glassSaturation = it
+                        }
+                    )
                 }
 
                 GlassKnobGroup(title = stringResource(R.string.glass_depth)) {
@@ -260,6 +271,7 @@ fun LiquidGlassScreen(onBack: () -> Unit) {
                         settingsManager.resetGlassTuning()
                         intensity = settingsManager.glassIntensity
                         transparency = settingsManager.glassTransparency
+                        saturation = settingsManager.glassSaturation
                         border = settingsManager.glassBorderOpacity
                         shadow = settingsManager.glassShadowIntensity
                         glow = settingsManager.glassGlowIntensity

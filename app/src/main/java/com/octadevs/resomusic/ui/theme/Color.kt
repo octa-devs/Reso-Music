@@ -19,20 +19,43 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 /* ============================================================
-   RESOMUSIC BRAND — "Ember"
-   Warm orange → golden yellow. The accent set is deliberately
-   small: these appear on controls, active states and glow only.
-   Everything structural stays neutral dark so the warmth reads
-   as light rather than as a colour scheme.
-   ============================================================ */
-val EmberOrange = Color(0xFFFF6B1A)
-val EmberOrangeDeep = Color(0xFFE64A0C)
-val EmberAmber = Color(0xFFFFA21A)
-val EmberGold = Color(0xFFFFC542)
-val EmberGoldSoft = Color(0xFFFFDE7A)
+   RESOMUSIC BRAND — "Noir"
+   ------------------------------------------------------------
+   Every value below was sampled directly from the reference
+   design rather than invented:
 
-/** Multi-stop brand ramp, for the rare places a gradient is warranted. */
-val EmberRamp = listOf(EmberOrange, EmberAmber, EmberGold)
+     · background   #000000 / #1F1F1F  (pure neutral black, R=G=B)
+     · glass tint   #7959A5           (dominant chromatic colour)
+     · mauve        #8D55A0
+     · warm rose    #51333B
+     · deep plum    #3E3754
+
+   The structural surface is deliberately monochrome so that the
+   purple reads as *light coming through glass* rather than as a
+   colour scheme. Orange/amber is gone from the app surface; it
+   survives only inside the ResoMusic logo itself, untouched.
+   ============================================================ */
+
+/** The signature glass tint. Used for glass fills, active pills, progress. */
+val NoirPurple = Color(0xFF7959A5)
+
+/** Lifted purple — active/pressed states and glowing icon accents. */
+val NoirPurpleLift = Color(0xFF9A7BD0)
+
+/** Secondary chromatic voice: pink-leaning mauve. */
+val NoirMauve = Color(0xFF8D55A0)
+
+/** Warm rose tertiary, sampled from the reference's shadow tones. */
+val NoirRose = Color(0xFF51333B)
+
+/** Deep plum — used for glass shadow and contour shading. */
+val NoirPlum = Color(0xFF3E3754)
+
+/** Pale lilac for text that sits directly on a glass pane. */
+val NoirLilac = Color(0xFFC9B6E8)
+
+/** Multi-stop ramp for the rare places a gradient is warranted. */
+val NoirRamp = listOf(NoirPurple, NoirMauve, NoirPlum)
 
 /* ---------- Brand core: "Aurora" (legacy, still referenced by palettes) ---------- */
 val AuroraViolet = Color(0xFF7C5CFF)
@@ -43,14 +66,17 @@ val AuroraAmber = Color(0xFFFFB020)
 val AuroraMint = Color(0xFF34D399)
 
 /* ---------- Dark spectrum ----------
-   Warm-shifted rather than blue-black: the surface neutrals carry a
-   trace of the brand's amber so the accents feel lit rather than pasted on. */
-val NightAbyss = Color(0xFF0A0705)
-val NightDeep = Color(0xFF120D0A)
-val NightBase = Color(0xFF191310)
-val NightElevated = Color(0xFF221A15)
-val NightHigh = Color(0xFF2C221B)
-val NightOutline = Color(0xFF3A2C22)
+   True neutral black, not blue-black and not warm charcoal. The
+   reference's background sampled as exactly #000000 at ~47% of
+   pixels with only #1A1A1A→#2E2E2E variation on top, so the
+   neutrals here are desaturated to match. All the perceived colour
+   in the app comes from the purple glass layered over this. */
+val NoirAbyss = Color(0xFF000000)
+val NoirDeep = Color(0xFF050506)
+val NoirBase = Color(0xFF0B0B0D)
+val NoirElevated = Color(0xFF121214)
+val NoirHigh = Color(0xFF191920)
+val NoirOutline = Color(0xFF24242B)
 
 /* ---------- Light spectrum ---------- */
 val DayMist = Color(0xFFF7F7FB)
@@ -71,6 +97,17 @@ val SpecularLight = Color(0xB3FFFFFF)
 /** Inner shadow used to carve depth into a pane. */
 val GlassInnerShadowDark = Color(0x40000000)
 val GlassInnerShadowLight = Color(0x1A000000)
+
+/* ---------- Organic backdrop ----------
+   The reference background is a monochrome field: pure #000000 with
+   faint contour banding around #1A1A1A–#2E2E2E. These stops recreate
+   that measured range rather than guessing a tint. */
+val ContourNear = Color(0xFF2E2E2E)
+val ContourMid = Color(0xFF1A1A1A)
+val ContourFar = Color(0xFF101012)
+
+/** Rare chromatic wash drifting across the backdrop. */
+val AmbientWash = Color(0x1A7959A5)
 
 /* ---------- Semantic accents ---------- */
 val AccentWarm = Color(0xFFFF7A59)

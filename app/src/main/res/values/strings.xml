@@ -497,6 +497,7 @@
     <string name="glass_depth">Depth &amp; Light</string>
     <string name="glass_intensity">Intensity</string>
     <string name="glass_transparency">Transparency</string>
+    <string name="glass_saturation">Saturation</string>
     <string name="glass_border_opacity">Border</string>
     <string name="glass_shadow_intensity">Shadow</string>
     <string name="glass_glow_intensity">Glow</string>

@@ -22,71 +22,75 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 
 /* ============================================================
-   1. SIGNATURE SCHEMES — "Aurora"
-   Deep space blacks with neon-violet/cyan energy.
+   1. SIGNATURE SCHEME — "Noir"
+   ------------------------------------------------------------
+   A monochrome black field with exactly one chromatic voice: the
+   sampled #7959A5 purple. Surfaces are near-black neutrals; the
+   purple is reserved for glass fills, active states and progress,
+   so it reads as light rather than as a colour scheme.
    ============================================================ */
 
-private val EmberDark = darkColorScheme(
-    primary = EmberOrange,
-    onPrimary = Color(0xFF1A0A02),
-    primaryContainer = Color(0xFF5A2405),
-    onPrimaryContainer = Color(0xFFFFDBC7),
+private val NoirDark = darkColorScheme(
+    primary = NoirPurple,
+    onPrimary = Color(0xFF0B0614),
+    primaryContainer = Color(0xFF3E3754),
+    onPrimaryContainer = Color(0xFFE4D9F7),
 
-    secondary = EmberAmber,
-    onSecondary = Color(0xFF291800),
-    secondaryContainer = Color(0xFF573100),
-    onSecondaryContainer = Color(0xFFFFE0B2),
+    secondary = NoirMauve,
+    onSecondary = Color(0xFF140714),
+    secondaryContainer = Color(0xFF51333B),
+    onSecondaryContainer = Color(0xFFF7DCF0),
 
-    tertiary = EmberGold,
-    onTertiary = Color(0xFF2B1D00),
-    tertiaryContainer = Color(0xFF5A4300),
-    onTertiaryContainer = Color(0xFFFFE9A8),
+    tertiary = NoirRose,
+    onTertiary = Color(0xFF160A0E),
+    tertiaryContainer = Color(0xFF3B2A31),
+    onTertiaryContainer = Color(0xFFEFD6DC),
 
     error = Color(0xFFFFB4AB),
     onError = Color(0xFF690005),
     errorContainer = Color(0xFF93000A),
     onErrorContainer = Color(0xFFFFDAD6),
 
-    background = NightDeep,
-    onBackground = Color(0xFFF5EEE8),
-    surface = NightDeep,
-    onSurface = Color(0xFFF5EEE8),
-    surfaceVariant = NightElevated,
-    onSurfaceVariant = Color(0xFFB5A79C),
-    surfaceTint = EmberOrange,
+    background = NoirAbyss,
+    onBackground = Color(0xFFF4F2F7),
+    surface = NoirAbyss,
+    onSurface = Color(0xFFF4F2F7),
+    surfaceVariant = NoirElevated,
+    onSurfaceVariant = Color(0xFFA9A3B4),
+    surfaceTint = NoirPurple,
 
-    inverseSurface = Color(0xFFF5EEE8),
-    inverseOnSurface = Color(0xFF241A14),
-    inversePrimary = EmberAmber,
+    inverseSurface = Color(0xFFF4F2F7),
+    inverseOnSurface = Color(0xFF15141A),
+    inversePrimary = NoirPurpleLift,
 
-    surfaceDim = NightAbyss,
-    surfaceBright = NightHigh,
-    surfaceContainerLowest = NightAbyss,
-    surfaceContainerLow = NightBase,
-    surfaceContainer = NightBase,
-    surfaceContainerHigh = NightElevated,
-    surfaceContainerHighest = NightHigh,
+    surfaceDim = NoirDeep,
+    surfaceBright = NoirHigh,
+    surfaceContainerLowest = NoirAbyss,
+    surfaceContainerLow = NoirDeep,
+    surfaceContainer = NoirBase,
+    surfaceContainerHigh = NoirElevated,
+    surfaceContainerHighest = NoirHigh,
 
-    outline = Color(0xFF574538),
-    outlineVariant = NightOutline,
+    outline = Color(0xFF4A4553),
+    outlineVariant = NoirOutline,
     scrim = Color(0xFF000000)
 )
 
-private val EmberLight = lightColorScheme(
-    primary = EmberOrangeDeep,
+private val NoirLight = lightColorScheme(
+    primary = Color(0xFF6B4EA8),
     onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFFFFDBC7),
-    onPrimaryContainer = Color(0xFF3B1200),
+    primaryContainer = Color(0xFFEBDDFF),
+    onPrimaryContainer = Color(0xFF230964),
 
-    secondary = Color(0xFF8A5200),
+    secondary = Color(0xFF8A4E92),
     onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFFFFE0B2),
-    onSecondaryContainer = Color(0xFF2C1700),
+    secondaryContainer = Color(0xFFF7DCF0),
+    onSecondaryContainer = Color(0xFF33062F),
 
-    tertiary = Color(0xFF6B4E00),
+    tertiary = Color(0xFF6B4A50),
     onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFFFFE9A8),
-    onTertiaryContainer = Color(0xFF221700),
+    tertiaryContainer = Color(0xFFEFD6DC),
+    onTertiaryContainer = Color(0xFF26081A),
 
     error = Color(0xFFBA1A1A),
     onError = Color(0xFFFFFFFF),
@@ -94,16 +98,16 @@ private val EmberLight = lightColorScheme(
     onErrorContainer = Color(0xFF410002),
 
     background = DayBase,
-    onBackground = Color(0xFF1F1611),
+    onBackground = Color(0xFF16141A),
     surface = DayBase,
-    onSurface = Color(0xFF1F1611),
+    onSurface = Color(0xFF16141A),
     surfaceVariant = DayHigh,
-    onSurfaceVariant = Color(0xFF5F564E),
-    surfaceTint = EmberOrangeDeep,
+    onSurfaceVariant = Color(0xFF5F5A66),
+    surfaceTint = Color(0xFF6B4EA8),
 
-    inverseSurface = Color(0xFF342A24),
-    inverseOnSurface = Color(0xFFF9EFE7),
-    inversePrimary = EmberAmber,
+    inverseSurface = Color(0xFF2B2830),
+    inverseOnSurface = Color(0xFFF3EFF7),
+    inversePrimary = NoirPurple,
 
     surfaceDim = Color(0xFFDDDCE8),
     surfaceBright = DayBase,
@@ -248,12 +252,12 @@ private val MidnightEmberDark = darkColorScheme(
     tertiaryContainer = Color(0xFF534500)
 )
 
-private val DarkColorScheme = EmberDark
-private val LightColorScheme = EmberLight
+private val DarkColorScheme = NoirDark
+private val LightColorScheme = NoirLight
 
 /** Names shown in the colour picker, index-aligned with [palette]. */
 val paletteNames = listOf(
-    "Reso Ember", "Sunset Peach", "Sage Green", "Ocean Breeze", "Lavender Mist", "Warm Amber", "Midnight Ember"
+    "Reso Noir", "Sunset Peach", "Sage Green", "Ocean Breeze", "Lavender Mist", "Warm Amber", "Midnight Ember"
 )
 
 private fun paletteScheme(dark: Boolean, index: Int) = when (index) {
@@ -278,6 +282,12 @@ data class GlassTokens(
     val fill: Color,
     /** Slightly stronger fill for "solid" glass like the mini player. */
     val fillStrong: Color,
+    /**
+     * Purple wash layered over the neutral frosted base. Kept separate from
+     * [fill] so the "Liquid Glass" saturation control can scale the colour
+     * independently of how opaque the pane is.
+     */
+    val meshFill: Color,
     /** Top-left specular sheen. */
     val specular: Color,
     /** Rim / border gradient endpoints. */
@@ -297,38 +307,48 @@ data class GlassTokens(
     val meshD: Color
 )
 
+/**
+ * Dark glass is built the way the reference is built: a *neutral* frosted
+ * base (white at low alpha, which picks up the blurred black backdrop and so
+ * reads as grey) plus a purple wash on top. Sampling the reference's nav
+ * pane gave #482744 over the black field, which is #7959A5 at roughly
+ * 0.45 alpha — that is the [meshFill] value.
+ */
 private val DarkGlass = GlassTokens(
     isDark = true,
-    fill = Color(0x1FFFFFFF),
-    fillStrong = Color(0x2EFFFFFF),
+    fill = Color(0x1AFFFFFF),
+    fillStrong = Color(0x2BFFFFFF),
+    /** Purple wash layered over the neutral base. */
+    meshFill = Color(0x737959A5),
     specular = SpecularDark,
-    rimStart = Color(0x59FFFFFF),
-    rimEnd = Color(0x14FFFFFF),
+    rimStart = Color(0x4DFFFFFF),
+    rimEnd = Color(0x0DFFFFFF),
     innerShadow = GlassInnerShadowDark,
-    content = Color(0xFFF7F1EB),
-    contentMuted = Color(0xB3F7F1EB),
+    content = Color(0xFFF4F2F7),
+    contentMuted = Color(0xB3F4F2F7),
     hairline = Color(0x1FFFFFFF),
-    meshA = Color(0xFF4A1E06),
-    meshB = Color(0xFF6B3505),
-    meshC = Color(0xFF7A4404),
-    meshD = Color(0xFF3A1A08)
+    meshA = Color(0xFF241C33),
+    meshB = Color(0xFF322445),
+    meshC = Color(0xFF1B1526),
+    meshD = Color(0xFF0D0A12)
 )
 
 private val LightGlass = GlassTokens(
     isDark = false,
     fill = Color(0x33FFFFFF),
     fillStrong = Color(0x59FFFFFF),
+    meshFill = Color(0x4D6B4EA8),
     specular = SpecularLight,
     rimStart = Color(0xB3FFFFFF),
     rimEnd = Color(0x4DFFFFFF),
     innerShadow = GlassInnerShadowLight,
-    content = Color(0xFF1C1410),
-    contentMuted = Color(0xB31C1410),
+    content = Color(0xFF16141A),
+    contentMuted = Color(0xB316141A),
     hairline = Color(0x1F000000),
-    meshA = Color(0xFFFFE8D2),
-    meshB = Color(0xFFFFF2D8),
-    meshC = Color(0xFFFFE0C2),
-    meshD = Color(0xFFFFF8E6)
+    meshA = Color(0xFFEDE6F6),
+    meshB = Color(0xFFF6EAF2),
+    meshC = Color(0xFFE6E0F0),
+    meshD = Color(0xFFFAF8FD)
 )
 
 val LocalGlassTokens = staticCompositionLocalOf { DarkGlass }
@@ -353,7 +373,13 @@ data class GlassUserTuning(
     /** 0..1 warm accent bloom behind players. */
     val glowIntensity: Float = 0.55f,
     /** 0..1 translucency — higher means the pane shows more through. */
-    val transparency: Float = 0.5f
+    val transparency: Float = 0.5f,
+    /**
+     * 0..1 colour strength of the purple bleed through the glass. This is the
+     * single control that separates "generic frosted white" from the reference
+     * material, where colour clearly comes through the pane.
+     */
+    val saturation: Float = 1f
 ) {
     /** Keeps sliders from producing unreadable or fully-opaque surfaces. */
     fun clamped() = GlassUserTuning(
@@ -361,7 +387,8 @@ data class GlassUserTuning(
         borderOpacity = borderOpacity.coerceIn(0.2f, 1.5f),
         shadowIntensity = shadowIntensity.coerceIn(0f, 1.5f),
         glowIntensity = glowIntensity.coerceIn(0f, 1f),
-        transparency = transparency.coerceIn(0.15f, 0.9f)
+        transparency = transparency.coerceIn(0.15f, 0.9f),
+        saturation = saturation.coerceIn(0f, 1.6f)
     )
 }
 
@@ -369,10 +396,10 @@ val LocalGlassUserTuning = staticCompositionLocalOf { GlassUserTuning() }
 
 val LocalGlowTokens = staticCompositionLocalOf {
     GlowTokens(
-        primary = EmberOrange,
-        secondary = EmberAmber,
-        tertiary = EmberGold,
-        backdrop = NightAbyss
+        primary = NoirPurple,
+        secondary = NoirMauve,
+        tertiary = NoirPlum,
+        backdrop = NoirAbyss
     )
 }
 
@@ -383,8 +410,8 @@ data class GlowTokens(
     val tertiary: Color,
     val backdrop: Color
 ) {
-    /** The ramp used for ambient bloom; ordered warm → bright. */
-    val ramp: List<Color> get() = listOf(primary, secondary, tertiary)
+    /** The ramp used for ambient bloom; ordered dim → bright. */
+    val ramp: List<Color> get() = listOf(tertiary, primary, secondary)
 }
 
 @Composable
@@ -430,6 +457,7 @@ fun rememberGlassUserTuning(): GlassUserTuning {
     return remember(
         settingsManager.glassIntensity,
         settingsManager.glassTransparency,
+        settingsManager.glassSaturation,
         settingsManager.glassBorderOpacity,
         settingsManager.glassShadowIntensity,
         settingsManager.glassGlowIntensity

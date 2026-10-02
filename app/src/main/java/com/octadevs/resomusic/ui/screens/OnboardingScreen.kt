@@ -65,6 +65,7 @@ import androidx.core.content.ContextCompat
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.SettingsManager
 import kotlinx.coroutines.delay
+import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun OnboardingScreen(
@@ -257,8 +258,9 @@ fun WelcomeStep(onStartClick: () -> Unit) {
                 modifier = Modifier.size(176.dp)
             ) {
                 LogoAura(isDarkTheme = isDark, modifier = Modifier.size(196.dp))
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(132.dp)
                 )
@@ -349,8 +351,9 @@ fun PermissionStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -477,8 +480,9 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -605,8 +609,9 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -722,8 +727,9 @@ fun MusicPermissionStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -856,8 +862,9 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -960,8 +967,9 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -1132,8 +1140,9 @@ fun FeaturesStep(onFinish: () -> Unit) {
                         contentAlignment = Alignment.Center,
                         modifier = Modifier.size(150.dp)
                     ) {
-                        Icon(
+                        androidx.compose.foundation.Image(
                             painter = painterResource(id = R.drawable.new_reso_logo),
+                            contentScale = ContentScale.Fit,
                             contentDescription = null,
                             modifier = Modifier.size(104.dp)
                         )
@@ -1336,8 +1345,9 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )
@@ -1415,8 +1425,9 @@ fun SupportStep(onNext: () -> Unit) {
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(200.dp)
             ) {
-                Icon(
+                androidx.compose.foundation.Image(
                     painter = painterResource(id = R.drawable.new_reso_logo),
+                    contentScale = ContentScale.Fit,
                     contentDescription = null,
                     modifier = Modifier.size(158.dp)
                 )

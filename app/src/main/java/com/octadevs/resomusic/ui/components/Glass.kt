@@ -66,9 +66,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
-import com.octadevs.resomusic.ui.theme.EmberAmber
-import com.octadevs.resomusic.ui.theme.EmberGold
-import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.NoirMauve
+import com.octadevs.resomusic.ui.theme.NoirPurple
+import com.octadevs.resomusic.ui.theme.NoirPurpleLift
 import com.octadevs.resomusic.ui.theme.glowTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlin.math.cos
@@ -89,6 +89,16 @@ private const val GLASS_ENTER_MS = 420
 data class GlassTuning(
     val fillTop: Float,
     val fillBottom: Float,
+    /**
+     * Strength of the purple wash layered over the neutral frosted base.
+     *
+     * The reference material is not `rgba(255,255,255,0.1)` + a border radius:
+     * it is a neutral frost with a distinctly *coloured* purple bleed coming
+     * through it. Keeping that as its own channel (rather than tinting the
+     * fill) is what lets the Saturation control move colour independently of
+     * opacity.
+     */
+    val tintAlpha: Float,
     val rimAlpha: Float,
     val specularAlpha: Float,
     val innerShadow: Float,
@@ -110,6 +120,7 @@ fun rememberGlassTuning(
         GlassTuning(
             fillTop = if (strong) 0.46f else 0.30f,
             fillBottom = if (strong) 0.26f else 0.16f,
+            tintAlpha = if (strong) 0.62f else 0.40f,
             rimAlpha = if (strong) 0.72f else 0.55f,
             specularAlpha = if (strong) 0.22f else 0.14f,
             innerShadow = 0.30f,
@@ -120,6 +131,7 @@ fun rememberGlassTuning(
         GlassTuning(
             fillTop = if (strong) 0.82f else 0.64f,
             fillBottom = if (strong) 0.58f else 0.40f,
+            tintAlpha = if (strong) 0.40f else 0.26f,
             rimAlpha = if (strong) 0.95f else 0.74f,
             specularAlpha = if (strong) 0.62f else 0.40f,
             innerShadow = 0.10f,
@@ -135,6 +147,8 @@ fun rememberGlassTuning(
     return GlassTuning(
         fillTop = (base.fillTop * user.intensity * transparencyMul).coerceIn(0f, 0.97f),
         fillBottom = (base.fillBottom * user.intensity * transparencyMul).coerceIn(0f, 0.97f),
+        tintAlpha = (base.tintAlpha * user.intensity * transparencyMul * user.saturation)
+            .coerceIn(0f, 0.95f),
         rimAlpha = (base.rimAlpha * user.borderOpacity).coerceIn(0f, 1f),
         specularAlpha = (base.specularAlpha * user.intensity).coerceIn(0f, 1f),
         innerShadow = (base.innerShadow * user.shadowIntensity).coerceIn(0f, 1f),
@@ -199,6 +213,28 @@ fun Modifier.liquidGlass(
             val r = cornerRadius.toPx()
             val path = roundedRectPath(size.width, size.height, r)
             val px = density
+
+            // ---- 0. Colour bleed.
+            // This is the layer that stops the material reading as
+            // "rgba(255,255,255,0.1) + border-radius". The neutral frost from
+            // `.background` stays underneath, and the sampled purple sits on
+            // top of it, strongest at the top of the pane and easing off
+            // toward the bottom so the pane still feels lit from above.
+            if (tuning.tintAlpha > 0.004f) {
+                val wash = tokens.meshFill
+                clipPath(path) {
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            colorStops = arrayOf(
+                                0f to wash.copy(alpha = tuning.tintAlpha),
+                                0.42f to wash.copy(alpha = tuning.tintAlpha * 0.74f),
+                                1f to wash.copy(alpha = tuning.tintAlpha * 0.46f)
+                            ),
+                            size = size
+                        )
+                    )
+                }
+            }
 
             // ---- 1. Inner shadow along the top edge: carves depth into the pane
             clipPath(path) {
@@ -462,12 +498,16 @@ fun GlassDivider(
    ============================================================================ */
 
 /**
- * Animated ambient backdrop. Two slow warm pools rather than a multi-hue
- * mesh: the brief for this layer was "a room with a lamp in it", and four
- * drifting hues read as a gradient wallpaper instead.
+ * App-wide background.
  *
- * Implemented with radial gradients, not blur passes — gradients are already
- * soft, so this looks the same and costs a fraction of the frame.
+ * This used to be two drifting radial pools. The reference design is not that
+ * at all — it is a monochrome near-black field carrying faint topographic
+ * contour banding — so the implementation now lives in
+ * [OrganicWaveBackdrop]. This stays as the app's single entry point so the
+ * existing call sites keep working unchanged.
+ *
+ * @param grain kept for signature compatibility; the organic field supplies
+ *        its own texture, so the old film-grain speckle is no longer drawn.
  */
 @Composable
 fun LiquidGlassBackground(
@@ -477,91 +517,22 @@ fun LiquidGlassBackground(
     grain: Boolean = true,
     baseColor: Color? = null
 ) {
-    val transition = rememberInfiniteTransition(label = "liquidMesh")
-    val driftA by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = (2.0 * Math.PI).toFloat(),
-        animationSpec = infiniteRepeatable(tween(38000, easing = LinearEasing), RepeatMode.Restart),
-        label = "driftA"
-    )
-    val driftB by transition.animateFloat(
-        initialValue = (2.0 * Math.PI).toFloat(),
-        targetValue = 0f,
-        animationSpec = infiniteRepeatable(tween(29000, easing = LinearEasing), RepeatMode.Restart),
-        label = "driftB"
-    )
-
     val glow = glowTokens()
-    val warmA = glow.primary
-    val warmB = glow.tertiary
-    val backdrop = baseColor ?: if (isDarkTheme) Color(0xFF0A0705) else Color(0xFFF7F3EE)
-    // Deliberately low. Anything higher and the glass on top of it stops
-    // reading as glass because there is no dark to refract.
-    val alpha = 0.13f * meshStrength
-
-    Canvas(
-        modifier = modifier
-            .fillMaxSize()
-            .background(backdrop)
-    ) {
-        val w = size.width
-        val h = size.height
-        val baseR = max(w, h) * 0.80f
-
-        val pools = listOf(
-            Blob(
-                Offset(w * 0.16f + cos(driftA) * w * 0.07f, h * 0.12f + sin(driftA) * h * 0.07f),
-                baseR * 0.78f,
-                warmA
-            ),
-            Blob(
-                Offset(w * 0.86f + cos(driftB) * w * 0.08f, h * 0.80f + sin(driftB) * h * 0.08f),
-                baseR * 0.70f,
-                warmB
-            )
-        )
-
-        for (blob in pools) {
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colorStops = arrayOf(
-                        0f to blob.color.copy(alpha = alpha),
-                        0.55f to blob.color.copy(alpha = alpha * 0.32f),
-                        1f to Color.Transparent
-                    ),
-                    center = blob.center,
-                    radius = blob.radius
-                ),
-                radius = blob.radius,
-                center = blob.center
+    Box(modifier = modifier.fillMaxSize()) {
+        if (baseColor != null) {
+            androidx.compose.foundation.background(
+                color = baseColor,
+                modifier = Modifier.fillMaxSize()
             )
         }
-
-        // Subtle vignette only - no harsh key light
-        drawRect(
-            brush = Brush.radialGradient(
-                colorStops = arrayOf(
-                    0f to Color.Transparent,
-                    0.6f to Color.Transparent,
-                    1f to Color.Black.copy(alpha = if (isDarkTheme) 0.28f else 0.04f)
-                ),
-                center = Offset(w * 0.5f, h * 0.5f),
-                radius = max(w, h) * 0.75f
-            )
+        OrganicWaveBackdrop(
+            modifier = Modifier.fillMaxSize(),
+            isDark = isDarkTheme,
+            strength = meshStrength,
+            washColor = glow.primary
         )
-
-        if (grain) {
-            drawGrain(
-                count = (w * h / 8000f).toInt().coerceIn(80, 500),
-                alpha = if (isDarkTheme) 0.015f else 0.010f,
-                seed = if (isDarkTheme) 20260901L else 19990712L,
-                light = isDarkTheme
-            )
-        }
     }
 }
-
-private data class Blob(val center: Offset, val radius: Float, val color: Color)
 
 /** Film-grain speckle. Seeded, so it does not shimmer between frames. */
 private fun DrawScope.drawGrain(count: Int, alpha: Float, seed: Long, light: Boolean) {
@@ -627,10 +598,10 @@ fun LightSweep(
    ============================================================================ */
 
 private val EmberSweep = listOf(
-    EmberOrange,
-    EmberAmber,
-    EmberGold,
-    EmberOrange
+    NoirPurple,
+    NoirMauve,
+    NoirPurpleLift,
+    NoirPurple
 )
 
 /** Text filled with a slowly drifting brand gradient. */

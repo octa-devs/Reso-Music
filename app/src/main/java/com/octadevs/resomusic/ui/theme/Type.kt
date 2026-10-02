@@ -11,15 +11,21 @@ import androidx.compose.ui.unit.sp
 import com.octadevs.resomusic.R
 
 /**
- * Reso uses a rounded geometric family (Quicksand) for *everything*, but the
- * scale is deliberately extreme: display sizes are huge with tight negative
- * tracking for that "editorial poster" feel, while micro labels are tiny,
- * uppercase and wide-tracked for that "instrument panel" feel.
+ * Reso uses a rounded geometric family (Quicksand) for *everything*.
+ *
+ * Only two real faces ship in `res/font` (regular + bold), so before this
+ * change every `FontWeight.Medium` / `SemiBold` / `ExtraBold` in the
+ * codebase was being faux-bolded by the platform — which is exactly why the
+ * type looked thin and uneven next to genuinely-bold text. Mapping the
+ * intermediate weights onto the real bold face removes all synthesis and
+ * makes the rounded character of the family actually read.
  */
-
 val quicksand = FontFamily(
     Font(R.font.quicksand_regular, FontWeight.Normal),
-    Font(R.font.quicksand_bold, FontWeight.Bold)
+    Font(R.font.quicksand_regular, FontWeight.Medium),
+    Font(R.font.quicksand_bold, FontWeight.SemiBold),
+    Font(R.font.quicksand_bold, FontWeight.Bold),
+    Font(R.font.quicksand_bold, FontWeight.ExtraBold)
 )
 
 private val TightLineHeight = LineHeightStyle(
@@ -62,19 +68,25 @@ private fun label(size: Int, tracking: Double, weight: FontWeight = FontWeight.B
 )
 
 /**
- * Set of Material typography styles. Everything is opt-in per style so existing
- * screens keep working, but new UI should prefer the expressive helpers below.
+ * Set of Material typography styles.
+ *
+ * The previous scale peaked at 64sp display with -2sp tracking — that reads
+ * as "SaaS marketing site", not "music app". The reference design gets its
+ * personality from *weight and roundness* on moderate sizes, not from sheer
+ * size, so the display end has been pulled back and the headings made
+ * uniformly bold. Everything stays opt-in per style so existing screens keep
+ * working; new UI should prefer the expressive helpers below.
  */
 val Typography = Typography(
-    displayLarge = display(64, -2.0),
-    displayMedium = display(50, -1.6),
-    displaySmall = display(40, -1.2),
+    displayLarge = display(42, -1.0),
+    displayMedium = display(34, -0.8),
+    displaySmall = display(28, -0.6),
 
-    headlineLarge = headline(34, -0.9),
-    headlineMedium = headline(28, -0.6),
-    headlineSmall = headline(23, -0.4),
+    headlineLarge = headline(27, -0.5),
+    headlineMedium = headline(23, -0.4),
+    headlineSmall = headline(20, -0.2),
 
-    titleLarge = headline(21, -0.3),
+    titleLarge = headline(19, -0.2),
     titleMedium = label(16, 0.0, FontWeight.Bold),
     titleSmall = label(14, 0.1),
 
@@ -102,7 +114,43 @@ private fun heroStyle(size: Int, tracking: Double) = TextStyle(
 )
 
 /** Big poster numerals / letters. Negative tracking, very tight leading. */
-val HeroDisplay = heroStyle(46, -2.2)
+val HeroDisplay = heroStyle(38, -1.4)
+
+/**
+ * Section heading — "Recently Played", "Your Playlists".
+ *
+ * This is the workhorse of the reference design: bold, rounded, and clearly
+ * present without tipping into oversized display type. Kept separate from
+ * `headlineMedium` so section rhythm can be tuned in one place.
+ */
+val DisplayTitle = heroStyle(22, -0.5)
+
+/** Card titles over artwork. Must stay legible on a busy image. */
+val CardTitle = TextStyle(
+    fontFamily = quicksand,
+    fontWeight = FontWeight.Bold,
+    fontSize = 16.sp,
+    lineHeight = 20.sp,
+    letterSpacing = (-0.2).sp
+)
+
+/** Secondary metadata line under a card title — artist, count, duration. */
+val CardSubtitle = TextStyle(
+    fontFamily = quicksand,
+    fontWeight = FontWeight.Medium,
+    fontSize = 12.5.sp,
+    lineHeight = 16.sp,
+    letterSpacing = 0.1.sp
+)
+
+/** Category filter pills. */
+val PillLabel = TextStyle(
+    fontFamily = quicksand,
+    fontWeight = FontWeight.Bold,
+    fontSize = 13.sp,
+    lineHeight = 17.sp,
+    letterSpacing = 0.1.sp
+)
 
 /** Section eyebrow: tiny, bold, wide tracking — reads like a hardware label. */
 val MicroLabel = TextStyle(

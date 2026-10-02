@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 private const val KEY_GLASS_INTENSITY = "glass_intensity"
 private const val KEY_GLASS_TRANSPARENCY = "glass_transparency"
+private const val KEY_GLASS_SATURATION = "glass_saturation"
 private const val KEY_GLASS_BORDER = "glass_border_opacity"
 private const val KEY_GLASS_SHADOW = "glass_shadow_intensity"
 private const val KEY_GLASS_GLOW = "glass_glow_intensity"
@@ -41,6 +42,14 @@ class SettingsManager(context: Context) {
         set(value) {
             _glassTransparency.value = value
             prefs.edit().putFloat(KEY_GLASS_TRANSPARENCY, value).apply()
+        }
+
+    private val _glassSaturation = mutableStateOf(prefs.getFloat(KEY_GLASS_SATURATION, 1f))
+    var glassSaturation: Float
+        get() = _glassSaturation.value
+        set(value) {
+            _glassSaturation.value = value
+            prefs.edit().putFloat(KEY_GLASS_SATURATION, value).apply()
         }
 
     private val _glassBorderOpacity = mutableStateOf(prefs.getFloat(KEY_GLASS_BORDER, 1f))
@@ -88,6 +97,7 @@ class SettingsManager(context: Context) {
         prefs.edit()
             .putFloat(KEY_GLASS_INTENSITY, 1f)
             .putFloat(KEY_GLASS_TRANSPARENCY, 0.5f)
+            .putFloat(KEY_GLASS_SATURATION, 1f)
             .putFloat(KEY_GLASS_BORDER, 1f)
             .putFloat(KEY_GLASS_SHADOW, 1f)
             .putFloat(KEY_GLASS_GLOW, 0.55f)
@@ -96,6 +106,7 @@ class SettingsManager(context: Context) {
             .apply()
         _glassIntensity.value = 1f
         _glassTransparency.value = 0.5f
+        _glassSaturation.value = 1f
         _glassBorderOpacity.value = 1f
         _glassShadowIntensity.value = 1f
         _glassGlowIntensity.value = 0.55f
@@ -109,7 +120,8 @@ class SettingsManager(context: Context) {
         borderOpacity = glassBorderOpacity,
         shadowIntensity = glassShadowIntensity,
         glowIntensity = glassGlowIntensity,
-        transparency = glassTransparency
+        transparency = glassTransparency,
+        saturation = glassSaturation
     ).clamped()
 
 

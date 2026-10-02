@@ -514,8 +514,9 @@ fun LyricsScreen(onBack: () -> Unit, isDarkTheme: Boolean = false) {
                             )
                             
                             Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
-                                Icon(
+                                androidx.compose.foundation.Image(
                                     painter = painterResource(id = R.drawable.new_reso_logo),
+                                    contentScale = ContentScale.Fit,
                                     contentDescription = null,
                                     modifier = Modifier.size(84.dp)
                                 )

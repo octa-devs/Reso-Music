@@ -101,6 +101,7 @@ import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.components.AmbientHalo
 import com.octadevs.resomusic.ui.components.AmbientGlowBackground
+import com.octadevs.resomusic.ui.components.rememberArtworkAccent
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -773,14 +774,18 @@ fun FullPlayer(
             }
         }
 
-        // Warm ambient light over whichever backdrop is in play. Without this
-        // the non-cinematic player is a flat colour field; with it the surface
-        // reads as lit. Kept low so it never competes with the artwork.
+        // Ambient light over whichever backdrop is in play. Without this the
+        // non-cinematic player is a flat colour field; with it the surface
+        // reads as lit. The accent lets the current artwork nudge the room
+        // light, but only part of the way -- it is capped in
+        // rememberArtworkAccent so this can never become a visualiser.
+        val artworkAccent = rememberArtworkAccent(song.coverUrl ?: song.albumArtUri)
         AmbientGlowBackground(
             modifier = Modifier.fillMaxSize(),
             isPlaying = isPlaying,
             strength = LocalGlassUserTuning.current.glowIntensity,
-            drawBase = false
+            drawBase = false,
+            accent = artworkAccent
         )
 
         val coverSection: @Composable () -> Unit = {

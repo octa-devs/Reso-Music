@@ -124,6 +124,11 @@
             android:label="@string/blur"
             android:theme="@style/Theme.Lune" />
         <activity
+            android:name=".ui.activities.LiquidGlassActivity"
+            android:exported="false"
+            android:label="@string/liquid_glass"
+            android:theme="@style/Theme.Lune" />
+        <activity
             android:name=".ui.activities.EqualizerActivity"
             android:exported="false"
             android:label="@string/eq_title"

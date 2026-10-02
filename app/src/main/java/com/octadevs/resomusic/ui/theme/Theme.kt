@@ -14,6 +14,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import com.octadevs.resomusic.tools.SettingsManager
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
@@ -412,6 +413,31 @@ fun getControlsPrimaryColor(
    4. THEME
    ============================================================ */
 
+/**
+ * Reads the persisted Liquid Glass knobs and re-resolves whenever one changes,
+ * so moving a slider repaints every glass surface in the app immediately.
+ * `SettingsManager` holds these as `mutableStateOf`, which is what makes the
+ * app-wide repaint work without any manual plumbing.
+ */
+@Composable
+fun rememberGlassUserTuning(): GlassUserTuning {
+    val context = LocalContext.current
+    val settingsManager = remember(context) {
+        SettingsManager.getInstance(context.applicationContext)
+    }
+    // Read the state-backed properties directly so composition subscribes to
+    // each knob instead of snapshotting them once.
+    return remember(
+        settingsManager.glassIntensity,
+        settingsManager.glassTransparency,
+        settingsManager.glassBorderOpacity,
+        settingsManager.glassShadowIntensity,
+        settingsManager.glassGlowIntensity
+    ) {
+        settingsManager.currentGlassTuning()
+    }
+}
+
 @Composable
 fun LuneTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -422,9 +448,14 @@ fun LuneTheme(
     useCustomColors: Boolean = false,
     customColorPalette: Int = 0,
     useAmoledPitchBlack: Boolean = false,
-    glassTuning: GlassUserTuning = GlassUserTuning(),
+    // `null` means "read the user's Liquid Glass preferences". Resolving here
+    // rather than at each of the 16 call sites means the sliders can never be
+    // half-wired, and a new screen picks the behaviour up for free.
+    glassTuning: GlassUserTuning? = null,
     content: @Composable () -> Unit
 ) {
+    val resolvedGlassTuning = glassTuning ?: rememberGlassUserTuning()
+
     val baseColorScheme = when {
         useCustomColors -> paletteScheme(darkTheme, customColorPalette)
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -457,7 +488,7 @@ fun LuneTheme(
 
     CompositionLocalProvider(
         LocalGlassTokens provides if (darkTheme) DarkGlass else LightGlass,
-        LocalGlassUserTuning provides glassTuning.clamped(),
+        LocalGlassUserTuning provides resolvedGlassTuning.clamped(),
         LocalGlowTokens provides GlowTokens(
             primary = colorScheme.primary,
             secondary = colorScheme.secondary,

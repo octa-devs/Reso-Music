@@ -490,4 +490,19 @@
     <string name="show_all_folders_desc">Include every music folder on the device, not just the one you picked</string>
     <string name="whatsapp_audio">WhatsApp Audio</string>
     <string name="whatsapp_audio_desc">Show or hide the WhatsApp Audio folder</string>
+
+    <!-- Liquid Glass -->
+    <string name="liquid_glass">Liquid Glass</string>
+    <string name="liquid_glass_desc">Customise how glass surfaces look throughout Reso Music. Changes apply instantly.</string>
+    <string name="glass_surface">Surface</string>
+    <string name="glass_depth">Depth &amp; Light</string>
+    <string name="glass_intensity">Intensity</string>
+    <string name="glass_transparency">Transparency</string>
+    <string name="glass_border_opacity">Border</string>
+    <string name="glass_shadow_intensity">Shadow</string>
+    <string name="glass_glow_intensity">Glow</string>
+    <string name="glass_ambient">Ambient background glow</string>
+    <string name="glass_animations">Animate ambient glow</string>
+    <string name="glass_preview_track">Live preview</string>
+    <string name="reset_to_default">Reset to Default</string>
 </resources>

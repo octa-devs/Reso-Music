@@ -554,6 +554,14 @@ fun SettingsScreen(
                             }
 
                             SettingsPreferenceItem(
+                                headlineText = stringResource(R.string.liquid_glass),
+                                supportingText = stringResource(R.string.liquid_glass_desc),
+                                icon = Icons.Default.LightMode,
+                                position = SectionPosition.MIDDLE,
+                                onClick = { context.startActivity(Intent(context, LiquidGlassActivity::class.java)) }
+                            )
+
+                            SettingsPreferenceItem(
                                 headlineText = stringResource(R.string.advanced_glass),
                                 supportingText = stringResource(R.string.advanced_glass_desc),
                                 icon = Icons.Default.Tune,

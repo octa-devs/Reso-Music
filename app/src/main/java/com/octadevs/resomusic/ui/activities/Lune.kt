@@ -955,6 +955,16 @@ fun MainScreen(
      * did not blow the logo up (Compose clamps the later constraint back to
      * the incoming one), but it meant the intended size was set twice and only
      * survived by accident, so the incoming modifier is now used as-is.
+     *
+     * It draws `reso_mark`, not `new_reso_logo`. Measuring the original asset:
+     * 86.6% of it is the black surround, the mark itself occupies only 42% of
+     * the width and 46% of the height, and its centre sits 21px (4% of the
+     * canvas) *above* the canvas centre. Fitting that square into a box
+     * therefore centres the canvas rather than the mark, so the wordmark never
+     * lined up with it -- the mark looked small and sat visibly high inside an
+     * invisible 30dp square. `reso_mark` is the same artwork trimmed to its own
+     * bounding box: the mark now fills 82% of the frame and its centre is dead
+     * on. Nothing about the design changed; the padding around it did.
      */
     @Composable
     fun AnimatedLogo(
@@ -963,7 +973,7 @@ fun MainScreen(
         tintColor: Color = MaterialTheme.colorScheme.primary
     ) {
         androidx.compose.foundation.Image(
-            painter = painterResource(id = R.drawable.new_reso_logo),
+            painter = painterResource(id = R.drawable.reso_mark),
             contentDescription = "ResoMusic Logo",
             modifier = modifier,
             contentScale = ContentScale.Fit
@@ -3096,25 +3106,24 @@ private fun ResoTopHeader(
             ) {
                 logo()
                 Spacer(Modifier.width(10.dp))
-                // Solid colour at full opacity, not a gradient brush.
-                //
-                // This is the app's name. It was 19sp at the tail end of a
-                // two-stop alpha gradient, inside a 46dp pill, next to a logo
-                // that carries its own 87%-black square -- so the wordmark had
-                // neither the size nor the contrast to hold its own, and read
-                // as part of the logo rather than as text. A single solid
-                // colour cannot wash out against its own glass.
+                // The line box is deliberately the same height as the logo box
+                // (30dp). Two children of identical height, centred on the same
+                // row, line their centres up exactly -- which is the only way
+                // the wordmark can stay level with the mark at every screen
+                // size and font scale. The text previously had a 26sp line box
+                // against a 30dp logo, so the two never shared a midpoint.
                 Text(
                     text = titleText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = androidx.compose.ui.text.TextStyle(
-                        fontSize = 20.sp,
-                        lineHeight = 26.sp,
+                        fontSize = 19.sp,
+                        lineHeight = 30.sp,
                         letterSpacing = (-0.2).sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = titleColor
-                    )
+                    ),
+                    modifier = Modifier.height(30.dp)
                 )
             }
         }

@@ -6,11 +6,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,8 +26,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+// Needed for the `by` delegation on animateColorAsState / animateFloatAsState.
+// The compiler resolves `by` through this operator, not by name, so an unused-
+// import sweep will always look like it is safe to drop.
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,16 +43,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.ui.screens.resume.HomeTab
 import com.octadevs.resomusic.ui.theme.EmberOrange
-import com.octadevs.resomusic.ui.theme.quicksand
 
 /* ============================================================
    FLOATING NAVIGATION DOCK
@@ -113,22 +106,19 @@ fun FloatingNavDock(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(64.dp)
+            .height(58.dp)
             .clip(DockShape)
             // The dock is the app's most prominent glass surface, hence
             // strong + raised: full rim, specular sheen and a real shadow.
             .liquidGlass(
                 shape = DockShape,
-                cornerRadius = 28.dp,
+                cornerRadius = 29.dp,
                 strong = true,
                 raised = true
             )
-            .padding(horizontal = 6.dp, vertical = 9.dp),
-        // Top-aligned, not centre-aligned: every cell is the same height, so
-        // centring only lets a taller cell push its own label out of line with
-        // its neighbours. Top alignment puts all the icons on one row and all
-        // the labels on the next, which is what makes the bar read as a bar.
-        verticalAlignment = Alignment.Top
+            // 58 - 2x5 = 48dp per cell, which is the minimum touch target.
+            .padding(horizontal = 6.dp, vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         visible.forEach { tab ->
             DockItem(
@@ -164,10 +154,21 @@ fun FloatingNavDock(
 }
 
 /**
- * A single dock destination.
+ * A single dock destination: an icon, nothing else.
  *
- * The active state is a soft purple glass highlight sized to the icon rather
- * than filling the cell — the brief is explicit about not wanting "a giant
+ * The labels are gone. At 9-10sp under a 1-1.5dp glass rim they were never
+ * legible on the glass, they forced the bar taller than the icons needed, and
+ * they were the source of every alignment complaint about this component --
+ * label lengths differ, so any text under the icons either had to be
+ * truncated to match or read as a ragged row. The icons alone are unambiguous
+ * and the bar reads as one object.
+ *
+ * Removing them is not an accessibility regression: [label] is now carried by
+ * the node's contentDescription instead of by a visible Text, so TalkBack
+ * announces exactly the same word it did before.
+ *
+ * The active state is a soft ember glass highlight sized to the icon rather
+ * than filling the cell -- the brief is explicit about not wanting "a giant
  * colored box".
  */
 @Composable
@@ -196,65 +197,31 @@ private fun DockItem(
         label = "dockHighlight"
     )
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
+    Box(
+        contentAlignment = Alignment.Center,
         modifier = modifier
+            .fillMaxWidth()
+            .height(42.dp)
+            .clip(DockItemShape)
+            .background(
+                EmberOrange.copy(
+                    alpha = (if (isDark) 0.55f else 0.18f) * highlight
+                )
+            )
+            .clickable(onClick = onClick)
             .semantics {
                 role = Role.Tab
                 selected = isActive
-                // The Text below already announces itself; without this the
-                // label is read out twice.
-                contentDescription = ""
+                contentDescription = label
             }
-            .clickable(onClick = onClick)
     ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(36.dp)
-                .clip(DockItemShape)
-                .background(
-                    EmberOrange.copy(
-                        alpha = (if (isDark) 0.55f else 0.18f) * highlight
-                    )
-                )
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = contentColor,
-                modifier = Modifier.size(21.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = label,
-            // Deliberately not MicroLabel.copy().
-            //
-            // MicroLabel is a 2.4sp-tracked all-caps eyebrow. Tracking adds a
-            // trailing gap after the final character, so a centred label sits
-            // half a step left of true centre -- by a different amount for
-            // every label, which is exactly the ragged column this is fixing.
-            // Zero tracking plus a full-width text box means every label
-            // occupies the same rectangle and shares one baseline.
-            style = TextStyle(
-                fontFamily = quicksand,
-                fontSize = 10.sp,
-                lineHeight = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.sp
-            ),
-            color = contentColor,
-            maxLines = 1,
-            softWrap = false,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 2.dp)
+        Icon(
+            imageVector = icon,
+            // The parent node announces the label; leaving this null keeps
+            // TalkBack from reading the destination name twice.
+            contentDescription = null,
+            tint = contentColor,
+            modifier = Modifier.size(23.dp)
         )
     }
 }

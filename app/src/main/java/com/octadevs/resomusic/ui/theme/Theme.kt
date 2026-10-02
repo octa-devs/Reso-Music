@@ -358,7 +358,10 @@ fun getControlsPrimaryColor(
 @Composable
 fun LuneTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    // Off by default: wallpaper-derived colour replaced the whole Aurora
+    // scheme on Android 12+, which left the glass surfaces tinted by whatever
+    // the user's wallpaper happened to be instead of the app's brand.
+    dynamicColor: Boolean = false,
     useCustomColors: Boolean = false,
     customColorPalette: Int = 0,
     useAmoledPitchBlack: Boolean = false,

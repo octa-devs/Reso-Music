@@ -99,23 +99,23 @@ fun rememberGlassTuning(
 ): GlassTuning = remember(isDark, strong, raised) {
     if (isDark) {
         GlassTuning(
-            fillTop = if (strong) 0.34f else 0.22f,
-            fillBottom = if (strong) 0.18f else 0.10f,
-            rimAlpha = if (strong) 0.58f else 0.40f,
-            specularAlpha = if (strong) 0.24f else 0.15f,
-            innerShadow = 0.26f,
-            elevation = if (raised) 16.dp else 7.dp,
-            shadowAlpha = 0.45f
+            fillTop = if (strong) 0.46f else 0.30f,
+            fillBottom = if (strong) 0.26f else 0.16f,
+            rimAlpha = if (strong) 0.72f else 0.55f,
+            specularAlpha = if (strong) 0.22f else 0.14f,
+            innerShadow = 0.30f,
+            elevation = if (raised) 18.dp else 8.dp,
+            shadowAlpha = 0.50f
         )
     } else {
         GlassTuning(
-            fillTop = if (strong) 0.80f else 0.62f,
-            fillBottom = if (strong) 0.56f else 0.38f,
-            rimAlpha = if (strong) 0.92f else 0.68f,
-            specularAlpha = if (strong) 0.68f else 0.44f,
-            innerShadow = 0.09f,
-            elevation = if (raised) 18.dp else 8.dp,
-            shadowAlpha = 0.14f
+            fillTop = if (strong) 0.82f else 0.64f,
+            fillBottom = if (strong) 0.58f else 0.40f,
+            rimAlpha = if (strong) 0.95f else 0.74f,
+            specularAlpha = if (strong) 0.62f else 0.40f,
+            innerShadow = 0.10f,
+            elevation = if (raised) 20.dp else 9.dp,
+            shadowAlpha = 0.16f
         )
     }
 }
@@ -148,7 +148,9 @@ fun Modifier.liquidGlass(
     val tokens = LocalGlassTokens.current
     val isDark = tokens.isDark
     val tuning = rememberGlassTuning(isDark = isDark, strong = strong, raised = raised)
-    val base = tint ?: if (isDark) Color(0xFF1B2033) else Color(0xFFFFFFFF)
+    // Glass is a *translucent white* veil, not a dark tinted slab. Using an
+    // opaque near-black base here is what made dark-mode panes disappear.
+    val base = tint ?: if (isDark) Color(0xFFEFF2FF) else Color(0xFFFFFFFF)
     val shadowColor = if (isDark) Color.Black else Color(0xFF3A3F63)
     val shadowAlpha = tuning.shadowAlpha
     val rimStart = tokens.rimStart
@@ -191,40 +193,91 @@ fun Modifier.liquidGlass(
                 )
             }
 
-            // ---- 2. Specular sheen: subtle light pooling in the top-left (much reduced)
+            // ---- 2. Specular sheen: light pools on the top-left face, with a
+            // fainter bounce along the bottom-right. One direction only leaves
+            // the opposite corner looking like dead flat plastic.
             if (showSpecular) {
-                val specR = size.minDimension * 1.1f
-                val center = Offset(size.width * 0.15f, -size.height * 0.05f)
+                val specR = size.minDimension * 1.15f
                 clipPath(path) {
+                    val keyCenter = Offset(size.width * 0.15f, -size.height * 0.05f)
                     drawCircle(
                         brush = Brush.radialGradient(
                             colorStops = arrayOf(
                                 0f to Color.White.copy(alpha = tuning.specularAlpha),
-                                0.6f to Color.White.copy(alpha = tuning.specularAlpha * 0.2f),
+                                0.55f to Color.White.copy(alpha = tuning.specularAlpha * 0.28f),
                                 1f to Color.Transparent
                             ),
-                            center = center,
+                            center = keyCenter,
                             radius = specR
                         ),
                         radius = specR,
-                        center = center
+                        center = keyCenter
+                    )
+
+                    val bounceR = size.minDimension * 0.95f
+                    val bounceCenter = Offset(size.width * 0.95f, size.height * 1.05f)
+                    drawCircle(
+                        brush = Brush.radialGradient(
+                            colorStops = arrayOf(
+                                0f to Color.White.copy(alpha = tuning.specularAlpha * 0.38f),
+                                0.6f to Color.White.copy(alpha = tuning.specularAlpha * 0.1f),
+                                1f to Color.Transparent
+                            ),
+                            center = bounceCenter,
+                            radius = bounceR
+                        ),
+                        radius = bounceR,
+                        center = bounceCenter
                     )
                 }
             }
 
-            // ---- 3. Rim light: single subtle highlight along top edge
+            // ---- 3. Rim light: the defining edge of the material. Glass catches
+            // light along its *entire* silhouette - brightest where it faces the
+            // light (top-left), softer but still present everywhere else. Fading
+            // this out makes the pane read as a flat rectangle.
             if (showRim) {
                 drawPath(
                     path = path,
                     brush = Brush.linearGradient(
                         colorStops = arrayOf(
                             0f to Color.White.copy(alpha = tuning.rimAlpha),
-                            0.4f to Color.White.copy(alpha = tuning.rimAlpha * 0.15f),
-                            1f to Color.Transparent
-                        )
+                            0.35f to Color.White.copy(alpha = tuning.rimAlpha * 0.55f),
+                            0.62f to Color.White.copy(alpha = tuning.rimAlpha * 0.68f),
+                            1f to Color.White.copy(alpha = tuning.rimAlpha * 0.22f)
+                        ),
+                        start = Offset.Zero,
+                        end = Offset(size.width, size.height)
                     ),
-                    style = Stroke(width = 0.8f * px)
+                    style = Stroke(width = 1.1f * px)
                 )
+
+                // A tighter hairline just inside the rim reads as refraction,
+                // giving the edge visible thickness.
+                val inset = 1.5f * px
+                val innerRadius = (r - inset).coerceAtLeast(0f)
+                if (innerRadius > 0f) {
+                    val inner = roundedRectPath(
+                        size.width - inset * 2f,
+                        size.height - inset * 2f,
+                        innerRadius
+                    )
+                    clipPath(path) {
+                        drawPath(
+                            path = inner,
+                            brush = Brush.linearGradient(
+                                colorStops = arrayOf(
+                                    0f to rimStart.copy(alpha = rimStart.alpha * 0.5f),
+                                    0.5f to rimStart.copy(alpha = rimStart.alpha * 0.12f),
+                                    1f to Color.Transparent
+                                ),
+                                start = Offset.Zero,
+                                end = Offset(size.width, size.height)
+                            ),
+                            style = Stroke(width = 1f * px)
+                        )
+                    }
+                }
             }
         }
 }

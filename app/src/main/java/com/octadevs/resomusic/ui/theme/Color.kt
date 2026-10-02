@@ -1,6 +1,7 @@
 package com.octadevs.resomusic.ui.theme
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
 /* ============================================================
    RESO MUSIC — DESIGN TOKENS
@@ -61,3 +62,34 @@ val AccentLime = Color(0xFFB4F14C)
 
 /* ---------- Useful alpha ramps ---------- */
 fun Color.a(alpha: Float) = copy(alpha = alpha)
+
+/**
+ * Spacing scale. Every gap in the app should come from here so rhythm stays
+ * consistent instead of drifting across ~20 screens.
+ */
+object Space {
+    val xxs = 2.dp
+    val xs = 4.dp
+    val sm = 8.dp
+    val md = 12.dp
+    val lg = 16.dp
+    val xl = 20.dp
+    val xxl = 24.dp
+    val xxxl = 32.dp
+    val huge = 48.dp
+}
+
+/**
+ * Corner-radius scale. Glass panes in particular need their radius to match
+ * the radius passed to `liquidGlass`, or the rim highlight traces the wrong
+ * silhouette.
+ */
+object Radius {
+    val xs = 8.dp
+    val sm = 12.dp
+    val md = 16.dp
+    val lg = 20.dp
+    val xl = 26.dp
+    val xxl = 32.dp
+    val pill = 999.dp
+}

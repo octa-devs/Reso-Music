@@ -88,6 +88,7 @@ import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.data.Album
+import com.octadevs.resomusic.ui.components.BACKDROP_WASH_PX
 import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.components.VinylRecordAsyncCover
 import com.octadevs.resomusic.ui.components.WaveformVisualizer
@@ -101,7 +102,6 @@ import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.components.glassCard
 import com.octadevs.resomusic.ui.components.AmbientHalo
 import com.octadevs.resomusic.ui.components.AmbientGlowBackground
-import com.octadevs.resomusic.ui.components.rememberArtworkAccent
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.utils.MaterialExpressiveScallopShape
 import com.octadevs.resomusic.ui.utils.bounceClick
@@ -637,6 +637,7 @@ fun FullPlayer(
             val blurRequest = remember(song.id) {
                 ImageRequest.Builder(context)
                             .data(song.coverUrl ?: song.uri)
+                            .size(BACKDROP_WASH_PX)
                     .crossfade(true)
                     .fallback(R.drawable.ic_artwork_fallback)
                     .error(R.drawable.ic_artwork_fallback)
@@ -647,7 +648,6 @@ fun FullPlayer(
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
-                    .blur(80.dp)
                     .alpha(if (isDarkTheme) 0.2f else 0.35f),
                 contentScale = ContentScale.Crop
             )
@@ -721,6 +721,7 @@ fun FullPlayer(
                     Crossfade(targetState = song.id, animationSpec = tween(400)) { _ ->
                         val request = remember(song.id) {
                             ImageRequest.Builder(context)
+                                .size(BACKDROP_WASH_PX)
                                 .data(song.coverUrl ?: song.uri)
                                 .crossfade(true)
                                 .fallback(R.drawable.ic_artwork_fallback)
@@ -733,7 +734,6 @@ fun FullPlayer(
                             modifier = cinematicTransform(
                                 Modifier
                                     .fillMaxSize()
-                                    .blur(80.dp)
                             ),
                             contentScale = ContentScale.Crop
                         )
@@ -776,16 +776,13 @@ fun FullPlayer(
 
         // Ambient light over whichever backdrop is in play. Without this the
         // non-cinematic player is a flat colour field; with it the surface
-        // reads as lit. The accent lets the current artwork nudge the room
-        // light, but only part of the way -- it is capped in
-        // rememberArtworkAccent so this can never become a visualiser.
-        val artworkAccent = rememberArtworkAccent(song.coverUrl ?: song.albumArtUri)
+        // reads as lit. Kept on the brand ember ramp -- deliberately not tinted
+        // by the artwork, so no album can pull the app off-palette.
         AmbientGlowBackground(
             modifier = Modifier.fillMaxSize(),
             isPlaying = isPlaying,
             strength = LocalGlassUserTuning.current.glowIntensity,
-            drawBase = false,
-            accent = artworkAccent
+            drawBase = false
         )
 
         val coverSection: @Composable () -> Unit = {
@@ -2111,12 +2108,12 @@ fun MiniPlayer(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .blur(80.dp)
                         .alpha(if (isDarkTheme) 0.3f else 0.5f)
                 ) {
                     val miniBlurRequest = remember(song.id, song.coverUrl) {
                         ImageRequest.Builder(miniContext)
                             .data(song.coverUrl ?: song.uri)
+                            .size(BACKDROP_WASH_PX)
                             .crossfade(true)
                             .build()
                     }
@@ -2465,13 +2462,13 @@ fun MiniPlayerMinimized(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .blur(40.dp)
                         .alpha(if (isDarkTheme) 0.2f else 0.35f)
                 ) {
                     val miniCtx = LocalContext.current
                     val blurRequest = remember(song.id, miniCtx) {
                         ImageRequest.Builder(miniCtx)
                             .data(song.coverUrl ?: song.uri)
+                            .size(BACKDROP_WASH_PX)
                             .crossfade(true)
                             .build()
                     }

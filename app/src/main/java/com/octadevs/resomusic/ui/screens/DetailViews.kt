@@ -35,7 +35,9 @@ import com.octadevs.resomusic.data.Playlist
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.Song
+import coil.request.ImageRequest
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.BACKDROP_WASH_PX
 import com.octadevs.resomusic.ui.components.FastScrollbar
 import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.components.SongItem
@@ -130,8 +132,18 @@ fun PlaylistDetailView(
         }
     }
 
+    // This image only ever becomes a soft 350dp header wash. It used to be
+    // handed to Coil as a bare url, so it was decoded at full resolution and
+    // then run through Modifier.blur(60.dp) -- a RenderEffect, i.e. an
+    // offscreen software render of a very large bitmap plus a wide gaussian
+    // pass. A 64px decode stretched across the header is already that blur.
     val backgroundCover = remember(songs) {
-        songs.firstOrNull()?.let { it.coverUrl ?: it.uri }
+        songs.firstOrNull()?.let { song ->
+            ImageRequest.Builder(LocalContext.current)
+                .data(song.coverUrl ?: song.uri)
+                .size(BACKDROP_WASH_PX)
+                .build()
+        }
     }
 
     AppBlurBackdrop(
@@ -163,7 +175,7 @@ fun PlaylistDetailView(
                                 AsyncImage(
                                     model = backgroundCover,
                                     contentDescription = null,
-                                    modifier = Modifier.fillMaxSize().blur(60.dp).alpha(0.4f),
+                                    modifier = Modifier.fillMaxSize().alpha(0.4f),
                                     contentScale = ContentScale.Crop
                                 )
                                 Box(
@@ -538,8 +550,14 @@ fun AlbumDetailView(
 
     BackHandler(onBack = onBack)
 
+    // See the note above: 64px is all a blurred header wash needs.
     val backgroundCover = remember(album) {
-        album.songs.firstOrNull()?.let { it.coverUrl ?: it.uri }
+        album.songs.firstOrNull()?.let { song ->
+            ImageRequest.Builder(LocalContext.current)
+                .data(song.coverUrl ?: song.uri)
+                .size(BACKDROP_WASH_PX)
+                .build()
+        }
     }
 
     AppBlurBackdrop(
@@ -569,7 +587,7 @@ fun AlbumDetailView(
                                 AsyncImage(
                                     model = backgroundCover,
                                     contentDescription = null,
-                                    modifier = Modifier.fillMaxSize().blur(60.dp).alpha(0.4f),
+                                    modifier = Modifier.fillMaxSize().alpha(0.4f),
                                     contentScale = ContentScale.Crop
                                 )
                                 Box(
@@ -888,8 +906,18 @@ fun FolderDetailView(
         }
     }
 
+    // This image only ever becomes a soft 350dp header wash. It used to be
+    // handed to Coil as a bare url, so it was decoded at full resolution and
+    // then run through Modifier.blur(60.dp) -- a RenderEffect, i.e. an
+    // offscreen software render of a very large bitmap plus a wide gaussian
+    // pass. A 64px decode stretched across the header is already that blur.
     val backgroundCover = remember(songs) {
-        songs.firstOrNull()?.let { it.coverUrl ?: it.uri }
+        songs.firstOrNull()?.let { song ->
+            ImageRequest.Builder(LocalContext.current)
+                .data(song.coverUrl ?: song.uri)
+                .size(BACKDROP_WASH_PX)
+                .build()
+        }
     }
 
     val covers = remember(songs) {
@@ -928,7 +956,7 @@ fun FolderDetailView(
                                 AsyncImage(
                                     model = backgroundCover,
                                     contentDescription = null,
-                                    modifier = Modifier.fillMaxSize().blur(60.dp).alpha(0.4f),
+                                    modifier = Modifier.fillMaxSize().alpha(0.4f),
                                     contentScale = ContentScale.Crop
                                 )
                                 Box(

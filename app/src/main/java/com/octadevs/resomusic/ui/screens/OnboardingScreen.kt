@@ -228,22 +228,58 @@ private fun LogoAura(isDarkTheme: Boolean, modifier: Modifier = Modifier) {
     )
 }
 
+/**
+ * The emblem at the top of each permission step.
+ *
+ * This used to be the 1024x1024 logo bitmap with the step's own icon dropped
+ * on top of it. That read badly, and for a specific reason: the bitmap is 87%
+ * pure black, so what actually rendered was a large dark square with a small
+ * icon marooned in the middle of it, while the mark inside the square was far
+ * larger than the icon it was meant to be illustrating. Every permission page
+ * ended up showing the same black square, which is what made the flow look
+ * broken rather than branded.
+ *
+ * One glass disc holding the step's icon says the same thing, reads
+ * instantly, and is built from the app's own glass so it still belongs. It
+ * also removes a 1024x1024 decode from the very first screen the user sees.
+ */
+@Composable
+private fun OnboardingStepEmblem(
+    imageVector: ImageVector,
+    modifier: Modifier = Modifier,
+    size: Dp = 112.dp
+) {
+    Box(
+        modifier = modifier.size(size),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+                .liquidGlass(
+                    shape = CircleShape,
+                    cornerRadius = size / 2,
+                    strong = true,
+                    raised = true
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = imageVector,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(size * 0.42f)
+            )
+        }
+    }
+}
 @Composable
 fun WelcomeStep(onStartClick: () -> Unit) {
     val isDark = isSystemInDarkTheme()
     val diamondsColor = if (isDark) Color.White else Color.Black
     val noteColor = if (isDark) Color.Black else Color.White
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -328,16 +364,6 @@ fun PermissionStep(onNext: () -> Unit) {
         isPermissionGranted = granted
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -347,23 +373,9 @@ fun PermissionStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Mic,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Mic
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -457,16 +469,6 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
         isPermissionGranted = granted
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -476,23 +478,9 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Bluetooth,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Bluetooth
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -586,16 +574,6 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
         isPermissionGranted = granted
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -605,23 +583,9 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Notifications,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Notifications
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -704,16 +668,6 @@ fun MusicPermissionStep(onNext: () -> Unit) {
         isPermissionGranted = granted
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -723,23 +677,9 @@ fun MusicPermissionStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.MusicNote,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.MusicNote
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -839,16 +779,6 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
         }
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -858,23 +788,9 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Folder,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Folder
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -944,16 +860,6 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
         mutableStateOf(settingsManager.showAllFoldersOnStart)
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotationVisibility")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -963,23 +869,9 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Visibility,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Visibility
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -1108,16 +1000,6 @@ fun FeaturesStep(onFinish: () -> Unit) {
         }
     }
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     Box(
         modifier = Modifier
@@ -1322,16 +1204,6 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
     val diamondsColor = MaterialTheme.colorScheme.primary
     val iconColor = MaterialTheme.colorScheme.onSurface
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotationReminder")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -1341,23 +1213,9 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.Security,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = androidx.compose.material.icons.Icons.Default.Security
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -1402,16 +1260,6 @@ fun SupportStep(onNext: () -> Unit) {
     val diamondsColor = if (isDark) Color.White else Color.Black
     val iconColor = if (isDark) Color.Black else Color.White
 
-    val infiniteTransition = rememberInfiniteTransition(label = "InfiniteLogoRotationSupport")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "LogoRotation"
-    )
 
     OnboardingBackdrop(isDarkTheme = isDark) {
         Column(
@@ -1421,23 +1269,9 @@ fun SupportStep(onNext: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.size(200.dp)
-            ) {
-                androidx.compose.foundation.Image(
-                    painter = painterResource(id = R.drawable.new_reso_logo),
-                    contentScale = ContentScale.Fit,
-                    contentDescription = null,
-                    modifier = Modifier.size(158.dp)
-                )
-                Icon(
-                    imageVector = Icons.Default.Favorite,
-                    contentDescription = null,
-                    tint = iconColor,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
+            OnboardingStepEmblem(
+                imageVector = Icons.Default.Favorite
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 

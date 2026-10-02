@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
@@ -45,14 +44,16 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.octadevs.resomusic.R
 import com.octadevs.resomusic.ui.screens.resume.HomeTab
-import com.octadevs.resomusic.ui.theme.MicroLabel
-import com.octadevs.resomusic.ui.theme.NoirPurple
+import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.quicksand
 
 /* ============================================================
    FLOATING NAVIGATION DOCK
@@ -112,7 +113,7 @@ fun FloatingNavDock(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(62.dp)
+            .height(64.dp)
             .clip(DockShape)
             // The dock is the app's most prominent glass surface, hence
             // strong + raised: full rim, specular sheen and a real shadow.
@@ -122,9 +123,12 @@ fun FloatingNavDock(
                 strong = true,
                 raised = true
             )
-            .padding(horizontal = 6.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 6.dp, vertical = 9.dp),
+        // Top-aligned, not centre-aligned: every cell is the same height, so
+        // centring only lets a taller cell push its own label out of line with
+        // its neighbours. Top alignment puts all the icons on one row and all
+        // the labels on the next, which is what makes the bar read as a bar.
+        verticalAlignment = Alignment.Top
     ) {
         visible.forEach { tab ->
             DockItem(
@@ -178,7 +182,7 @@ private fun DockItem(
     val contentColor by animateColorAsState(
         targetValue = when {
             isActive && isDark -> Color.White
-            isActive -> NoirPurple
+            isActive -> EmberOrange
             isDark -> Color.White.copy(alpha = 0.55f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant
         },
@@ -194,23 +198,24 @@ private fun DockItem(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         modifier = modifier
             .semantics {
                 role = Role.Tab
                 selected = isActive
-                contentDescription = label
+                // The Text below already announces itself; without this the
+                // label is read out twice.
+                contentDescription = ""
             }
             .clickable(onClick = onClick)
-            .padding(vertical = 6.dp)
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(38.dp)
+                .size(36.dp)
                 .clip(DockItemShape)
                 .background(
-                    NoirPurple.copy(
+                    EmberOrange.copy(
                         alpha = (if (isDark) 0.55f else 0.18f) * highlight
                     )
                 )
@@ -223,23 +228,33 @@ private fun DockItem(
             )
         }
 
-        Spacer(modifier = Modifier.height(3.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = label,
-            // MicroLabel is an all-caps hardware-style eyebrow; the dock
-            // wants sentence case, so it keeps the size but not the casing
-            // transform the callers apply.
-            style = MicroLabel.copy(
-                fontSize = 9.5.sp,
-                letterSpacing = 0.3.sp,
-                lineHeight = 11.sp
+            // Deliberately not MicroLabel.copy().
+            //
+            // MicroLabel is a 2.4sp-tracked all-caps eyebrow. Tracking adds a
+            // trailing gap after the final character, so a centred label sits
+            // half a step left of true centre -- by a different amount for
+            // every label, which is exactly the ragged column this is fixing.
+            // Zero tracking plus a full-width text box means every label
+            // occupies the same rectangle and shares one baseline.
+            style = TextStyle(
+                fontFamily = quicksand,
+                fontSize = 10.sp,
+                lineHeight = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 0.sp
             ),
             color = contentColor,
             maxLines = 1,
+            softWrap = false,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 2.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 2.dp)
         )
     }
 }

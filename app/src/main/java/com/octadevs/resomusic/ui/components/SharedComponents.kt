@@ -125,13 +125,13 @@ fun AppBlurBackdrop(
                 Box(
                     modifier = Modifier
                         .matchParentSize()
-                        .blur(90.dp)
                         .graphicsLayer { scaleX = 1.18f; scaleY = 1.18f }
                         .alpha(if (isDarkTheme) 0.38f else 0.48f)
                 ) {
                     val req = remember(currentSong.id, currentSong.coverUrl) {
                         coil.request.ImageRequest.Builder(context)
                             .data(currentSong.coverUrl ?: currentSong.albumArtUri ?: currentSong.uri)
+                            .size(BACKDROP_WASH_PX)
                             .crossfade(true)
                             .build()
                     }

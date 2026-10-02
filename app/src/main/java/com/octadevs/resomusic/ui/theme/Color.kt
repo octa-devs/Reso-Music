@@ -19,43 +19,46 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 /* ============================================================
-   RESOMUSIC BRAND — "Noir"
+   RESOMUSIC BRAND — "Noir + Ember"
    ------------------------------------------------------------
-   Every value below was sampled directly from the reference
-   design rather than invented:
+   The accent ramp is sampled from the ResoMusic logo asset
+   itself (new_reso_logo.jpg, 1024x1024), not from any reference
+   mockup. Measuring that file:
 
-     · background   #000000 / #1F1F1F  (pure neutral black, R=G=B)
-     · glass tint   #7959A5           (dominant chromatic colour)
-     · mauve        #8D55A0
-     · warm rose    #51333B
-     · deep plum    #3E3754
+     · 86.6% of its pixels are pure #000000 (the square canvas)
+     · the mark itself ramps  hue 17deg -> 54deg
+     · core of the mark       #F07000  (hue 28, sat 97%)
+     · ramp top               #F0E050  (hue 54, warm gold)
 
-   The structural surface is deliberately monochrome so that the
-   purple reads as *light coming through glass* rather than as a
-   colour scheme. Orange/amber is gone from the app surface; it
-   survives only inside the ResoMusic logo itself, untouched.
+   So the brand is a warm ember ramp, and the structural surface
+   around it stays monochrome near-black. That is the whole idea:
+   black structure, ember light coming through the glass.
+
+   The tokens below are that ramp, rounded to the nearest clean
+   step. EmberOrange is the signature; EmberAmber and EmberGold
+   are the highlights that keep large ember areas from going flat.
    ============================================================ */
 
 /** The signature glass tint. Used for glass fills, active pills, progress. */
-val NoirPurple = Color(0xFF7959A5)
+val EmberOrange = Color(0xFFFF6B1A)
 
-/** Lifted purple — active/pressed states and glowing icon accents. */
-val NoirPurpleLift = Color(0xFF9A7BD0)
+/** Lifted ember — active/pressed states and glowing icon accents. */
+val EmberAmber = Color(0xFFFFA21A)
 
-/** Secondary chromatic voice: pink-leaning mauve. */
-val NoirMauve = Color(0xFF8D55A0)
+/** Secondary chromatic voice: the gold top of the logo's ramp. */
+val EmberGold = Color(0xFFFFC542)
 
-/** Warm rose tertiary, sampled from the reference's shadow tones. */
-val NoirRose = Color(0xFF51333B)
+/** Deep ember tertiary — the #E04000 end of the logo's ramp. */
+val EmberOrangeDeep = Color(0xFFE64A0C)
 
-/** Deep plum — used for glass shadow and contour shading. */
-val NoirPlum = Color(0xFF3E3754)
+/** Deep warm shadow — glass shadow and contour shading, never a hue. */
+val EmberShadow = Color(0xFF3A1A08)
 
-/** Pale lilac for text that sits directly on a glass pane. */
-val NoirLilac = Color(0xFFC9B6E8)
+/** Pale gold for text that sits directly on a glass pane. */
+val EmberGoldSoft = Color(0xFFFFDE7A)
 
 /** Multi-stop ramp for the rare places a gradient is warranted. */
-val NoirRamp = listOf(NoirPurple, NoirMauve, NoirPlum)
+val EmberRamp = listOf(EmberOrange, EmberAmber, EmberGold)
 
 /* ---------- Brand core: "Aurora" (legacy, still referenced by palettes) ---------- */
 val AuroraViolet = Color(0xFF7C5CFF)
@@ -106,8 +109,8 @@ val ContourNear = Color(0xFF2E2E2E)
 val ContourMid = Color(0xFF1A1A1A)
 val ContourFar = Color(0xFF101012)
 
-/** Rare chromatic wash drifting across the backdrop. */
-val AmbientWash = Color(0x1A7959A5)
+/** Rare chromatic wash drifting across the backdrop. Logo ember, held faint. */
+val AmbientWash = Color(0x1AFF6B1A)
 
 /* ---------- Semantic accents ---------- */
 val AccentWarm = Color(0xFFFF7A59)

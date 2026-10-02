@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
 import com.octadevs.resomusic.ui.theme.GlowTokens
 import com.octadevs.resomusic.ui.theme.glowTokens
 import kotlin.math.cos
@@ -130,12 +129,6 @@ private fun GlowPool(
  * @param strength   multiplies the whole layer; 0 disables it entirely.
  * @param drawBase   set false to lay only the glow over artwork that is
  *                   already painting the backdrop (the full player does this).
- * @param accent     optional artwork-derived colour, from
- *                   [rememberArtworkAccent]. Blended into the primary pool so
- *                   the room light shifts with the album without ever
- *                   replacing the brand purple outright.
- * @param accentMix  how far [accent] pulls the primary pool toward the
- *                   artwork. Kept low deliberately.
  */
 @Composable
 fun AmbientGlowBackground(
@@ -144,8 +137,6 @@ fun AmbientGlowBackground(
     strength: Float = 1f,
     baseColor: Color? = null,
     drawBase: Boolean = true,
-    accent: Color? = null,
-    accentMix: Float = 0.35f,
     content: @Composable BoxScope.() -> Unit = {}
 ) {
     val glow: GlowTokens = glowTokens()
@@ -158,11 +149,6 @@ fun AmbientGlowBackground(
     // Paused sits noticeably below playing, but neither end is extreme.
     val lift = if (isPlaying) 1f else 0.55f
 
-    // The artwork accent can only ever nudge the pool, never repaint it.
-    val primaryPool = accent?.let {
-        lerp(glow.primary, it, accentMix.coerceIn(0f, 1f))
-    } ?: glow.primary
-
     Box(modifier = modifier.fillMaxSize()) {
         if (drawBase) {
             Canvas(modifier = Modifier.fillMaxSize()) {
@@ -171,7 +157,7 @@ fun AmbientGlowBackground(
         }
 
         GlowPool(
-            color = primaryPool,
+            color = glow.primary,
             anchorX = 0.18f,
             anchorY = 0.06f,
             radiusFactor = 0.80f,

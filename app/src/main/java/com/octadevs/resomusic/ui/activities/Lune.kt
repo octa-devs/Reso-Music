@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.octadevs.resomusic.ui.viewmodels.MusicViewModel
 import com.octadevs.resomusic.data.Playlist
 import com.octadevs.resomusic.tools.*
+import com.octadevs.resomusic.ui.components.BACKDROP_WASH_PX
 import com.octadevs.resomusic.ui.components.FastScrollbar
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -942,39 +943,31 @@ fun MainScreen(
         onIsPlayingChange(playbackManager.isPlaying)
     }
 
+    /**
+     * The brand mark.
+     *
+     * This used to spin forever: an `Animatable` was driven to 360 degrees
+     * every 3 seconds, but the value was never read by anything, so nothing
+     * rotated. It was a pure cost -- a 60fps invalidation loop re-drawing a
+     * 1024x1024 bitmap on the screen the user sees most often. Removed.
+     *
+     * It also appended a second `.size(40.dp)` to the caller's own size. That
+     * did not blow the logo up (Compose clamps the later constraint back to
+     * the incoming one), but it meant the intended size was set twice and only
+     * survived by accident, so the incoming modifier is now used as-is.
+     */
     @Composable
     fun AnimatedLogo(
         isPlaying: Boolean,
         modifier: Modifier = Modifier,
         tintColor: Color = MaterialTheme.colorScheme.primary
     ) {
-        val rotation = remember { Animatable(0f) }
-
-        LaunchedEffect(isPlaying) {
-            if (isPlaying) {
-                while (true) {
-                    rotation.animateTo(
-                        targetValue = 360f,
-                        animationSpec = tween(durationMillis = 3000, easing = LinearEasing)
-                    )
-                    rotation.snapTo(0f)
-                }
-            } else {
-                rotation.snapTo(0f)
-            }
-        }
-
-        Box(
-            modifier = modifier.size(40.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            androidx.compose.foundation.Image(
-                painter = painterResource(id = R.drawable.new_reso_logo),
-                contentDescription = "ResoMusic Logo",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Fit
-            )
-        }
+        androidx.compose.foundation.Image(
+            painter = painterResource(id = R.drawable.new_reso_logo),
+            contentDescription = "ResoMusic Logo",
+            modifier = modifier,
+            contentScale = ContentScale.Fit
+        )
     }
 
     val playPrevious = {
@@ -1147,7 +1140,7 @@ fun MainScreen(
                     titleColor = titleColor,
                     onGlass = onGlass,
                     themeMode = themeMode,
-                    logo = { AnimatedLogo(isPlaying = isPlaying, tintColor = titleColor, modifier = Modifier.size(26.dp)) },
+                    logo = { AnimatedLogo(isPlaying = isPlaying, tintColor = titleColor, modifier = Modifier.size(30.dp)) },
                     onThemeClick = onThemeModeChange,
                     onSearchClick = { showSearchScreen = true },
                     onSettingsClick = {
@@ -2880,12 +2873,12 @@ fun UnifiedHeaderPill(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .blur(80.dp)
                             .alpha(if (isDark) 0.2f else 0.35f)
                     ) {
                         val pillBlurRequest = remember(song.id, song.coverUrl) {
                             ImageRequest.Builder(context)
                                 .data(song.coverUrl ?: song.uri)
+                            .size(BACKDROP_WASH_PX)
                                 .crossfade(true)
                                 .build()
                         }
@@ -3090,35 +3083,37 @@ private fun ResoTopHeader(
     ) {
         GlassSurface(
             modifier = Modifier
-                .weight(1f, fill = false)
-                .height(46.dp),
-            shape = RoundedCornerShape(23.dp),
-            cornerRadius = 23.dp,
+                .weight(1f)
+                .height(52.dp),
+            shape = RoundedCornerShape(26.dp),
+            cornerRadius = 26.dp,
             strong = true,
             raised = true
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 13.dp)
+                modifier = Modifier.padding(horizontal = 14.dp)
             ) {
                 logo()
-                Spacer(Modifier.width(9.dp))
+                Spacer(Modifier.width(10.dp))
+                // Solid colour at full opacity, not a gradient brush.
+                //
+                // This is the app's name. It was 19sp at the tail end of a
+                // two-stop alpha gradient, inside a 46dp pill, next to a logo
+                // that carries its own 87%-black square -- so the wordmark had
+                // neither the size nor the contrast to hold its own, and read
+                // as part of the logo rather than as text. A single solid
+                // colour cannot wash out against its own glass.
                 Text(
                     text = titleText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.padding(top = 1.dp),
                     style = androidx.compose.ui.text.TextStyle(
-                        fontSize = 19.sp,
-                        // lineHeight must clear fontSize or the glyph box
-                        // shrinks and the word sits visibly off-centre
-                        // against the logo beside it.
-                        lineHeight = 24.sp,
-                        letterSpacing = (-0.4).sp,
-                        fontWeight = FontWeight.Bold,
-                        brush = Brush.linearGradient(
-                            listOf(titleColor, titleColor.copy(alpha = 0.72f))
-                        )
+                        fontSize = 20.sp,
+                        lineHeight = 26.sp,
+                        letterSpacing = (-0.2).sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = titleColor
                     )
                 )
             }

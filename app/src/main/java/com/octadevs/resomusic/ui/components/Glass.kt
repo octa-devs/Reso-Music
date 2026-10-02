@@ -66,14 +66,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
-import com.octadevs.resomusic.ui.theme.NoirMauve
-import com.octadevs.resomusic.ui.theme.NoirPurple
-import com.octadevs.resomusic.ui.theme.NoirPurpleLift
+import com.octadevs.resomusic.ui.theme.EmberGold
+import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.EmberAmber
 import com.octadevs.resomusic.ui.theme.glowTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
+
+/**
+ * Decode size, in pixels, for artwork that exists only to become a soft wash.
+ *
+ * These backdrops used to decode the album cover at full resolution -- often
+ * 1000-3000px -- and then hand it to `Modifier.blur(80.dp)`. On Compose that is
+ * a RenderEffect: a full-screen offscreen software render of a very large
+ * bitmap, followed by a wide gaussian pass. And because the organic backdrop
+ * behind them never stops drifting, that layer was redrawn constantly.
+ *
+ * A 64px decode blown up to fill the screen *is* a blur. Asking the decoder
+ * for 64px and dropping the RenderEffect altogether gives the same soft wash
+ * for a tiny fraction of the cost, and takes a hardware/software layer
+ * boundary out of the busiest composables in the app.
+ */
+const val BACKDROP_WASH_PX = 64
 
 /* ============================================================================
    RESO — LIQUID GLASS SYSTEM
@@ -598,10 +614,10 @@ fun LightSweep(
    ============================================================================ */
 
 private val EmberSweep = listOf(
-    NoirPurple,
-    NoirMauve,
-    NoirPurpleLift,
-    NoirPurple
+    EmberOrange,
+    EmberGold,
+    EmberAmber,
+    EmberOrange
 )
 
 /** Text filled with a slowly drifting brand gradient. */

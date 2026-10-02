@@ -52,8 +52,8 @@ import com.octadevs.resomusic.ui.components.SongCoverImage
 import com.octadevs.resomusic.ui.components.liquidGlass
 import com.octadevs.resomusic.ui.theme.CardSubtitle
 import com.octadevs.resomusic.ui.theme.CardTitle
-import com.octadevs.resomusic.ui.theme.NoirPurple
-import com.octadevs.resomusic.ui.theme.NoirPurpleLift
+import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.EmberAmber
 import com.octadevs.resomusic.ui.theme.PillLabel
 import com.octadevs.resomusic.ui.theme.Radius
 import com.octadevs.resomusic.ui.theme.Space
@@ -124,7 +124,7 @@ private fun CategoryPill(
 ) {
     val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
     // The selected pill is purple *glass*; unselected is a neutral frost.
-    val tint = if (selected) NoirPurple else Color.White
+    val tint = if (selected) EmberOrange else Color.White
     val contentColor by animateColorAsState(
         targetValue = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = spring(),
@@ -156,7 +156,7 @@ private fun CategoryPill(
             Icon(
                 imageVector = Icons.Filled.Check,
                 contentDescription = null,
-                tint = if (isDark) NoirPurpleLift else NoirPurple,
+                tint = if (isDark) EmberAmber else EmberOrange,
                 modifier = Modifier.size(15.dp)
             )
             Spacer(Modifier.width(6.dp))

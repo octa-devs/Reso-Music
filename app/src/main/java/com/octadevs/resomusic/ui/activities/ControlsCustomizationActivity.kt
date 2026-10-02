@@ -519,7 +519,7 @@ fun ControlsCustomizationScreen(
                                     1 to Color(0xFFB04B38), // Sunset Peach
                                     2 to Color(0xFF386B52), // Sage Green
                                     3 to Color(0xFF2E6580), // Ocean Breeze
-                                    4 to Color(0xFF6E568F), // Lavender Mist
+                                    4 to Color(0xFFC08457), // Soft Sand
                                     5 to Color(0xFF7F5700)  // Warm Amber
                                 )
                                 palettes.forEach { (index, color) ->

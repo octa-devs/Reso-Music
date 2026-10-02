@@ -111,6 +111,9 @@ import com.octadevs.resomusic.ui.components.GlassIconButton
 import com.octadevs.resomusic.ui.components.LightSweep
 import com.octadevs.resomusic.ui.components.StaggeredEntrance
 import com.octadevs.resomusic.ui.components.liquidGlass
+import com.octadevs.resomusic.ui.theme.EmberAmber
+import com.octadevs.resomusic.ui.theme.EmberOrange
+import com.octadevs.resomusic.ui.theme.EmberOrangeDeep
 import com.octadevs.resomusic.ui.theme.LuneTheme
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
@@ -1074,9 +1077,9 @@ private fun SettingsHero(
                     .background(
                         Brush.linearGradient(
                             listOf(
-                                Color(0xFF7C5CFF).copy(alpha = 0.34f),
-                                Color(0xFF22D3EE).copy(alpha = 0.16f),
-                                Color(0xFFFF4D9D).copy(alpha = 0.28f)
+                                EmberOrange.copy(alpha = 0.30f),
+                                EmberAmber.copy(alpha = 0.14f),
+                                EmberOrangeDeep.copy(alpha = 0.24f)
                             )
                         )
                     )

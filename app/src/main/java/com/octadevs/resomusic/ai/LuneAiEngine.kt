@@ -476,9 +476,9 @@ class LuneAiEngine private constructor(private val context: Context) {
             }
             val timeGradients = when (currentTime) {
                 TimeOfDay.MORNING -> listOf(Color(0xFFF59E0B), Color(0xFF10B981), Color(0xFF06B6D4))
-                TimeOfDay.AFTERNOON -> listOf(Color(0xFF3B82F6), Color(0xFF8B5CF6), Color(0xFF06B6D4))
-                TimeOfDay.EVENING -> listOf(Color(0xFFF97316), Color(0xFF8B5CF6), Color(0xFF4F46E5))
-                TimeOfDay.NIGHT -> listOf(Color(0xFF1E1B4B), Color(0xFF312E81), Color(0xFF4C1D95))
+                TimeOfDay.AFTERNOON -> listOf(Color(0xFF38BDF8), Color(0xFFF59E0B), Color(0xFFFB7185))
+                TimeOfDay.EVENING -> listOf(Color(0xFFFF6B1A), Color(0xFFFFA21A), Color(0xFFE64A0C))
+                TimeOfDay.NIGHT -> listOf(Color(0xFF2A1405), Color(0xFF4A2408), Color(0xFF7A3A08))
             }
 
             val timeSongs = allSongs.sortedByDescending { song ->

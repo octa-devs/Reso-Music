@@ -137,9 +137,10 @@ fun PlaylistDetailView(
     // then run through Modifier.blur(60.dp) -- a RenderEffect, i.e. an
     // offscreen software render of a very large bitmap plus a wide gaussian
     // pass. A 64px decode stretched across the header is already that blur.
-    val backgroundCover = remember(songs) {
+    val washContext = LocalContext.current
+    val backgroundCover = remember(songs, washContext) {
         songs.firstOrNull()?.let { song ->
-            ImageRequest.Builder(LocalContext.current)
+            ImageRequest.Builder(washContext)
                 .data(song.coverUrl ?: song.uri)
                 .size(BACKDROP_WASH_PX)
                 .build()
@@ -551,9 +552,10 @@ fun AlbumDetailView(
     BackHandler(onBack = onBack)
 
     // See the note above: 64px is all a blurred header wash needs.
-    val backgroundCover = remember(album) {
+    val washContext = LocalContext.current
+    val backgroundCover = remember(album, washContext) {
         album.songs.firstOrNull()?.let { song ->
-            ImageRequest.Builder(LocalContext.current)
+            ImageRequest.Builder(washContext)
                 .data(song.coverUrl ?: song.uri)
                 .size(BACKDROP_WASH_PX)
                 .build()
@@ -911,9 +913,10 @@ fun FolderDetailView(
     // then run through Modifier.blur(60.dp) -- a RenderEffect, i.e. an
     // offscreen software render of a very large bitmap plus a wide gaussian
     // pass. A 64px decode stretched across the header is already that blur.
-    val backgroundCover = remember(songs) {
+    val washContext = LocalContext.current
+    val backgroundCover = remember(songs, washContext) {
         songs.firstOrNull()?.let { song ->
-            ImageRequest.Builder(LocalContext.current)
+            ImageRequest.Builder(washContext)
                 .data(song.coverUrl ?: song.uri)
                 .size(BACKDROP_WASH_PX)
                 .build()

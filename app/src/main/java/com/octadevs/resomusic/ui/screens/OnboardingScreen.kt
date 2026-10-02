@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material3.*
 import com.octadevs.resomusic.ui.components.BouncySwitch
 import com.octadevs.resomusic.ui.components.LiquidGlassBackground
+import com.octadevs.resomusic.ui.components.liquidGlass
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.ui.graphics.Brush
@@ -59,6 +60,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat

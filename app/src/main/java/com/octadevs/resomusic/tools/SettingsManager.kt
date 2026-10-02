@@ -3,15 +3,114 @@ package com.octadevs.resomusic.tools
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.runtime.mutableStateOf
+import com.octadevs.resomusic.ui.theme.GlassUserTuning
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+
+private const val KEY_GLASS_INTENSITY = "glass_intensity"
+private const val KEY_GLASS_TRANSPARENCY = "glass_transparency"
+private const val KEY_GLASS_BORDER = "glass_border_opacity"
+private const val KEY_GLASS_SHADOW = "glass_shadow_intensity"
+private const val KEY_GLASS_GLOW = "glass_glow_intensity"
+private const val KEY_GLASS_AMBIENT = "glass_ambient_enabled"
+private const val KEY_GLASS_ANIM = "glass_animations_enabled"
 
 class SettingsManager(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("lune_settings", Context.MODE_PRIVATE)
 
     private val _customTitleFlow = MutableStateFlow(prefs.getString("custom_title", "") ?: "")
     val customTitleFlow: StateFlow<String> = _customTitleFlow.asStateFlow()
+
+    /* ---------- Liquid Glass tuning ----------
+       Backs the in-app "Liquid Glass" settings screen. Stored as individual
+       floats so a future version can migrate one knob at a time, and exposed
+       as a StateFlow so the sliders re-render the app live. */
+
+    private val _glassIntensity = mutableStateOf(prefs.getFloat(KEY_GLASS_INTENSITY, 1f))
+    var glassIntensity: Float
+        get() = _glassIntensity.value
+        set(value) {
+            _glassIntensity.value = value
+            prefs.edit().putFloat(KEY_GLASS_INTENSITY, value).apply()
+        }
+
+    private val _glassTransparency = mutableStateOf(prefs.getFloat(KEY_GLASS_TRANSPARENCY, 0.5f))
+    var glassTransparency: Float
+        get() = _glassTransparency.value
+        set(value) {
+            _glassTransparency.value = value
+            prefs.edit().putFloat(KEY_GLASS_TRANSPARENCY, value).apply()
+        }
+
+    private val _glassBorderOpacity = mutableStateOf(prefs.getFloat(KEY_GLASS_BORDER, 1f))
+    var glassBorderOpacity: Float
+        get() = _glassBorderOpacity.value
+        set(value) {
+            _glassBorderOpacity.value = value
+            prefs.edit().putFloat(KEY_GLASS_BORDER, value).apply()
+        }
+
+    private val _glassShadowIntensity = mutableStateOf(prefs.getFloat(KEY_GLASS_SHADOW, 1f))
+    var glassShadowIntensity: Float
+        get() = _glassShadowIntensity.value
+        set(value) {
+            _glassShadowIntensity.value = value
+            prefs.edit().putFloat(KEY_GLASS_SHADOW, value).apply()
+        }
+
+    private val _glassGlowIntensity = mutableStateOf(prefs.getFloat(KEY_GLASS_GLOW, 0.55f))
+    var glassGlowIntensity: Float
+        get() = _glassGlowIntensity.value
+        set(value) {
+            _glassGlowIntensity.value = value
+            prefs.edit().putFloat(KEY_GLASS_GLOW, value).apply()
+        }
+
+    private val _glassAmbientEnabled = mutableStateOf(prefs.getBoolean(KEY_GLASS_AMBIENT, true))
+    var glassAmbientEnabled: Boolean
+        get() = _glassAmbientEnabled.value
+        set(value) {
+            _glassAmbientEnabled.value = value
+            prefs.edit().putBoolean(KEY_GLASS_AMBIENT, value).apply()
+        }
+
+    private val _glassAnimationsEnabled = mutableStateOf(prefs.getBoolean(KEY_GLASS_ANIM, true))
+    var glassAnimationsEnabled: Boolean
+        get() = _glassAnimationsEnabled.value
+        set(value) {
+            _glassAnimationsEnabled.value = value
+            prefs.edit().putBoolean(KEY_GLASS_ANIM, value).apply()
+        }
+
+    /** Restores every glass knob to its shipping default. */
+    fun resetGlassTuning() {
+        prefs.edit()
+            .putFloat(KEY_GLASS_INTENSITY, 1f)
+            .putFloat(KEY_GLASS_TRANSPARENCY, 0.5f)
+            .putFloat(KEY_GLASS_BORDER, 1f)
+            .putFloat(KEY_GLASS_SHADOW, 1f)
+            .putFloat(KEY_GLASS_GLOW, 0.55f)
+            .putBoolean(KEY_GLASS_AMBIENT, true)
+            .putBoolean(KEY_GLASS_ANIM, true)
+            .apply()
+        _glassIntensity.value = 1f
+        _glassTransparency.value = 0.5f
+        _glassBorderOpacity.value = 1f
+        _glassShadowIntensity.value = 1f
+        _glassGlowIntensity.value = 0.55f
+        _glassAmbientEnabled.value = true
+        _glassAnimationsEnabled.value = true
+    }
+
+    /** Current tuning resolved into the theme-layer value object. */
+    fun currentGlassTuning() = GlassUserTuning(
+        intensity = glassIntensity,
+        borderOpacity = glassBorderOpacity,
+        shadowIntensity = glassShadowIntensity,
+        glowIntensity = glassGlowIntensity,
+        transparency = glassTransparency
+    ).clamped()
 
 
     var isFirstRun: Boolean

@@ -18,7 +18,23 @@ val Purple40 = Color(0xFF6650A4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
-/* ---------- Brand core: "Aurora" ---------- */
+/* ============================================================
+   RESOMUSIC BRAND — "Ember"
+   Warm orange → golden yellow. The accent set is deliberately
+   small: these appear on controls, active states and glow only.
+   Everything structural stays neutral dark so the warmth reads
+   as light rather than as a colour scheme.
+   ============================================================ */
+val EmberOrange = Color(0xFFFF6B1A)
+val EmberOrangeDeep = Color(0xFFE64A0C)
+val EmberAmber = Color(0xFFFFA21A)
+val EmberGold = Color(0xFFFFC542)
+val EmberGoldSoft = Color(0xFFFFDE7A)
+
+/** Multi-stop brand ramp, for the rare places a gradient is warranted. */
+val EmberRamp = listOf(EmberOrange, EmberAmber, EmberGold)
+
+/* ---------- Brand core: "Aurora" (legacy, still referenced by palettes) ---------- */
 val AuroraViolet = Color(0xFF7C5CFF)
 val AuroraIndigo = Color(0xFF4F46E5)
 val AuroraCyan = Color(0xFF22D3EE)
@@ -26,13 +42,15 @@ val AuroraPink = Color(0xFFFF4D9D)
 val AuroraAmber = Color(0xFFFFB020)
 val AuroraMint = Color(0xFF34D399)
 
-/* ---------- Dark spectrum ---------- */
-val NightAbyss = Color(0xFF05060B)
-val NightDeep = Color(0xFF0A0C14)
-val NightBase = Color(0xFF10121C)
-val NightElevated = Color(0xFF171A26)
-val NightHigh = Color(0xFF1F2331)
-val NightOutline = Color(0xFF2C3142)
+/* ---------- Dark spectrum ----------
+   Warm-shifted rather than blue-black: the surface neutrals carry a
+   trace of the brand's amber so the accents feel lit rather than pasted on. */
+val NightAbyss = Color(0xFF0A0705)
+val NightDeep = Color(0xFF120D0A)
+val NightBase = Color(0xFF191310)
+val NightElevated = Color(0xFF221A15)
+val NightHigh = Color(0xFF2C221B)
+val NightOutline = Color(0xFF3A2C22)
 
 /* ---------- Light spectrum ---------- */
 val DayMist = Color(0xFFF7F7FB)

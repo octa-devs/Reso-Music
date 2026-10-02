@@ -25,21 +25,21 @@ import androidx.compose.ui.graphics.luminance
    Deep space blacks with neon-violet/cyan energy.
    ============================================================ */
 
-private val AuroraDark = darkColorScheme(
-    primary = AuroraViolet,
-    onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFF3B2C6B),
-    onPrimaryContainer = Color(0xFFE7DEFF),
+private val EmberDark = darkColorScheme(
+    primary = EmberOrange,
+    onPrimary = Color(0xFF1A0A02),
+    primaryContainer = Color(0xFF5A2405),
+    onPrimaryContainer = Color(0xFFFFDBC7),
 
-    secondary = AuroraCyan,
-    onSecondary = Color(0xFF00323B),
-    secondaryContainer = Color(0xFF0B4A56),
-    onSecondaryContainer = Color(0xFFB9F1FF),
+    secondary = EmberAmber,
+    onSecondary = Color(0xFF291800),
+    secondaryContainer = Color(0xFF573100),
+    onSecondaryContainer = Color(0xFFFFE0B2),
 
-    tertiary = AuroraPink,
-    onTertiary = Color(0xFF4A0026),
-    tertiaryContainer = Color(0xFF6E1245),
-    onTertiaryContainer = Color(0xFFFFD9E7),
+    tertiary = EmberGold,
+    onTertiary = Color(0xFF2B1D00),
+    tertiaryContainer = Color(0xFF5A4300),
+    onTertiaryContainer = Color(0xFFFFE9A8),
 
     error = Color(0xFFFFB4AB),
     onError = Color(0xFF690005),
@@ -47,16 +47,16 @@ private val AuroraDark = darkColorScheme(
     onErrorContainer = Color(0xFFFFDAD6),
 
     background = NightDeep,
-    onBackground = Color(0xFFECECF2),
+    onBackground = Color(0xFFF5EEE8),
     surface = NightDeep,
-    onSurface = Color(0xFFECECF2),
+    onSurface = Color(0xFFF5EEE8),
     surfaceVariant = NightElevated,
-    onSurfaceVariant = Color(0xFFA9ACC0),
-    surfaceTint = AuroraViolet,
+    onSurfaceVariant = Color(0xFFB5A79C),
+    surfaceTint = EmberOrange,
 
-    inverseSurface = Color(0xFFECECF2),
-    inverseOnSurface = Color(0xFF1B1B22),
-    inversePrimary = Color(0xFF5B45C9),
+    inverseSurface = Color(0xFFF5EEE8),
+    inverseOnSurface = Color(0xFF241A14),
+    inversePrimary = EmberAmber,
 
     surfaceDim = NightAbyss,
     surfaceBright = NightHigh,
@@ -66,26 +66,26 @@ private val AuroraDark = darkColorScheme(
     surfaceContainerHigh = NightElevated,
     surfaceContainerHighest = NightHigh,
 
-    outline = Color(0xFF474B60),
+    outline = Color(0xFF574538),
     outlineVariant = NightOutline,
     scrim = Color(0xFF000000)
 )
 
-private val AuroraLight = lightColorScheme(
-    primary = Color(0xFF5B45C9),
+private val EmberLight = lightColorScheme(
+    primary = EmberOrangeDeep,
     onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFFE7DEFF),
-    onPrimaryContainer = Color(0xFF1F0073),
+    primaryContainer = Color(0xFFFFDBC7),
+    onPrimaryContainer = Color(0xFF3B1200),
 
-    secondary = Color(0xFF006877),
+    secondary = Color(0xFF8A5200),
     onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFFB9F1FF),
-    onSecondaryContainer = Color(0xFF001F26),
+    secondaryContainer = Color(0xFFFFE0B2),
+    onSecondaryContainer = Color(0xFF2C1700),
 
-    tertiary = Color(0xFFB3235C),
+    tertiary = Color(0xFF6B4E00),
     onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFFFFD9E7),
-    onTertiaryContainer = Color(0xFF3E0021),
+    tertiaryContainer = Color(0xFFFFE9A8),
+    onTertiaryContainer = Color(0xFF221700),
 
     error = Color(0xFFBA1A1A),
     onError = Color(0xFFFFFFFF),
@@ -93,16 +93,16 @@ private val AuroraLight = lightColorScheme(
     onErrorContainer = Color(0xFF410002),
 
     background = DayBase,
-    onBackground = Color(0xFF16141F),
+    onBackground = Color(0xFF1F1611),
     surface = DayBase,
-    onSurface = Color(0xFF16141F),
+    onSurface = Color(0xFF1F1611),
     surfaceVariant = DayHigh,
-    onSurfaceVariant = Color(0xFF5A5C6E),
-    surfaceTint = Color(0xFF5B45C9),
+    onSurfaceVariant = Color(0xFF5F564E),
+    surfaceTint = EmberOrangeDeep,
 
-    inverseSurface = Color(0xFF2B2936),
-    inverseOnSurface = Color(0xFFF2F0FA),
-    inversePrimary = Color(0xFFCBBDFF),
+    inverseSurface = Color(0xFF342A24),
+    inverseOnSurface = Color(0xFFF9EFE7),
+    inversePrimary = EmberAmber,
 
     surfaceDim = Color(0xFFDDDCE8),
     surfaceBright = DayBase,
@@ -247,12 +247,12 @@ private val MidnightEmberDark = darkColorScheme(
     tertiaryContainer = Color(0xFF534500)
 )
 
-private val DarkColorScheme = AuroraDark
-private val LightColorScheme = AuroraLight
+private val DarkColorScheme = EmberDark
+private val LightColorScheme = EmberLight
 
 /** Names shown in the colour picker, index-aligned with [palette]. */
 val paletteNames = listOf(
-    "Aurora", "Sunset Peach", "Sage Green", "Ocean Breeze", "Lavender Mist", "Warm Amber", "Midnight Ember"
+    "Reso Ember", "Sunset Peach", "Sage Green", "Ocean Breeze", "Lavender Mist", "Warm Amber", "Midnight Ember"
 )
 
 private fun paletteScheme(dark: Boolean, index: Int) = when (index) {
@@ -304,13 +304,13 @@ private val DarkGlass = GlassTokens(
     rimStart = Color(0x59FFFFFF),
     rimEnd = Color(0x14FFFFFF),
     innerShadow = GlassInnerShadowDark,
-    content = Color(0xFFF6F6FB),
-    contentMuted = Color(0xB3F6F6FB),
+    content = Color(0xFFF7F1EB),
+    contentMuted = Color(0xB3F7F1EB),
     hairline = Color(0x1FFFFFFF),
-    meshA = Color(0xFF2B1B5A),
-    meshB = Color(0xFF0B3A54),
-    meshC = Color(0xFF4A1338),
-    meshD = Color(0xFF0B4F3E)
+    meshA = Color(0xFF4A1E06),
+    meshB = Color(0xFF6B3505),
+    meshC = Color(0xFF7A4404),
+    meshD = Color(0xFF3A1A08)
 )
 
 private val LightGlass = GlassTokens(
@@ -321,16 +321,73 @@ private val LightGlass = GlassTokens(
     rimStart = Color(0xB3FFFFFF),
     rimEnd = Color(0x4DFFFFFF),
     innerShadow = GlassInnerShadowLight,
-    content = Color(0xFF14121C),
-    contentMuted = Color(0xB314121C),
+    content = Color(0xFF1C1410),
+    contentMuted = Color(0xB31C1410),
     hairline = Color(0x1F000000),
-    meshA = Color(0xFFEDE7FF),
-    meshB = Color(0xFFDFF3FF),
-    meshC = Color(0xFFFFE7F2),
-    meshD = Color(0xFFE0FBF1)
+    meshA = Color(0xFFFFE8D2),
+    meshB = Color(0xFFFFF2D8),
+    meshC = Color(0xFFFFE0C2),
+    meshD = Color(0xFFFFF8E6)
 )
 
 val LocalGlassTokens = staticCompositionLocalOf { DarkGlass }
+
+/* ============================================================
+   3b. USER GLASS CONTROLS
+   ------------------------------------------------------------
+   Live-tuned from the Liquid Glass settings screen. These are
+   multipliers, not absolute colours, so every glass surface in the
+   app re-resolves from one place and the sliders stay meaningful.
+   Clamped in Glass.kt so no combination can destroy readability.
+   ============================================================ */
+
+@androidx.compose.runtime.Immutable
+data class GlassUserTuning(
+    /** 0..1 master multiplier on every glass alpha. */
+    val intensity: Float = 1f,
+    /** 0..1 rim / border strength. */
+    val borderOpacity: Float = 1f,
+    /** 0..1 drop-shadow + inner-shadow depth. */
+    val shadowIntensity: Float = 1f,
+    /** 0..1 warm accent bloom behind players. */
+    val glowIntensity: Float = 0.55f,
+    /** 0..1 translucency — higher means the pane shows more through. */
+    val transparency: Float = 0.5f
+) {
+    /** Keeps sliders from producing unreadable or fully-opaque surfaces. */
+    fun clamped() = GlassUserTuning(
+        intensity = intensity.coerceIn(0.35f, 1.6f),
+        borderOpacity = borderOpacity.coerceIn(0.2f, 1.5f),
+        shadowIntensity = shadowIntensity.coerceIn(0f, 1.5f),
+        glowIntensity = glowIntensity.coerceIn(0f, 1f),
+        transparency = transparency.coerceIn(0.15f, 0.9f)
+    )
+}
+
+val LocalGlassUserTuning = staticCompositionLocalOf { GlassUserTuning() }
+
+val LocalGlowTokens = staticCompositionLocalOf {
+    GlowTokens(
+        primary = EmberOrange,
+        secondary = EmberAmber,
+        tertiary = EmberGold,
+        backdrop = NightAbyss
+    )
+}
+
+@androidx.compose.runtime.Immutable
+data class GlowTokens(
+    val primary: Color,
+    val secondary: Color,
+    val tertiary: Color,
+    val backdrop: Color
+) {
+    /** The ramp used for ambient bloom; ordered warm → bright. */
+    val ramp: List<Color> get() = listOf(primary, secondary, tertiary)
+}
+
+@Composable
+fun glowTokens(): GlowTokens = LocalGlowTokens.current
 
 @Composable
 fun glassTokens(isDark: Boolean = LocalGlassTokens.current.isDark): GlassTokens =
@@ -358,13 +415,14 @@ fun getControlsPrimaryColor(
 @Composable
 fun LuneTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Off by default: wallpaper-derived colour replaced the whole Aurora
-    // scheme on Android 12+, which left the glass surfaces tinted by whatever
-    // the user's wallpaper happened to be instead of the app's brand.
+    // Off by default: wallpaper-derived colour replaced the whole scheme on
+    // Android 12+, which left glass surfaces tinted by the user's wallpaper
+    // instead of the app's brand.
     dynamicColor: Boolean = false,
     useCustomColors: Boolean = false,
     customColorPalette: Int = 0,
     useAmoledPitchBlack: Boolean = false,
+    glassTuning: GlassUserTuning = GlassUserTuning(),
     content: @Composable () -> Unit
 ) {
     val baseColorScheme = when {
@@ -397,7 +455,16 @@ fun LuneTheme(
     // Keep icon/status-bar contrast honest against whatever surface we land on.
     val forceLightIcons = remember(colorScheme) { colorScheme.surface.luminance() < 0.5f }
 
-    CompositionLocalProvider(LocalGlassTokens provides if (darkTheme) DarkGlass else LightGlass) {
+    CompositionLocalProvider(
+        LocalGlassTokens provides if (darkTheme) DarkGlass else LightGlass,
+        LocalGlassUserTuning provides glassTuning.clamped(),
+        LocalGlowTokens provides GlowTokens(
+            primary = colorScheme.primary,
+            secondary = colorScheme.secondary,
+            tertiary = colorScheme.tertiary,
+            backdrop = colorScheme.background
+        )
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

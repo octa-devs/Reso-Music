@@ -16,6 +16,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
@@ -287,14 +288,41 @@ private fun PlayingSongDiamondsIndicator(
         modifier = Modifier.size(60.dp),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.ic_logo_diamonds),
-            contentDescription = null,
-            tint = Color.White.copy(alpha = 0.8f),
+        // A thin ring sweeping once per track-length beat: the conventional
+        // "this row is playing" signal. Far quieter than a spinning mark, and
+        // it costs one arc rather than a raster repaint per frame.
+        Canvas(
             modifier = Modifier
-                .size(60.dp)
+                .fillMaxSize()
                 .then(if (isPlaying) Modifier.rotate(rotation) else Modifier)
-        )
+        ) {
+            val stroke = 2.dp.toPx()
+            val inset = stroke / 2f + 1.dp.toPx()
+            drawArc(
+                color = tint.copy(alpha = 0.28f),
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = Offset(inset, inset),
+                size = Size(size.width - inset * 2, size.height - inset * 2),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(
+                    width = stroke,
+                    cap = androidx.compose.ui.graphics.StrokeCap.Round
+                )
+            )
+            drawArc(
+                color = tint,
+                startAngle = 0f,
+                sweepAngle = 96f,
+                useCenter = false,
+                topLeft = Offset(inset, inset),
+                size = Size(size.width - inset * 2, size.height - inset * 2),
+                style = androidx.compose.ui.graphics.drawscope.Stroke(
+                    width = stroke,
+                    cap = androidx.compose.ui.graphics.StrokeCap.Round
+                )
+            )
+        }
         Icon(
             imageVector = if (isPlaying) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
             contentDescription = null,

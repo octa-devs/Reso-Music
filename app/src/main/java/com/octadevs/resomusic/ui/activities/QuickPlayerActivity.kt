@@ -293,11 +293,11 @@ private fun QuickPlayerDialogScreen(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_logo_diamonds),
+                                    Image(
+                                        painter = painterResource(R.drawable.new_reso_logo),
                                         contentDescription = null,
-                                        modifier = Modifier.size(20.dp),
-                                        tint = activePrimary
+                                        modifier = Modifier.size(22.dp),
+                                        contentScale = ContentScale.Fit
                                     )
                                     Text(
                                         text = stringResource(R.string.quick_player),

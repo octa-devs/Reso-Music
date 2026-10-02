@@ -924,21 +924,14 @@ fun MainScreen(
         }
 
         Box(
-            modifier = modifier.size(42.dp),
+            modifier = modifier.size(40.dp),
             contentAlignment = Alignment.Center
         ) {
-            // Use the vector logo for crisp rendering
             androidx.compose.foundation.Image(
-                painter = painterResource(id = R.drawable.ic_logo_note),
-                contentDescription = "Reso Music Logo",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape)
-                    .graphicsLayer {
-                        if (isPlaying) rotationZ = rotation.value
-                    },
-                contentScale = ContentScale.Fit,
-                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(tintColor)
+                painter = painterResource(id = R.drawable.new_reso_logo),
+                contentDescription = "ResoMusic Logo",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Fit
             )
         }
     }
@@ -3102,7 +3095,7 @@ private fun ResoTopHeader(
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 14.dp)
+                modifier = Modifier.padding(horizontal = 13.dp)
             ) {
                 logo()
                 Spacer(Modifier.width(9.dp))
@@ -3110,13 +3103,17 @@ private fun ResoTopHeader(
                     text = titleText,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 1.dp),
                     style = androidx.compose.ui.text.TextStyle(
                         fontSize = 19.sp,
-                        lineHeight = 21.sp,
-                        letterSpacing = (-0.5).sp,
+                        // lineHeight must clear fontSize or the glyph box
+                        // shrinks and the word sits visibly off-centre
+                        // against the logo beside it.
+                        lineHeight = 24.sp,
+                        letterSpacing = (-0.4).sp,
                         fontWeight = FontWeight.Bold,
                         brush = Brush.linearGradient(
-                            listOf(titleColor, titleColor.copy(alpha = 0.62f))
+                            listOf(titleColor, titleColor.copy(alpha = 0.72f))
                         )
                     )
                 )

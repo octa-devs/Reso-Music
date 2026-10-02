@@ -515,16 +515,9 @@ fun LyricsScreen(onBack: () -> Unit, isDarkTheme: Boolean = false) {
                             
                             Box(modifier = Modifier.size(120.dp), contentAlignment = Alignment.Center) {
                                 Icon(
-                                    painter = painterResource(id = com.octadevs.resomusic.R.drawable.ic_logo_diamonds),
+                                    painter = painterResource(id = R.drawable.new_reso_logo),
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
-                                    modifier = Modifier.fillMaxSize().graphicsLayer { rotationZ = rotation }
-                                )
-                                Icon(
-                                    painter = painterResource(id = com.octadevs.resomusic.R.drawable.ic_logo_note),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.fillMaxSize(0.6f)
+                                    modifier = Modifier.size(84.dp)
                                 )
                             }
                             

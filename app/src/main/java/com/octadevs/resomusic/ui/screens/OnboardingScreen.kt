@@ -254,22 +254,13 @@ fun WelcomeStep(onStartClick: () -> Unit) {
         ) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.size(210.dp)
+                modifier = Modifier.size(176.dp)
             ) {
-                LogoAura(isDarkTheme = isDark, modifier = Modifier.size(230.dp))
+                LogoAura(isDarkTheme = isDark, modifier = Modifier.size(196.dp))
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
-                )
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_note),
-                    contentDescription = null,
-                    tint = noteColor,
-                    modifier = Modifier.fillMaxSize(0.9f)
+                    modifier = Modifier.size(132.dp)
                 )
             }
 
@@ -359,12 +350,9 @@ fun PermissionStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Mic,
@@ -490,12 +478,9 @@ fun BluetoothPermissionStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Bluetooth,
@@ -621,12 +606,9 @@ fun NotificationPermissionStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Notifications,
@@ -741,12 +723,9 @@ fun MusicPermissionStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.MusicNote,
@@ -878,12 +857,9 @@ fun ManageFilesPermissionStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Folder,
@@ -985,12 +961,9 @@ fun FolderVisibilityStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Visibility,
@@ -1160,18 +1133,9 @@ fun FeaturesStep(onFinish: () -> Unit) {
                         modifier = Modifier.size(150.dp)
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                            painter = painterResource(id = R.drawable.new_reso_logo),
                             contentDescription = null,
-                            tint = diamondsColor,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .graphicsLayer(rotationZ = rotation)
-                        )
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_logo_note),
-                            contentDescription = null,
-                            tint = noteColor,
-                            modifier = Modifier.fillMaxSize(0.9f)
+                            modifier = Modifier.size(104.dp)
                         )
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -1373,12 +1337,9 @@ fun PermissionsReminderStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = androidx.compose.material.icons.Icons.Default.Security,
@@ -1455,12 +1416,9 @@ fun SupportStep(onNext: () -> Unit) {
                 modifier = Modifier.size(200.dp)
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_logo_diamonds),
+                    painter = painterResource(id = R.drawable.new_reso_logo),
                     contentDescription = null,
-                    tint = diamondsColor,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer(rotationZ = rotation)
+                    modifier = Modifier.size(158.dp)
                 )
                 Icon(
                     imageVector = Icons.Default.Favorite,

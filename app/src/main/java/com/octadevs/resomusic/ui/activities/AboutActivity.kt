@@ -46,6 +46,8 @@ import com.octadevs.resomusic.R
 import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.tools.PlaybackManager
 import com.octadevs.resomusic.ui.components.AppBlurBackdrop
+import com.octadevs.resomusic.ui.components.GlassSurface
+import androidx.compose.ui.layout.ContentScale
 import com.octadevs.resomusic.ui.theme.LuneTheme
 import com.octadevs.resomusic.ui.utils.bounceClick
 import androidx.compose.ui.platform.LocalUriHandler
@@ -159,17 +161,24 @@ fun AboutScreen() {
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Logo Section
-                Box(
-                    contentAlignment = Alignment.Center,
+                // Logo lockup: mark above the wordmark, on a warm glass tile so the
+                // identity reads as one unit rather than two stacked images.
+                GlassSurface(
                     modifier = Modifier
-                        .size(170.dp)
-                        .padding(vertical = 12.dp)
+                        .size(132.dp)
+                        .padding(top = 12.dp, bottom = 20.dp),
+                    shape = RoundedCornerShape(34.dp),
+                    cornerRadius = 34.dp,
+                    strong = true,
+                    raised = true
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.reso_logo),
+                        painter = painterResource(id = R.drawable.new_reso_logo),
                         contentDescription = stringResource(R.string.app_name),
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .size(84.dp)
+                            .padding(2.dp),
+                        contentScale = ContentScale.Fit
                     )
                 }
 

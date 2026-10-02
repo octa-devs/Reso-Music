@@ -65,6 +65,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
+import com.octadevs.resomusic.ui.theme.LocalGlassUserTuning
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import kotlin.math.cos
 import kotlin.math.max
@@ -96,8 +97,12 @@ fun rememberGlassTuning(
     isDark: Boolean = LocalGlassTokens.current.isDark,
     strong: Boolean = false,
     raised: Boolean = false
-): GlassTuning = remember(isDark, strong, raised) {
-    if (isDark) {
+): GlassTuning {
+    val user = LocalGlassUserTuning.current.clamped()
+
+    // Base strengths: dark glass needs more fill to register at all, light
+    // glass needs less or it goes milky.
+    val base = if (isDark) {
         GlassTuning(
             fillTop = if (strong) 0.46f else 0.30f,
             fillBottom = if (strong) 0.26f else 0.16f,
@@ -118,6 +123,20 @@ fun rememberGlassTuning(
             shadowAlpha = 0.16f
         )
     }
+
+    // `transparency` is inverted relative to fill: pushing it up thins the
+    // body so more of the background reads through the pane.
+    val transparencyMul = 1.30f - (user.transparency * 0.75f)
+
+    return GlassTuning(
+        fillTop = (base.fillTop * user.intensity * transparencyMul).coerceIn(0f, 0.97f),
+        fillBottom = (base.fillBottom * user.intensity * transparencyMul).coerceIn(0f, 0.97f),
+        rimAlpha = (base.rimAlpha * user.borderOpacity).coerceIn(0f, 1f),
+        specularAlpha = (base.specularAlpha * user.intensity).coerceIn(0f, 1f),
+        innerShadow = (base.innerShadow * user.shadowIntensity).coerceIn(0f, 1f),
+        elevation = base.elevation,
+        shadowAlpha = (base.shadowAlpha * user.shadowIntensity).coerceIn(0f, 1f)
+    )
 }
 
 private fun roundedRectPath(width: Float, height: Float, radius: Float): Path = Path().apply {

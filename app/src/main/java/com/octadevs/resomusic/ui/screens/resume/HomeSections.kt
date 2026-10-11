@@ -123,7 +123,7 @@ private fun CategoryPill(
     onClick: () -> Unit
 ) {
     val isDark = MaterialTheme.colorScheme.surface.luminance() < 0.5f
-    // The selected pill is purple *glass*; unselected is a neutral frost.
+    // The selected pill is brand *glass*; unselected is a neutral frost.
     val tint = if (selected) EmberOrange else Color.White
     val contentColor by animateColorAsState(
         targetValue = if (selected) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -289,7 +289,7 @@ private fun ImmersiveSongCard(
                     )
             )
 
-            // A faint purple rim, matching the rest of the material language.
+            // A faint brand rim, matching the rest of the material language.
             Box(
                 modifier = Modifier
                     .fillMaxSize()

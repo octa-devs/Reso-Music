@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.octadevs.resomusic.ui.theme.AmbientWash
 import com.octadevs.resomusic.ui.theme.ContourFar
 import com.octadevs.resomusic.ui.theme.ContourMid
 import com.octadevs.resomusic.ui.theme.ContourNear
@@ -307,8 +306,8 @@ fun OrganicWaveBackdrop(
                         val p2 = if (shouldAnimate) drift2 else 0.68f
                         drawCircle(
                             brush = Brush.radialGradient(
-                                0f to AmbientWash.copy(alpha = 0.5f * wash),
-                                0.45f to AmbientWash.copy(alpha = 0.16f * wash),
+                                0f to washColor.copy(alpha = 0.5f * wash),
+                                0.45f to washColor.copy(alpha = 0.16f * wash),
                                 1f to Color.Transparent
                             ),
                             radius = w * 0.70f,

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +34,8 @@ import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.AutoAwesome
 import com.octadevs.resomusic.tools.SettingsManager
 import com.octadevs.resomusic.ui.theme.LuneTheme
+import com.octadevs.resomusic.ui.theme.paletteNames
+import com.octadevs.resomusic.ui.theme.paletteSwatchColors
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -406,18 +409,17 @@ fun CustomizationScreen(
                             Spacer(modifier = Modifier.height(12.dp))
 
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(14.dp)
                             ) {
-                                val palettes = listOf(
-                                    0 to Color(0xFF6650a4),
-                                    1 to Color(0xFFB04B38),
-                                    2 to Color(0xFF386B52),
-                                    3 to Color(0xFF2E6580),
-                                    4 to Color(0xFF6E568F),
-                                    5 to Color(0xFF7F5700)
-                                )
-                                palettes.forEach { (index, color) ->
+                                // Real palette colours, and the full set. This row used to
+                                // hard-code five chips plus a violet index 0, so it both
+                                // disagreed with the picker in Settings and dragged the
+                                // app's old purple back onto the screen.
+                                paletteNames.forEachIndexed { index, _ ->
+                                    val color = paletteSwatchColors(index, isDarkTheme).first()
                                     val isSelected = customColorPalette == index
                                     Box(
                                         modifier = Modifier

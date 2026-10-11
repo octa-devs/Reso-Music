@@ -112,14 +112,12 @@ import com.octadevs.resomusic.ui.components.LightSweep
 import com.octadevs.resomusic.ui.components.StaggeredEntrance
 import com.octadevs.resomusic.ui.components.glassPane
 import com.octadevs.resomusic.ui.components.liquidGlass
-import com.octadevs.resomusic.ui.theme.EmberAmber
-import com.octadevs.resomusic.ui.theme.EmberOrange
-import com.octadevs.resomusic.ui.theme.EmberOrangeDeep
 import com.octadevs.resomusic.ui.theme.LuneTheme
 import com.octadevs.resomusic.ui.theme.LocalGlassTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import com.octadevs.resomusic.ui.theme.Numeric
 import com.octadevs.resomusic.ui.theme.paletteNames
+import com.octadevs.resomusic.ui.theme.paletteSwatchColors
 import kotlinx.coroutines.launch
 
 class SettingsActivity : AppCompatActivity() {
@@ -299,6 +297,12 @@ fun SettingsScreen(
             onSelect = { index ->
                 customColorPalette = index
                 settingsManager.customColorPalette = index
+                // Choosing a palette is a request for custom colours, so honour it
+                // rather than leaving the pick unusable behind the master switch.
+                if (!useCustomColors) {
+                    useCustomColors = true
+                    settingsManager.useCustomColors = true
+                }
                 showPaletteDialog = false
             },
             onDismiss = { showPaletteDialog = false }
@@ -425,7 +429,18 @@ fun SettingsScreen(
                                 },
                                 icon = Icons.Default.ColorLens,
                                 position = if (useCustomColors) SectionPosition.MIDDLE else SectionPosition.LAST,
-                                onClick = { if (useCustomColors) showPaletteDialog = true }
+                                // This row used to silently do nothing until the "Use custom
+                                // colours" switch above it was flipped, which reads as a broken
+                                // control: it looks tappable, gives no feedback, and the only clue
+                                // is one line of secondary text. Tapping it now enables custom
+                                // colours and opens the picker in one step.
+                                onClick = {
+                                    if (!useCustomColors) {
+                                        useCustomColors = true
+                                        settingsManager.useCustomColors = true
+                                    }
+                                    showPaletteDialog = true
+                                }
                             )
 
                             if (useCustomColors) {
@@ -1077,10 +1092,12 @@ private fun SettingsHero(
                     .matchParentSize()
                     .background(
                         Brush.linearGradient(
+                            // Palette-driven, so the hero follows the colour scheme
+                            // instead of staying ember under every palette.
                             listOf(
-                                EmberOrange.copy(alpha = 0.30f),
-                                EmberAmber.copy(alpha = 0.14f),
-                                EmberOrangeDeep.copy(alpha = 0.24f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.30f),
+                                MaterialTheme.colorScheme.secondary.copy(alpha = 0.14f),
+                                MaterialTheme.colorScheme.tertiary.copy(alpha = 0.24f)
                             )
                         )
                     )
@@ -1301,17 +1318,10 @@ private fun SettingsPaletteDialog(
 
 @Composable
 private fun PaletteSwatch(index: Int, isDark: Boolean) {
-    val swatch = remember(index) {
-        when (index) {
-            1 -> listOf(Color(0xFFB04B38), Color(0xFFFFB4AA))
-            2 -> listOf(Color(0xFF386B52), Color(0xFF9FD3B1))
-            3 -> listOf(Color(0xFF2E6580), Color(0xFF99CCEA))
-            4 -> listOf(Color(0xFF6E568F), Color(0xFFD6BAFF))
-            5 -> listOf(Color(0xFF7F5700), Color(0xFFFCBC43))
-            6 -> listOf(Color(0xFFB3321F), Color(0xFFFFB4A2))
-            else -> listOf(Color(0xFF5B45C9), Color(0xFF22D3EE))
-        }
-    }
+    // Derived from the real scheme, so the chip can never advertise a colour the
+    // palette does not apply. (It previously hard-coded swatches for a palette set
+    // that no longer exists -- index 0 "Reso Noir" previewed as violet/cyan.)
+    val swatch = remember(index, isDark) { paletteSwatchColors(index, isDark) }
     Box(
         modifier = Modifier
             .size(32.dp)

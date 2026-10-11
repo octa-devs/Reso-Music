@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.luminance
    1. SIGNATURE SCHEME — "Noir"
    ------------------------------------------------------------
    A monochrome black field with exactly one chromatic voice: the
-   sampled the logo's own ember ramp. Surfaces are near-black
-   purple is reserved for glass fills, active states and progress,
+   ember ramp sampled from the logo itself. Surfaces are near-black,
+   and ember is reserved for glass fills, active states and progress,
    so it reads as light rather than as a colour scheme.
    ============================================================ */
 
@@ -357,19 +357,63 @@ private const val GlassVeilMid = 0.16f
 private const val GlassVeilHigh = 0.22f
 private const val GlassVeilTop = 0.28f
 
-/** Names shown in the colour picker, index-aligned with [palette]. */
+/** Names shown in the colour picker, index-aligned with [paletteScheme]. */
 val paletteNames = listOf(
     "Reso Noir", "Sunset Peach", "Sage Green", "Ocean Breeze", "Soft Sand", "Warm Amber", "Midnight Ember"
 )
 
-private fun paletteScheme(dark: Boolean, index: Int) = when (index) {
-    1 -> if (dark) SunsetPeachDark else SunsetPeachLight
-    2 -> if (dark) SageGreenDark else SageGreenLight
-    3 -> if (dark) OceanBreezeDark else OceanBreezeLight
-    4 -> if (dark) SoftSandDark else SoftSandLight
-    5 -> if (dark) WarmAmberDark else WarmAmberLight
-    6 -> if (dark) MidnightEmberDark else MidnightEmberLight
-    else -> if (dark) DarkColorScheme else LightColorScheme
+/**
+ * Resolves a selectable palette into a full [ColorScheme].
+ *
+ * Index 0 is the brand scheme itself. Every other index overlays the preset's
+ * *chromatic* roles onto the brand scheme rather than using the preset's own
+ * `darkColorScheme(...)`/`lightColorScheme(...)` result directly.
+ *
+ * That distinction is the whole point. The presets are written as partial
+ * builders -- `darkColorScheme(primary = ..., secondary = ...)` -- and Material
+ * fills every role they omit with its own baseline palette, which is
+ * lavender-grey (`onSurfaceVariant` #CAC4D0, `surfaceTint`/`inversePrimary`
+ * #D0BCFF, a #141218 background). Using them as-is meant that picking any
+ * palette other than the default quietly dragged the app back onto Material's
+ * baseline purple: the surfaces went violet-black, the 120-odd
+ * `onSurfaceVariant` call sites went lavender, and the brand reverted. Copying
+ * only the accent roles onto the brand scheme keeps every neutral on brand no
+ * matter which palette is selected.
+ */
+private fun paletteScheme(dark: Boolean, index: Int): ColorScheme {
+    val base = if (dark) DarkColorScheme else LightColorScheme
+    val accents = when (index) {
+        1 -> if (dark) SunsetPeachDark else SunsetPeachLight
+        2 -> if (dark) SageGreenDark else SageGreenLight
+        3 -> if (dark) OceanBreezeDark else OceanBreezeLight
+        4 -> if (dark) SoftSandDark else SoftSandLight
+        5 -> if (dark) WarmAmberDark else WarmAmberLight
+        6 -> if (dark) MidnightEmberDark else MidnightEmberLight
+        else -> return base
+    }
+    return base.copy(
+        primary = accents.primary,
+        primaryContainer = accents.primaryContainer,
+        secondary = accents.secondary,
+        secondaryContainer = accents.secondaryContainer,
+        tertiary = accents.tertiary,
+        tertiaryContainer = accents.tertiaryContainer,
+        // Follows the accent so M3's elevation tint and any inverse-on-accent
+        // text track the chosen palette instead of the baseline.
+        surfaceTint = accents.primary,
+        inversePrimary = accents.primary
+    )
+}
+
+/**
+ * The two-stop preview drawn on a palette chip: primary then secondary.
+ *
+ * Derived from [paletteScheme] so a chip can never show a colour the palette
+ * does not actually apply -- the picker and the app can not drift apart.
+ */
+fun paletteSwatchColors(index: Int, isDark: Boolean): List<Color> {
+    val scheme = paletteScheme(isDark, index)
+    return listOf(scheme.primary, scheme.secondary)
 }
 
 /* ============================================================
@@ -385,7 +429,7 @@ data class GlassTokens(
     /** Slightly stronger fill for "solid" glass like the mini player. */
     val fillStrong: Color,
     /**
-     * Purple wash layered over the neutral frosted base. Kept separate from
+     * Brand wash layered over the neutral frosted base. Kept separate from
      * [fill] so the "Liquid Glass" saturation control can scale the colour
      * independently of how opaque the pane is.
      */
@@ -413,7 +457,7 @@ data class GlassTokens(
  * Dark glass is built the way the reference is built: a *neutral* frosted
  * base (white at low alpha, which picks up the blurred black backdrop and so
  * reads as grey) plus an ember wash on top. The wash is the logo's own
- * orange at ~0.42 alpha — the same visual weight the reference's purple pane
+ * orange at ~0.42 alpha, the same visual weight the reference pane
  * had, so glass surfaces keep the depth that was tuned against them.
  */
 private val DarkGlass = GlassTokens(
@@ -455,6 +499,19 @@ private val LightGlass = GlassTokens(
 
 val LocalGlassTokens = staticCompositionLocalOf { DarkGlass }
 
+/**
+ * Re-tints the one chromatic part of the glass -- the wash laid over the pane
+ * -- to follow the active palette.
+ *
+ * Everything else in [GlassTokens] is intentionally neutral (white veils, white
+ * specular, black inner shadow), so the wash is the only lever a palette needs.
+ * It is applied only when a non-default palette is selected, which is why the
+ * default ember material is bit-for-bit unchanged.
+ */
+private fun GlassTokens.withAccent(accent: Color) = copy(
+    meshFill = accent.copy(alpha = if (isDark) 0.42f else 0.30f)
+)
+
 /* ============================================================
    3b. USER GLASS CONTROLS
    ------------------------------------------------------------
@@ -477,7 +534,7 @@ data class GlassUserTuning(
     /** 0..1 translucency — higher means the pane shows more through. */
     val transparency: Float = 0.5f,
     /**
-     * 0..1 colour strength of the purple bleed through the glass. This is the
+     * 0..1 colour strength of the brand bleed through the glass. This is the
      * single control that separates "generic frosted white" from the reference
      * material, where colour clearly comes through the pane.
      */
@@ -621,8 +678,18 @@ fun LuneTheme(
     // Keep icon/status-bar contrast honest against whatever surface we land on.
     val forceLightIcons = remember(colorScheme) { colorScheme.surface.luminance() < 0.5f }
 
+    // The glass material is fixed ember by default. When the user has explicitly
+    // chosen another palette, the wash is re-tinted to that palette's primary so
+    // the panes actually follow the selection -- otherwise the picker changes only
+    // accents while the glass, which now dominates the screen, stays orange.
+    val themeGlassTokens = if (useCustomColors && customColorPalette != 0) {
+        (if (darkTheme) DarkGlass else LightGlass).withAccent(colorScheme.primary)
+    } else {
+        if (darkTheme) DarkGlass else LightGlass
+    }
+
     CompositionLocalProvider(
-        LocalGlassTokens provides if (darkTheme) DarkGlass else LightGlass,
+        LocalGlassTokens provides themeGlassTokens,
         LocalGlassUserTuning provides resolvedGlassTuning.clamped(),
         LocalGlowTokens provides GlowTokens(
             primary = colorScheme.primary,

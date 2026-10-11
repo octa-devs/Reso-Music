@@ -109,10 +109,10 @@ data class GlassTuning(
     val fillTop: Float,
     val fillBottom: Float,
     /**
-     * Strength of the purple wash layered over the neutral frosted base.
+     * Strength of the brand wash layered over the neutral frosted base.
      *
      * The reference material is not `rgba(255,255,255,0.1)` + a border radius:
-     * it is a neutral frost with a distinctly *coloured* purple bleed coming
+     * it is a neutral frost with a distinctly *coloured* bleed coming
      * through it. Keeping that as its own channel (rather than tinting the
      * fill) is what lets the Saturation control move colour independently of
      * opacity.
@@ -364,9 +364,11 @@ fun Modifier.liquidGlass(
             // ---- 0. Colour bleed.
             // This is the layer that stops the material reading as
             // "rgba(255,255,255,0.1) + border-radius". The neutral frost from
-            // `.background` stays underneath, and the sampled purple sits on
+            // `.background` stays underneath, and the brand wash sits on
             // top of it, strongest at the top of the pane and easing off
             // toward the bottom so the pane still feels lit from above.
+            // The wash hue comes from `GlassTokens.meshFill`, so it follows
+            // both the brand default and any palette the user picks.
             if (tuning.tintAlpha > 0.004f) {
                 val wash = tokens.meshFill
                 clipPath(path) {

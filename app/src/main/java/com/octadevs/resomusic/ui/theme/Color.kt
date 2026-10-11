@@ -9,15 +9,6 @@ import androidx.compose.ui.unit.dp
    derives from here so the whole app stays visually coherent.
    ============================================================ */
 
-/* ---------- Legacy Material basics (kept for compatibility) ---------- */
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650A4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
 /* ============================================================
    RESOMUSIC BRAND — "Noir + Ember"
    ------------------------------------------------------------
@@ -60,20 +51,12 @@ val EmberGoldSoft = Color(0xFFFFDE7A)
 /** Multi-stop ramp for the rare places a gradient is warranted. */
 val EmberRamp = listOf(EmberOrange, EmberAmber, EmberGold)
 
-/* ---------- Brand core: "Aurora" (legacy, still referenced by palettes) ---------- */
-val AuroraViolet = Color(0xFF7C5CFF)
-val AuroraIndigo = Color(0xFF4F46E5)
-val AuroraCyan = Color(0xFF22D3EE)
-val AuroraPink = Color(0xFFFF4D9D)
-val AuroraAmber = Color(0xFFFFB020)
-val AuroraMint = Color(0xFF34D399)
-
 /* ---------- Dark spectrum ----------
    True neutral black, not blue-black and not warm charcoal. The
    reference's background sampled as exactly #000000 at ~47% of
    pixels with only #1A1A1A→#2E2E2E variation on top, so the
    neutrals here are desaturated to match. All the perceived colour
-   in the app comes from the purple glass layered over this. */
+   in the app comes from the ember glass layered over this. */
 val NoirAbyss = Color(0xFF000000)
 val NoirDeep = Color(0xFF050506)
 val NoirBase = Color(0xFF0B0B0D)
@@ -109,13 +92,9 @@ val ContourNear = Color(0xFF2E2E2E)
 val ContourMid = Color(0xFF1A1A1A)
 val ContourFar = Color(0xFF101012)
 
-/** Rare chromatic wash drifting across the backdrop. Logo ember, held faint. */
-val AmbientWash = Color(0x1AFF6B1A)
-
 /* ---------- Semantic accents ---------- */
 val AccentWarm = Color(0xFFFF7A59)
 val AccentCool = Color(0xFF35C4FF)
-val AccentGrape = Color(0xFFB15CFF)
 val AccentLime = Color(0xFFB4F14C)
 
 /* ---------- Useful alpha ramps ---------- */

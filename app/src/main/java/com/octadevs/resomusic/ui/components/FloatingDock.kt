@@ -110,11 +110,18 @@ fun FloatingNavDock(
             .clip(DockShape)
             // The dock is the app's most prominent glass surface, hence
             // strong + raised: full rim, specular sheen and a real shadow.
+            //
+            // It is also the only surface that asks for the frost pass. Every
+            // other pane is a thin sheet over the backdrop; the dock is the one
+            // piece of chrome that should read as a solid slab of frosted glass
+            // floating over the content, so it gets the milky scatter and the
+            // speckle as well.
             .liquidGlass(
                 shape = DockShape,
                 cornerRadius = 29.dp,
                 strong = true,
-                raised = true
+                raised = true,
+                haze = true
             )
             // 58 - 2x5 = 48dp per cell, which is the minimum touch target.
             .padding(horizontal = 6.dp, vertical = 5.dp),

@@ -1028,14 +1028,31 @@ fun MainScreen(
         }
 
         val activePrimary = getControlsPrimaryColor(useCustomControlsColor, controlsColorPalette)
+        // ── Header ink ───────────────────────────────────────────────────────
+        // The header is the one surface whose glass is deliberately tinted with
+        // the *opaque* `surfaceContainerLowest` role rather than left as the
+        // default white frost (see `ResoTopHeader`).
+        //
+        // Two separate things were wrong with the default. The white frost plus
+        // the ember wash lays down a pane of roughly 20% luminance -- a mid
+        // grey-brown. Light ink on that measures about 3.5:1, and it is *worst
+        // under the specular hotspot*, which is exactly where the wordmark
+        // sits, so the one part of the screen that must be crisp was the part
+        // the material was washing out. And because the brand mark is a JPEG on
+        // a black field, that field had nothing to blend into on a light pane:
+        // it read as a black tile behind the logo.
+        //
+        // Tinting the pane with the floor role fixes both at once. In dark mode
+        // the pane becomes deep ember glass and `onSurface` ink clears 6:1; in
+        // light mode the floor is white, so the pane and the dark ink are
+        // exactly what they already were.
+        val headerGlassTint = MaterialTheme.colorScheme.surfaceContainerLowest
         val titleColor = if (useCustomControlsColor) {
             activePrimary
-        } else if (hasBlurBackgroundMini) {
-            Color.White
         } else {
             MaterialTheme.colorScheme.onSurface
         }
-        val onGlass = if (hasBlurBackgroundMini) Color.White else MaterialTheme.colorScheme.onSurface
+        val onGlass = titleColor
 
         Scaffold(
             snackbarHost = {
@@ -1143,6 +1160,7 @@ fun MainScreen(
                 ResoTopHeader(
                     titleColor = titleColor,
                     onGlass = onGlass,
+                    glassTint = headerGlassTint,
                     themeMode = themeMode,
                     logo = { AnimatedLogo(isPlaying = isPlaying, tintColor = titleColor, modifier = Modifier.size(30.dp)) },
                     onThemeClick = onThemeModeChange,
@@ -3068,6 +3086,7 @@ fun UnifiedHeaderPill(
 private fun ResoTopHeader(
     titleColor: Color,
     onGlass: Color,
+    glassTint: Color,
     themeMode: Int,
     logo: @Composable () -> Unit,
     onThemeClick: () -> Unit,
@@ -3091,15 +3110,22 @@ private fun ResoTopHeader(
                 .height(52.dp),
             shape = RoundedCornerShape(26.dp),
             cornerRadius = 26.dp,
+            // Tinted with the opaque floor role, not the default white frost.
+            // The white frost plus the ember wash lands on a mid grey-brown
+            // that no ink has good contrast against; the floor role gives the
+            // pane the same tone as the theme, so the brand lockup is legible
+            // and the mark's black field blends into the glass instead of
+            // sitting on it.
+            tint = glassTint,
             strong = true,
             raised = true
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 14.dp)
+                modifier = Modifier.padding(horizontal = 12.dp)
             ) {
                 logo()
-                Spacer(Modifier.width(10.dp))
+                Spacer(Modifier.width(8.dp))
                 // The line box is deliberately the same height as the logo box
                 // (30dp). Two children of identical height, centred on the same
                 // row, line their centres up exactly -- which is the only way
@@ -3122,7 +3148,16 @@ private fun ResoTopHeader(
             }
         }
 
-        Spacer(Modifier.weight(1f))
+        // No weighted spacer here.
+        //
+        // This Row's first child (the brand pill) is already `weight(1f)`. A
+        // second weighted child does not push the icons to the right -- it
+        // splits the leftover width *in half*, and the half the pill was left
+        // with (about 94dp on a 360dp screen, after the three 42dp icon
+        // buttons) is narrower than the logo mark plus the wordmark. So the
+        // wordmark was being ellipsised to a couple of characters, which is
+        // what "the text is not quite visible" actually was. With the spacer
+        // gone the pill takes the whole leftover width and the label fits.
         Spacer(Modifier.width(6.dp))
 
         GlassIconButton(
@@ -3132,6 +3167,9 @@ private fun ResoTopHeader(
             size = 42.dp,
             iconSize = 19.dp,
             tint = onGlass,
+            // Same pane as the brand pill, so the header reads as one row of
+            // glass rather than a light chip flanked by brighter circles.
+            backgroundTint = glassTint,
             strong = true
         )
         Spacer(Modifier.width(6.dp))
@@ -3150,6 +3188,7 @@ private fun ResoTopHeader(
             size = 42.dp,
             iconSize = 19.dp,
             tint = onGlass,
+            backgroundTint = glassTint,
             strong = true
         )
         Spacer(Modifier.width(6.dp))
@@ -3160,6 +3199,7 @@ private fun ResoTopHeader(
             size = 42.dp,
             iconSize = 21.dp,
             tint = onGlass,
+            backgroundTint = glassTint,
             strong = true
         )
     }

@@ -196,6 +196,19 @@ fun Modifier.liquidGlass(
     strong: Boolean = false,
     raised: Boolean = false,
     tint: Color? = null,
+    /**
+     * Adds the frost-scatter pass: a milky bloom plus a fine seeded speckle,
+     * both drawn under the rim so the silhouette stays crisp.
+     *
+     * This is the difference between *translucent* and *frosted*. Alpha alone
+     * gives you a pane you can see through; it cannot give you the milky,
+     * slightly uneven light that a real frosted pane scatters back at you.
+     *
+     * Off by default. Most panes in the app are meant to be a thin sheet over
+     * the backdrop, and the extra milk would just fog whatever is behind them.
+     * It is for the surfaces that are meant to read as genuinely thick.
+     */
+    haze: Boolean = false,
     showSpecular: Boolean = true,
     showRim: Boolean = true
 ): Modifier {
@@ -303,6 +316,37 @@ fun Modifier.liquidGlass(
                         ),
                         radius = bounceR,
                         center = bounceCenter
+                    )
+                }
+            }
+
+            // ---- 2b. Frost scatter ("haze").
+            // A milky bloom plus a fine speckle, both inside the pane and under
+            // the rim. The bloom is the light that went into the glass and came
+            // back out; the speckle is the scatter settling. Together they are
+            // what the eye reads as "frosted" rather than "translucent", and
+            // neither can be produced with an alpha value.
+            if (haze) {
+                clipPath(path) {
+                    drawRect(
+                        brush = Brush.verticalGradient(
+                            colorStops = arrayOf(
+                                0f to Color.White.copy(alpha = if (isDark) 0.20f else 0.34f),
+                                0.5f to Color.White.copy(alpha = if (isDark) 0.12f else 0.22f),
+                                1f to Color.White.copy(alpha = if (isDark) 0.07f else 0.14f)
+                            )
+                        )
+                    )
+                    // Seeded, not random per frame. A live random would make this
+                    // layer dirty on every frame, which is the exact per-frame
+                    // redraw cost the rest of this file was written to avoid.
+                    drawGrain(
+                        count = ((size.width * size.height) / (70f * px * px))
+                            .toInt()
+                            .coerceIn(160, 1100),
+                        alpha = if (isDark) 0.05f else 0.035f,
+                        seed = 0x5EEDF00DL,
+                        light = false
                     )
                 }
             }

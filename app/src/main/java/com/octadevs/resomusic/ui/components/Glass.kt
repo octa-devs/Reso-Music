@@ -289,6 +289,29 @@ fun Modifier.liquidGlass(
         val glassAlpha = (1f - (user.transparency - 0.5f).coerceAtLeast(0f) * 0.5f)
             .coerceIn(0.6f, 1f)
 
+        // ---- Translucency, not transparency.
+        // Without these two the pane is only *clear*: the backdrop is bent, but
+        // nothing signals a solid object in the way, so at a glance it still
+        // reads as a hole cut in the screen. The veil is the light that entered
+        // the glass and scattered instead of passing through; the ambient term
+        // is the light the slab picks up on its own. Together they turn the
+        // pane from a window into a slab you can see through -- the difference
+        // between transparent and translucent.
+        //
+        // Dark mode needs a touch more of both: the material sits over an
+        // already-dark backdrop, so the milk has to carry the luminance itself.
+        //
+        // Transparency is inverted everywhere in the app (up = thinner), so it
+        // thins the milk as well rather than only lowering the material's
+        // opacity. Otherwise sliding it up would leave the pane milky and the
+        // control would read as broken.
+        val userIntensity = user.intensity.coerceIn(0.4f, 1.6f)
+        val veilScale = (1.15f - user.transparency * 0.4f).coerceIn(0.5f, 1.2f)
+        val glassVeil = Color.White.copy(
+            alpha = (if (isDark) 0.13f else 0.20f) * userIntensity * veilScale
+        )
+        val glassAmbient = (if (isDark) 0.34f else 0.42f) * userIntensity * veilScale
+
         return this
             .shadow(
                 elevation = tuning.elevation,
@@ -306,7 +329,9 @@ fun Modifier.liquidGlass(
                 specularIntensity = glassSpecular,
                 chromaMultiplier = glassChroma,
                 edgeShadowAlpha = glassEdgeShadow,
-                materialAlpha = glassAlpha
+                materialAlpha = glassAlpha,
+                backgroundVeil = glassVeil,
+                ambientLight = glassAmbient
             )
     }
 

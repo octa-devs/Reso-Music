@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.chrisbanes.haze.HazeInput
@@ -63,6 +64,20 @@ import dev.chrisbanes.haze.glass.hazeGlass
  * [shape] masks the material and its refraction, so the bent light follows the
  * rounded silhouette rather than a rectangle.
  *
+ * [backgroundVeil] and [ambientLight] are what separate *translucent* from
+ * merely *transparent*, and they are the two things Apple's material does not
+ * already cover on its own:
+ *
+ *  - [backgroundVeil] is a milky colour composited *behind* the refracted
+ *    content, inside the silhouette. Refraction alone leaves the pane as clear
+ *    as a window: you see the backdrop, bent, but nothing tells the eye that a
+ *    solid object is in the way. A low-alpha veil under the refraction is the
+ *    scattered light that came into the glass and never made it through --
+ *    the pane stops being a hole and becomes a slab you can see through.
+ *  - [ambientLight] is the material's ambient response: how much light the
+ *    slab picks up from nowhere in particular. Raising it lifts the whole
+ *    material off the backdrop so it glows rather than reads as a cutout.
+ *
  * Every float here is snapped to its valid domain before it reaches Haze.
  * Haze's style setters validate and throw `IllegalArgumentException` on
  * out-of-range values, and these are fed by user sliders, so an unclamped
@@ -77,20 +92,28 @@ fun Modifier.appleLiquidGlass(
     specularIntensity: Float,
     chromaMultiplier: Float,
     edgeShadowAlpha: Float,
-    materialAlpha: Float
+    materialAlpha: Float,
+    backgroundVeil: Color = Color.Transparent,
+    ambientLight: Float = 0f
 ): Modifier {
     val radius = cornerRadius.coerceIn(0.dp, 240.dp)
     val fSpecular = specularIntensity.coerceIn(0f, 1f)
     val fChroma = chromaMultiplier.coerceIn(0f, 2f)
     val fEdgeShadow = edgeShadowAlpha.coerceIn(0f, 1f)
     val fAlpha = materialAlpha.coerceIn(0f, 1f)
+    val fAmbient = ambientLight.coerceIn(0f, 1f)
+    // Haze refuses an unspecified colour, and an unspecified colour is what a
+    // caller gets for free from `Color.Unspecified`. Snap to transparent.
+    val veil = if (backgroundVeil.isSpecified) backgroundVeil else Color.Transparent
 
     // The material can only mask a rounded rectangle, so a non-rounded Shape
     // falls back to [radius] rather than being ignored -- an unmasked material
     // would bleed refraction into the corners as a grey square.
     val rounded = shape as? RoundedCornerShape ?: RoundedCornerShape(radius)
 
-    val style = remember(rounded, fSpecular, fChroma, fEdgeShadow, fAlpha, tintColor) {
+    val style = remember(
+        rounded, fSpecular, fChroma, fEdgeShadow, fAlpha, tintColor, veil, fAmbient
+    ) {
         // The regular response is replayed first (Haze seeds every style with
         // it), so these writes only *add* to Apple's calibrated material rather
         // than replacing it. Replaying it twice is idempotent.
@@ -101,6 +124,8 @@ fun Modifier.appleLiquidGlass(
             edgeShadow(Color.Black.copy(alpha = fEdgeShadow))
             alpha(fAlpha)
             tint(tintColor)
+            backgroundColor(veil)
+            ambientResponse(fAmbient)
         }
         GlassStyle.regular.then(writes)
     }

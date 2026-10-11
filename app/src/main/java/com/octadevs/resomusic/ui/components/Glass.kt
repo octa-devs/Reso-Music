@@ -44,7 +44,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -73,8 +72,6 @@ import com.octadevs.resomusic.ui.theme.EmberAmber
 import com.octadevs.resomusic.ui.theme.glowTokens
 import com.octadevs.resomusic.ui.theme.MicroLabel
 import dev.chrisbanes.haze.HazeInput
-import dev.chrisbanes.haze.blur.HazeBlurStyle
-import dev.chrisbanes.haze.blur.hazeBlur
 import kotlin.math.cos
 import kotlin.math.max
 import androidx.compose.animation.core.spring
@@ -106,25 +103,6 @@ const val BACKDROP_WASH_PX = 64
    ============================================================================ */
 
 private const val GLASS_ENTER_MS = 420
-
-/**
- * Blur style for panes that sample the backdrop (see [liquidGlass]'s
- * `backdrop` parameter).
- *
- * Radius is deliberately a constant rather than a seventh tuning slider: this
- * is not a look control, it is the optical property of the glass, and every
- * slider the user already has acts on top of it.
- */
-private val GlassBackdropBlurStyle: HazeBlurStyle = HazeBlurStyle {
-    blurRadius(26.dp)
-    // The pane's own seeded frost grain already breaks up banding, and it is
-    // drawn once from a fixed seed. Haze's noise would be a second scatter pass
-    // for no visual gain, so it stays off.
-    noiseFactor(0f)
-    // Without this the blur stops dead at the pane's bounds and drags the
-    // backdrop's edge colour in as a dark halo around the silhouette.
-    blurredEdgeTreatment(BlurredEdgeTreatment.Unbounded)
-}
 
 @Immutable
 data class GlassTuning(
@@ -236,23 +214,27 @@ fun Modifier.liquidGlass(
     showSpecular: Boolean = true,
     showRim: Boolean = true,
     /**
-     * Real blur of whatever is drawn *behind* this pane, supplied as a Haze
-     * input.
+     * Apple's Liquid Glass material for whatever is drawn *behind* this pane.
      *
-     * This is the one ingredient translucent alpha cannot fake. An alpha pane
-     * tells the eye "there is something back there"; a pane that actually
-     * samples and smears it tells the eye "this is a piece of glass". Over the
-     * app's own backdrop the distinction barely shows, because the backdrop is
-     * a smooth field and blurring a smooth field returns the same field -- which
-     * is precisely why every earlier pass read as tinted plastic however the
-     * alphas were tuned. It only becomes visible where real content passes
-     * underneath, i.e. the floating chrome: the dock and the mini player both
-     * sit over a scrolling list.
+     * Supply a Haze input and the pane stops being a painted sheet and becomes
+     * a piece of glass: Haze refracts the backdrop through the rim (see
+     * [appleLiquidGlass]), boosts its colour and finishes the silhouette with a
+     * specular rim, a Fresnel edge and an interior shadow. None of this can be
+     * faked with alpha, which is why every earlier pass read as tinted plastic
+     * however the alphas were tuned: alpha can *show* what is behind a pane, but
+     * only refraction can *bend* it, and bending is what the eye reads as
+     * thickness.
      *
-     * `null` -- the default -- means no backdrop. Callers pass an input only
-     * for surfaces that genuinely float over moving content. Panes *inside* the
-     * scrolling content must not, or they would sample the very layer they are
-     * part of.
+     * It is also invisible over a smooth field -- refracting a gradient returns
+     * a gradient. It only shows where real content passes underneath, i.e. the
+     * floating chrome: the dock and the mini player both sit over a scrolling
+     * list.
+     *
+     * `null` -- the default -- paints the pane instead. Callers pass an input
+     * only for surfaces that genuinely float over moving content, and only
+     * where the platform can honour it (RenderEffect, i.e. API 31+). Panes
+     * *inside* the scrolling content must not, or they would sample the very
+     * layer they are part of.
      */
     backdrop: HazeInput? = null
 ): Modifier {
@@ -272,18 +254,66 @@ fun Modifier.liquidGlass(
     val activeBackdrop =
         if (backdrop != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) backdrop else null
 
-    // Sampling the backdrop and painting a body are competing goals: the dark
-    // dock used to lay down 0.43 white plus 0.57 ember, which is opaque enough
-    // to hide the blur completely. Thin the body and the colour bleed to a rung
-    // the smear reads through, and ease the frost bloom back so it frosts the
-    // blur instead of burying it. Rim, specular and inner shadow are untouched:
-    // those are the material's silhouette, not its opacity.
-    val bodyScale = if (activeBackdrop != null) 0.40f else 1f
-    val fillTop = tuning.fillTop * bodyScale
-    val fillBottom = tuning.fillBottom * bodyScale
-    val tintAlpha = tuning.tintAlpha * bodyScale
-    val frostScale = if (activeBackdrop != null) 0.70f else 1f
+    // ---- Apple Liquid Glass ------------------------------------------------
+    // When the pane has something to sample, the painted body below is not a
+    // layer under the glass -- it is replaced by it. The material's whole
+    // signature is that it *bends* what is behind it, and painting our own
+    // gradient on top buries the one effect that makes it read as glass rather
+    // than as tinted plastic. So the fill, the colour bleed, the inner shadow,
+    // the specular, the frost bloom and the rim are all skipped on this path;
+    // the only things the pane still contributes are its drop shadow and a
+    // whisper of brand tint handed to the material.
+    if (activeBackdrop != null) {
+        val user = LocalGlassUserTuning.current.clamped()
 
+        // The app's own Liquid Glass sliders stay meaningful by writing through
+        // to the material. Anything not mapped here is left at Haze's calibrated
+        // regular response, which is the actual Apple look.
+        val glassTint = tokens.meshFill.copy(
+            alpha = (0.05f + 0.11f * user.intensity * user.saturation).coerceIn(0f, 0.9f)
+        )
+        val glassSpecular = (if (isDark) 0.38f else 0.48f) * user.intensity
+        val glassChroma = if (isDark) {
+            0.80f + 0.40f * user.saturation
+        } else {
+            1.10f + 0.45f * user.saturation
+        }
+        val glassEdgeShadow = (if (isDark) 0.32f else 0.14f) *
+            user.shadowIntensity * (0.6f + 0.4f * user.borderOpacity)
+        // `transparency` is inverted everywhere else in the app -- pushing it up
+        // thins the pane -- so it scales the material down, not up. Pinned to
+        // exactly 1f at the default dial position so the out-of-the-box look is
+        // Haze's full calibrated material, and only ever *reduces* from there:
+        // at low opacity the material blends back into the flat backdrop and
+        // stops being glass at all.
+        val glassAlpha = (1f - (user.transparency - 0.5f).coerceAtLeast(0f) * 0.5f)
+            .coerceIn(0.6f, 1f)
+
+        return this
+            .shadow(
+                elevation = tuning.elevation,
+                shape = shape,
+                clip = false,
+                ambientColor = shadowColor.copy(alpha = shadowAlpha),
+                spotColor = shadowColor.copy(alpha = shadowAlpha)
+            )
+            .clip(shape)
+            .appleLiquidGlass(
+                input = activeBackdrop,
+                shape = shape,
+                cornerRadius = cornerRadius,
+                tintColor = glassTint,
+                specularIntensity = glassSpecular,
+                chromaMultiplier = glassChroma,
+                edgeShadowAlpha = glassEdgeShadow,
+                materialAlpha = glassAlpha
+            )
+    }
+
+    // ---- Painted pane ------------------------------------------------------
+    // No backdrop (or no RenderEffect to sample one with): the original
+    // hand-rolled material. Rim, specular and inner shadow are the pane's
+    // silhouette, not its opacity.
     return this
         .shadow(
             elevation = tuning.elevation,
@@ -293,18 +323,11 @@ fun Modifier.liquidGlass(
             spotColor = shadowColor.copy(alpha = shadowAlpha)
         )
         .clip(shape)
-        // After the clip, so the blurred rectangle inherits the rounded
-        // silhouette; before the body, so the blur sits underneath it.
-        .then(
-            activeBackdrop?.let {
-                Modifier.hazeBlur(input = it, style = GlassBackdropBlurStyle)
-            } ?: Modifier
-        )
         .background(
             Brush.linearGradient(
                 colors = listOf(
-                    base.copy(alpha = fillTop),
-                    base.copy(alpha = fillBottom)
+                    base.copy(alpha = tuning.fillTop),
+                    base.copy(alpha = tuning.fillBottom)
                 )
             )
         )
@@ -319,15 +342,15 @@ fun Modifier.liquidGlass(
             // `.background` stays underneath, and the sampled purple sits on
             // top of it, strongest at the top of the pane and easing off
             // toward the bottom so the pane still feels lit from above.
-            if (tintAlpha > 0.004f) {
+            if (tuning.tintAlpha > 0.004f) {
                 val wash = tokens.meshFill
                 clipPath(path) {
                     drawRect(
                         brush = Brush.verticalGradient(
                             colorStops = arrayOf(
-                                0f to wash.copy(alpha = tintAlpha),
-                                0.42f to wash.copy(alpha = tintAlpha * 0.74f),
-                                1f to wash.copy(alpha = tintAlpha * 0.46f)
+                                0f to wash.copy(alpha = tuning.tintAlpha),
+                                0.42f to wash.copy(alpha = tuning.tintAlpha * 0.74f),
+                                1f to wash.copy(alpha = tuning.tintAlpha * 0.46f)
                             )
                         )
                     )
@@ -396,9 +419,9 @@ fun Modifier.liquidGlass(
             // what the eye reads as "frosted" rather than "translucent", and
             // neither can be produced with an alpha value.
             if (haze) {
-                val bloomTop = (if (isDark) 0.20f else 0.34f) * frostScale
-                val bloomMid = (if (isDark) 0.12f else 0.22f) * frostScale
-                val bloomBottom = (if (isDark) 0.07f else 0.14f) * frostScale
+                val bloomTop = if (isDark) 0.20f else 0.34f
+                val bloomMid = if (isDark) 0.12f else 0.22f
+                val bloomBottom = if (isDark) 0.07f else 0.14f
                 clipPath(path) {
                     drawRect(
                         brush = Brush.verticalGradient(
@@ -416,7 +439,7 @@ fun Modifier.liquidGlass(
                         count = ((size.width * size.height) / (70f * px * px))
                             .toInt()
                             .coerceIn(160, 1100),
-                        alpha = (if (isDark) 0.05f else 0.035f) * frostScale,
+                        alpha = if (isDark) 0.05f else 0.035f,
                         seed = 0x5EEDF00DL,
                         light = false
                     )

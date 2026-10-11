@@ -106,13 +106,16 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.documentfile)
 
-    // Real backdrop blur. `haze` captures the content behind a floating pane
-    // into a graphics layer; `haze-blur` draws the blurred region under the
-    // pane itself. This is the only dependency in the app that samples what is
-    // behind a composable -- alpha can imitate a translucent sheet, but it
-    // cannot smear what is underneath, and the smear is what reads as glass.
+    // Real backdrop sampling. `haze` captures the content behind a floating
+    // pane into a graphics layer; `haze-glass` draws Apple's Liquid Glass
+    // material into the pane -- refraction displacement, chromatic
+    // aberration, specular response, Fresnel edge. These are the only
+    // dependencies in the app that sample what is behind a composable. Alpha
+    // can imitate a translucent sheet, but it cannot bend the light coming
+    // through it, and the bending is what makes the material read as glass
+    // rather than as tinted plastic.
     implementation(libs.haze)
-    implementation(libs.haze.blur)
+    implementation(libs.haze.glass)
 
     implementation(libs.gson)
     implementation(libs.jaudiotagger)

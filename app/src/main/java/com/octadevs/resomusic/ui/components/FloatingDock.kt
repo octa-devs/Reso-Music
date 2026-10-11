@@ -47,6 +47,7 @@ import com.octadevs.resomusic.ui.screens.resume.HomeTab
 import androidx.compose.animation.core.spring
 import androidx.compose.ui.semantics.role
 import com.octadevs.resomusic.ui.theme.EmberOrange
+import dev.chrisbanes.haze.HazeInput
 
 /* ============================================================
    FLOATING NAVIGATION DOCK
@@ -94,7 +95,14 @@ fun FloatingNavDock(
     onMoreClick: () -> Unit,
     onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
-    maxVisible: Int = 4
+    maxVisible: Int = 4,
+    /**
+     * Backdrop the dock should blur. Supplied by the screen that owns the
+     * scrolling content underneath; `null` (the default) leaves the dock as a
+     * plain translucent pane, which is what it falls back to whenever the
+     * user's Blur setting is off.
+     */
+    backdrop: HazeInput? = null
 ) {
     if (tabs.isEmpty()) return
 
@@ -121,7 +129,8 @@ fun FloatingNavDock(
                 cornerRadius = 29.dp,
                 strong = true,
                 raised = true,
-                haze = true
+                haze = true,
+                backdrop = backdrop
             )
             // 58 - 2x5 = 48dp per cell, which is the minimum touch target.
             .padding(horizontal = 6.dp, vertical = 5.dp),

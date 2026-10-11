@@ -177,6 +177,9 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.animation.core.Spring
 import androidx.compose.ui.unit.dp
 import coil.request.ImageRequest
+import dev.chrisbanes.haze.HazeInput
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
 
 class Lune : AppCompatActivity() {
     companion object {
@@ -985,6 +988,24 @@ fun MainScreen(
 
     var showSearchScreen by remember { mutableStateOf(false) }
 
+    // ── Backdrop blur ──────────────────────────────────────────────────────
+    // The dock and the mini player are the only two surfaces in the app that
+    // sit *on top of* scrolling content rather than inside it, so they are the
+    // only two that can be real glass rather than translucent paint. This is
+    // the Haze source/effect pair that makes that possible: `hazeSource` below
+    // records the pager into a graphics layer once per frame, and each
+    // qualifying pane draws the region underneath itself, blurred, instead of
+    // inventing a background.
+    //
+    // Gated on the user's own Blur setting, which is per theme. With it off --
+    // or on API < 31, where `RenderEffect` does not exist -- nothing demands the
+    // source, so nothing is recorded at all and the panes keep their opaque
+    // bodies. There is no cost to leaving this wired up.
+    val hazeState = rememberHazeState()
+    val glassBackdrop = remember(hazeState, hasBlurBackgroundMini) {
+        if (hasBlurBackgroundMini) HazeInput.Sources(hazeState) else null
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -1172,7 +1193,8 @@ fun MainScreen(
 
                 HorizontalPager(
                     state = pagerState,
-                    modifier = Modifier.weight(1f),
+                    // Source of the backdrop blur sampled by the floating chrome.
+                    modifier = Modifier.weight(1f).hazeSource(hazeState),
                     beyondViewportPageCount = 1
                 ) { pageIndex ->
                     val folder = folders.getOrElse(pageIndex) { "ALL" }
@@ -2267,7 +2289,8 @@ fun MainScreen(
                                         activeTabId = currentActiveFolder,
                                         onTabSelected = onSelectedFolderChange,
                                         onMoreClick = { showSectionMenuSheet = true },
-                                        onSettingsClick = openSettings
+                                        onSettingsClick = openSettings,
+                                        backdrop = glassBackdrop
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
@@ -2301,7 +2324,8 @@ fun MainScreen(
                                         activeTabId = currentActiveFolder,
                                         onTabSelected = onSelectedFolderChange,
                                         onMoreClick = { showSectionMenuSheet = true },
-                                        onSettingsClick = openSettings
+                                        onSettingsClick = openSettings,
+                                        backdrop = glassBackdrop
                                     )
                                 }
                                 Spacer(modifier = Modifier.height(10.dp))
@@ -2343,7 +2367,8 @@ fun MainScreen(
                                         onNext = playNext,
                                         onSearchClick = { showSearchScreen = true },
                                         onScrollToCurrent = { scrollToCurrentTrigger.value++ },
-                                        onMinimize = { settingsManager.isMiniPlayerMinimized = true }
+                                        onMinimize = { settingsManager.isMiniPlayerMinimized = true },
+                                        backdrop = glassBackdrop
                                     )
                                 }
                             }
@@ -2360,7 +2385,8 @@ fun MainScreen(
                             activeTabId = currentActiveFolder,
                             onTabSelected = onSelectedFolderChange,
                             onMoreClick = { showSectionMenuSheet = true },
-                            onSettingsClick = openSettings
+                            onSettingsClick = openSettings,
+                            backdrop = glassBackdrop
                         )
                     }
                 }

@@ -116,6 +116,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.withContext
+import dev.chrisbanes.haze.HazeInput
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -2076,6 +2077,12 @@ fun MiniPlayer(
     shape: Shape = CircleShape,
     hasBlurBackground: Boolean = false,
     isDarkTheme: Boolean = false,
+    /**
+     * Backdrop the pane should sample. The mini player floats over the list, so
+     * it gets the same real blur as the dock; `null` falls back to a plain
+     * translucent pane, which is also what happens on API < 31.
+     */
+    backdrop: HazeInput? = null,
     onTogglePlay: () -> Unit,
     onExpand: () -> Unit,
     onPrevious: () -> Unit,
@@ -2141,7 +2148,8 @@ fun MiniPlayer(
                 shape = miniShape,
                 isDarkTheme = isDarkTheme,
                 hasBlurBackground = hasBlurBackground,
-                cornerRadius = 26.dp
+                cornerRadius = 26.dp,
+                backdrop = backdrop
             )
             .clickable { onExpand() }
             .songSwipeGestures(

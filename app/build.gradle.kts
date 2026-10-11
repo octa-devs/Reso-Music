@@ -106,6 +106,14 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.documentfile)
 
+    // Real backdrop blur. `haze` captures the content behind a floating pane
+    // into a graphics layer; `haze-blur` draws the blurred region under the
+    // pane itself. This is the only dependency in the app that samples what is
+    // behind a composable -- alpha can imitate a translucent sheet, but it
+    // cannot smear what is underneath, and the smear is what reads as glass.
+    implementation(libs.haze)
+    implementation(libs.haze.blur)
+
     implementation(libs.gson)
     implementation(libs.jaudiotagger)
     implementation(libs.androidx.room3.runtime)

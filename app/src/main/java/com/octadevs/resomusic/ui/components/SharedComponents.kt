@@ -82,6 +82,7 @@ import com.octadevs.resomusic.tools.Song
 import com.octadevs.resomusic.ui.utils.formatDuration
 import com.octadevs.resomusic.ui.utils.formatDurationCompact
 import com.octadevs.resomusic.ui.utils.formatLongDuration
+import dev.chrisbanes.haze.HazeInput
 import kotlinx.coroutines.delay
 import androidx.compose.animation.core.spring
 import kotlinx.coroutines.launch
@@ -773,13 +774,15 @@ fun Modifier.glassCard(
     isDarkTheme: Boolean,
     hasBlurBackground: Boolean,
     cornerRadius: androidx.compose.ui.unit.Dp = 26.dp,
-    strong: Boolean? = null
+    strong: Boolean? = null,
+    backdrop: HazeInput? = null
 ): Modifier = liquidGlass(
     shape = shape,
     cornerRadius = cornerRadius,
     strong = strong ?: !hasBlurBackground,
     raised = true,
-    tint = if (hasBlurBackground) null else if (isDarkTheme) Color(0xFF1B2033) else Color(0xFFFFFFFF)
+    tint = if (hasBlurBackground) null else if (isDarkTheme) Color(0xFF1B2033) else Color(0xFFFFFFFF),
+    backdrop = backdrop
 )
 @Composable
 fun Modifier.headerWaveBackground(

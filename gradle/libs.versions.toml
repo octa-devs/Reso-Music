@@ -18,6 +18,7 @@ room3 = "3.0.3"
 ksp = "2.3.11"
 appcompat = "1.8.0"
 documentfile = "1.1.0"
+haze = "2.0.1"
 
 [libraries]
 androidx-compose-animation-graphics = { module = "androidx.compose.animation:animation-graphics" }
@@ -47,6 +48,8 @@ androidx-room3-runtime = { group = "androidx.room3", name = "room3-runtime", ver
 androidx-room3-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "room3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
+haze-blur = { group = "dev.chrisbanes.haze", name = "haze-blur", version.ref = "haze" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
